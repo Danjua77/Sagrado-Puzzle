@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Código Secreto</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-black flex items-center justify-center min-h-screen">
+  <div class="text-center">
+    <h1 class="text-white text-2xl mb-4">Escribe el código secreto</h1>
+    <input
+      id="codeInput"
+      type="tel"
+      placeholder="Ingresa el código"
+      class="bg-black text-white border border-white rounded-xl p-2 text-center text-lg"
+    />
+    <button
+      onclick="checkCode()"
+      class="mt-4 bg-white text-black rounded-xl px-4 py-2 font-semibold"
+    >
+      Enviar
+    </button>
+    <p id="errorText" class="text-red-500 mt-2 hidden">Incorrecto</p>
+  </div>
+
+  <script>
+    function checkCode() {
+      const input = document.getElementById(\"codeInput\").value;
+      const errorText = document.getElementById(\"errorText\");
+      if (input === \"9182\") {
+        window.location.href = \"secreto.html\";
+      } else {
+        errorText.classList.remove(\"hidden\");
+      }
+    }
+  </script>
+</body>
+</html>
