@@ -1,39 +1,72 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Código Secreto</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-black flex items-center justify-center min-h-screen">
-  <div class="text-center">
-    <h1 class="text-white text-2xl mb-4">Escribe el código secreto</h1>
-    <input
-      id="codeInput"
-      type="tel"
-      placeholder="Ingresa el código"
-      class="bg-black text-white border border-white rounded-xl p-2 text-center text-lg"
-    />
-    <button
-      onclick="checkCode()"
-      class="mt-4 bg-white text-black rounded-xl px-4 py-2 font-semibold"
-    >
-      Enviar
-    </button>
-    <p id="errorText" class="text-red-500 mt-2 hidden">Incorrecto</p>
-  </div>
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
-  <script>
-    function checkCode() {
-      const input = document.getElementById(\"codeInput\").value;
-      const errorText = document.getElementById(\"errorText\");
-      if (input === \"9182\") {
-        window.location.href = \"secreto.html\";
-      } else {
-        errorText.classList.remove(\"hidden\");
-      }
+export default function SecretCodePage() {
+  const [code, setCode] = useState("");
+  const [error, setError] = useState("");
+  const [redirecting, setRedirecting] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const handleSubmit = () => {
+    if (code === "9182") {
+      setRedirecting(true);
+      setTimeout(() => setSuccess(true), 800);
+    } else {
+      setError("Incorrecto");
     }
-  </script>
-</body>
-</html>
+  };
+
+  return (
+    <AnimatePresence mode="wait">
+      {success ? (
+        <motion.div
+          key="video-page"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.95 }}
+          transition={{ duration: 0.6 }}
+          className="min-h-screen bg-black flex flex-col justify-center items-center p-4"
+        >
+          <h1 className="text-white text-2xl mb-4">Pista 2</h1>
+          <div className="w-full max-w-xl aspect-video">
+            <iframe
+              className="w-full h-full rounded-2xl"
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1"
+              title="YouTube video player"
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
+        </motion.div>
+      ) : (
+        <motion.div
+          key="code-page"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="min-h-screen bg-black flex flex-col justify-center items-center p-4"
+        >
+          <h1 className="text-white text-2xl mb-4">Escribe el código secreto</h1>
+          <input
+            type="tel"
+            inputMode="numeric"
+            pattern="[0-9]*"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            className="bg-black text-white border border-white rounded-xl p-2 text-center text-lg"
+            placeholder="Ingresa el código"
+          />
+          <button
+            onClick={handleSubmit}
+            disabled={redirecting}
+            className="mt-4 bg-white text-black rounded-xl px-4 py-2 font-semibold disabled:opacity-50"
+          >
+            {redirecting ? "Redirigiendo..." : "Enviar"}
+          </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
