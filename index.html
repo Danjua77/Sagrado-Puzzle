@@ -57,16 +57,33 @@
         simonSuccess: "¡Correcto! Avanzando de nivel...",
         simonFinal: "🎯 ¡Correcto! Dirigiendo a la última pista...",
         simonFail: "Incorrecto. Volviendo al nivel 1."
+      },
+      en: {
+        title: "Find the clues and enter the secret codes",
+        buttonAccept: "Accept",
+        back: "Back",
+        winText: "🎉Congratulations! The cache is here",
+        imagePlaceholder: "[Image placeholder]",
+        puzzlePrompt: "No matter where you look in a park, you always see...",
+        puzzleHint: "Place the answer in the code space",
+        inputPlaceholder: "Answer",
+        foundAllPairs: "You found all the pairs!",
+        simonStart: "Watch the sequence",
+        simonRepeat: "Repeat the sequence",
+        simonSuccess: "Correct! Advancing level...",
+        simonFinal: "🎯 Correct! Directing to final clue...",
+        simonFail: "Wrong. Going back to level 1."
       }
     };
 
-    function VideoScreen({ url, onBack }) {
+    function VideoScreen({ url, onBack, lang }) {
+      const t = translations[lang];
       return (
         <div className="flex flex-col items-center text-center space-y-6">
           <div className="w-full max-w-xl aspect-video">
             <iframe className="w-full h-full rounded-lg" src={url} title="video pista" allowFullScreen></iframe>
           </div>
-          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">Volver</button>
+          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
         </div>
       );
     }
@@ -77,7 +94,7 @@
       useEffect(() => {
         const timer = setTimeout(() => setShowHint(true), 4000);
         return () => clearTimeout(timer);
-      }, []);
+      }, [lang]);
 
       return (
         <div className="flex flex-col items-center justify-center text-center space-y-4">
@@ -152,7 +169,7 @@
           clearInterval(interval);
           clearTimeout(timeoutRef.current);
         };
-      }, [level]);
+      }, [level, lang]);
 
       const handleClick = (index) => {
         if (!isUserTurn || gameFinished) return;
@@ -250,8 +267,8 @@
       const [screen, setScreen] = useState("entry");
       const [lang, setLang] = useState("es");
 
-      return screen === "video1" ? <VideoScreen url="https://www.youtube.com/embed/3KsR03Ir6xM" onBack={() => setScreen("entry")} /> :
-        screen === "video2" ? <VideoScreen url="https://www.youtube.com/embed/VHYkZPRp5Bk" onBack={() => setScreen("entry")} /> :
+      return screen === "video1" ? <VideoScreen url="https://www.youtube.com/embed/3KsR03Ir6xM" onBack={() => setScreen("entry")} lang={lang} /> :
+        screen === "video2" ? <VideoScreen url="https://www.youtube.com/embed/VHYkZPRp5Bk" onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "simon" ? <SimonGame onBack={setScreen} lang={lang} /> :
         screen === "cache" ? <CachePage onBack={() => setScreen("entry")} lang={lang} /> :
