@@ -46,7 +46,7 @@
         title: "Busca las pistas e ingresa los códigos secretos",
         buttonAccept: "Aceptar",
         back: "Volver",
-        winText: "🎉🎉🎉¡Felicidades! Aquí está el caché. Recuerda que nadie debe verte tomarlo.",
+        winText: "🎉Felicidades!, el cache esta aqui",
         imagePlaceholder: "[Espacio para la imagen]",
         puzzlePrompt: "Sin importar a dónde mires en un parque, siempre verás un...",
         puzzleHint: "Coloca la respuesta en el espacio para código",
@@ -55,46 +55,57 @@
         simonStart: "Observa la secuencia",
         simonRepeat: "Repite la secuencia",
         simonSuccess: "¡Correcto! Avanzando de nivel...",
-        simonFinalSuccess: "🎯 ¡Correcto! Dirigiendo a la última pista...",
+        simonFinal: "🎯 ¡Correcto! Dirigiendo a la última pista...",
         simonFail: "Incorrecto. Volviendo al nivel 1."
-      },
-      en: {
-        title: "Find the clues and enter the secret codes",
-        buttonAccept: "Accept",
-        back: "Back",
-        winText: "🎉🎉🎉Congratulations! Here is the cache. Remember, no one should see you take it.",
-        imagePlaceholder: "[Image placeholder]",
-        puzzlePrompt: "No matter where you look in a park, you will always see a...",
-        puzzleHint: "Enter the answer in the code space",
-        inputPlaceholder: "Answer",
-        foundAllPairs: "You found all the pairs!",
-        simonStart: "Watch the sequence",
-        simonRepeat: "Repeat the sequence",
-        simonSuccess: "Correct! Moving to the next level...",
-        simonFinalSuccess: "🎯 Correct! Heading to the final clue...",
-        simonFail: "Wrong. Returning to level 1."
       }
     };
 
-    function getTranslation(lang) {
-      return translations[lang] || translations['es'];
+    function VideoScreen({ url, onBack }) {
+      return (
+        <div className="flex flex-col items-center text-center space-y-6">
+          <div className="w-full max-w-xl aspect-video">
+            <iframe className="w-full h-full rounded-lg" src={url} title="video pista" allowFullScreen></iframe>
+          </div>
+          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">Volver</button>
+        </div>
+      );
     }
 
     function PuzzleScreen({ onBack, lang }) {
-      const t = getTranslation(lang);
+      const [showHint, setShowHint] = useState(false);
+      const t = translations[lang];
+      useEffect(() => {
+        const timer = setTimeout(() => setShowHint(true), 4000);
+        return () => clearTimeout(timer);
+      }, []);
+
       return (
         <div className="flex flex-col items-center justify-center text-center space-y-4">
           <div className="h-16 flex items-center justify-center">
             <p className="text-white text-xl typewriter">{t.puzzlePrompt}</p>
           </div>
-          <p className="text-green-400 fade-in">{t.puzzleHint}</p>
+          {showHint && (
+            <p className="text-green-400 fade-in">{t.puzzleHint}</p>
+          )}
+          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
+        </div>
+      );
+    }
+
+    function CachePage({ onBack, lang }) {
+      const t = translations[lang];
+      return (
+        <div className="flex flex-col items-center text-center space-y-6">
+          <h1 className="text-2xl font-bold text-green-400 animate-pulse">{t.winText}</h1>
+          <div className="w-full max-w-xs h-64 bg-zinc-800 rounded-lg flex items-center justify-center">
+            <span className="text-zinc-500">{t.imagePlaceholder}</span>
+          </div>
           <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
         </div>
       );
     }
 
     function SimonGame({ onBack, lang }) {
-      const t = getTranslation(lang);
       const gridSize = 4;
       const totalButtons = gridSize * gridSize;
       const [sequence, setSequence] = useState([]);
@@ -102,9 +113,9 @@
       const [level, setLevel] = useState(1);
       const [activeIndex, setActiveIndex] = useState(-1);
       const [isUserTurn, setIsUserTurn] = useState(false);
-      const [message, setMessage] = useState(t.simonStart);
+      const [message, setMessage] = useState("");
       const [pressedIndex, setPressedIndex] = useState(-1);
-
+      const t = translations[lang];
       const colors = ['bg-red-600', 'bg-yellow-400', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-pink-600'];
 
       useEffect(() => {
@@ -128,7 +139,7 @@
             }, 600);
           }
         }, 800);
-      }, [level, lang]);
+      }, [level]);
 
       const handleClick = (index) => {
         if (!isUserTurn) return;
@@ -145,7 +156,7 @@
         }
         if (nextInput.length === sequence.length) {
           if (level === 3) {
-            setMessage(t.simonFinalSuccess);
+            setMessage(t.simonFinal);
             setTimeout(() => onBack(), 1500);
           } else {
             setMessage(t.simonSuccess);
@@ -182,8 +193,8 @@
     }
 
     function CodeEntry({ onSuccess, lang, setLang }) {
-      const t = getTranslation(lang);
       const [codes, setCodes] = useState(["", "", "", "", ""]);
+      const t = translations[lang];
       const handleCodeChange = (i, value) => {
         const updated = [...codes];
         updated[i] = value.slice(0, 1);
@@ -192,9 +203,9 @@
       const handleAccept = () => {
         const fullCode = codes.join("").toLowerCase();
         const body = document.getElementById("body");
-        if (fullCode === "29074") onSuccess("video");
+        if (fullCode === "29074") onSuccess("video1");
         else if (fullCode === "98142") onSuccess("puzzle");
-        else if (fullCode === "arbol" || fullCode === "trees") onSuccess("arbol");
+        else if (["arbol", "trees"].includes(fullCode)) onSuccess("video2");
         else if (fullCode === "pizza") onSuccess("simon");
         else if (fullCode === "70635") onSuccess("cache");
         else {
@@ -225,13 +236,11 @@
       const [screen, setScreen] = useState("entry");
       const [lang, setLang] = useState("es");
 
-      const commonProps = { lang };
-
-      return screen === "video" ? <div>VideoScreen pendiente</div> :
-        screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} {...commonProps} /> :
-        screen === "arbol" ? <div>ArbolVideo pendiente</div> :
-        screen === "simon" ? <SimonGame onBack={() => setScreen("cache")} {...commonProps} /> :
-        screen === "cache" ? <PuzzleScreen onBack={() => setScreen("entry")} {...commonProps} /> :
+      return screen === "video1" ? <VideoScreen url="https://www.youtube.com/embed/3KsR03Ir6xM" onBack={() => setScreen("entry")} /> :
+        screen === "video2" ? <VideoScreen url="https://www.youtube.com/embed/VHYkZPRp5Bk" onBack={() => setScreen("entry")} /> :
+        screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} lang={lang} /> :
+        screen === "simon" ? <SimonGame onBack={() => setScreen("cache")} lang={lang} /> :
+        screen === "cache" ? <CachePage onBack={() => setScreen("entry")} lang={lang} /> :
         <CodeEntry onSuccess={(target) => setScreen(target)} lang={lang} setLang={setLang} />;
     }
 
@@ -239,4 +248,3 @@
   </script>
 </body>
 </html>
-
