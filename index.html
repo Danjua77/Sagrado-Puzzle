@@ -48,7 +48,7 @@
         back: "Volver",
         winText: "🎉Felicidades!, el cache esta aqui",
         imagePlaceholder: "[Espacio para la imagen]",
-        puzzlePrompt: "Sin importar a dónde mires en un parque, siempre verás un...",
+        puzzlePrompt: "Sin importar a dónde mires en un parque,\nsiempre verás un...",
         puzzleHint: "Coloca la respuesta en el espacio para código",
         inputPlaceholder: "Respuesta",
         foundAllPairs: "¡Encontraste todas las parejas!",
@@ -64,7 +64,7 @@
         back: "Back",
         winText: "🎉Congratulations! The cache is here",
         imagePlaceholder: "[Image placeholder]",
-        puzzlePrompt: "No matter where you look in a park, you always see...",
+        puzzlePrompt: "No matter where you look in a park,\nyou always see...",
         puzzleHint: "Place the answer in the code space",
         inputPlaceholder: "Answer",
         foundAllPairs: "You found all the pairs!",
@@ -90,16 +90,27 @@
 
     function PuzzleScreen({ onBack, lang }) {
       const [showHint, setShowHint] = useState(false);
+      const [showSecondLine, setShowSecondLine] = useState(false);
       const t = translations[lang];
       useEffect(() => {
-        const timer = setTimeout(() => setShowHint(true), 4000);
-        return () => clearTimeout(timer);
+        // Espera 4s (duración de la animación typewriter) antes de mostrar la segunda línea
+        const timer1 = setTimeout(() => setShowSecondLine(true), 4000);
+        const timer2 = setTimeout(() => setShowHint(true), 6000);
+        return () => {
+          clearTimeout(timer1);
+          clearTimeout(timer2);
+        };
       }, [lang]);
+
+      const promptLines = t.puzzlePrompt.split('\n');
 
       return (
         <div className="flex flex-col items-center justify-center text-center space-y-4">
-          <div className="h-16 flex items-center justify-center">
-            <p className="text-white text-xl typewriter">{t.puzzlePrompt}</p>
+          <div className="min-h-[4.5rem] flex flex-col items-center justify-center">
+            <p className="text-white text-xl typewriter">{promptLines[0]}</p>
+            {showSecondLine && (
+              <p className="text-white text-xl typewriter">{promptLines[1]}</p>
+            )}
           </div>
           {showHint && (
             <p className="text-green-400 fade-in">{t.puzzleHint}</p>
@@ -279,3 +290,4 @@
   </script>
 </body>
 </html>
+
