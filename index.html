@@ -46,16 +46,16 @@
         title: "Busca las pistas e ingresa los códigos secretos",
         buttonAccept: "Aceptar",
         back: "Volver",
-        winText: "🎉Felicidades!, el cache esta aqui",
+        winText: "🎉¡Felicidades! El caché está aquí",
         imagePlaceholder: "[Espacio para la imagen]",
-        puzzlePrompt: "Sin importar a dónde mires en un parque,\nsiempre verás un...",
-        puzzleHint: "Coloca la respuesta en el espacio para código",
+        puzzlePrompt: "No importa a dónde mires en un parque,\nsiempre verás un...",
+        puzzleHint: "Coloca la respuesta en el espacio para el código",
         inputPlaceholder: "Respuesta",
         foundAllPairs: "¡Encontraste todas las parejas!",
         simonStart: "Observa la secuencia",
         simonRepeat: "Repite la secuencia",
         simonSuccess: "¡Correcto! Avanzando de nivel...",
-        simonFinal: "🎯 ¡Correcto! Dirigiendo a la última pista...",
+        simonFinal: "🎯 ¡Correcto! Dirigiéndote a la última pista...",
         simonFail: "Incorrecto. Volviendo al nivel 1."
       },
       en: {
@@ -64,22 +64,33 @@
         back: "Back",
         winText: "🎉Congratulations! The cache is here",
         imagePlaceholder: "[Image placeholder]",
-        puzzlePrompt: "No matter where you look in a park,\nyou always see...",
-        puzzleHint: "Place the answer in the code space",
+        puzzlePrompt: "No matter where you look in a park,\nyou will always see a...",
+        puzzleHint: "Enter the answer in the code space",
         inputPlaceholder: "Answer",
         foundAllPairs: "You found all the pairs!",
         simonStart: "Watch the sequence",
         simonRepeat: "Repeat the sequence",
-        simonSuccess: "Correct! Advancing level...",
-        simonFinal: "🎯 Correct! Directing to final clue...",
-        simonFail: "Wrong. Going back to level 1."
+        simonSuccess: "Correct! Advancing to the next level...",
+        simonFinal: "🎯 Correct! Heading to the final clue...",
+        simonFail: "Incorrect. Returning to level 1."
       }
     };
 
     function VideoScreen({ url, onBack, lang }) {
       const t = translations[lang];
+      // Título traducido para el video especial
+      const isArbolVideo = url === "https://www.youtube.com/embed/VHYkZPRp5Bk";
+      const isVideo1 = url === "https://www.youtube.com/embed/3KsR03Ir6xM";
+      const arbolTitles = { es: "mira abajo", en: "look below" };
+      const video1Titles = { es: "Busca el siguiente código", en: "Find the next code" };
       return (
         <div className="flex flex-col items-center text-center space-y-6">
+          {isArbolVideo && (
+            <h2 className="text-2xl font-bold text-green-400 mb-2">{arbolTitles[lang]}</h2>
+          )}
+          {isVideo1 && (
+            <h2 className="text-2xl font-bold text-green-400 mb-2">{video1Titles[lang]}</h2>
+          )}
           <div className="w-full max-w-2xl aspect-[16/7]">
             <iframe className="w-full h-full rounded-lg" src={url} title="video pista" allowFullScreen></iframe>
           </div>
