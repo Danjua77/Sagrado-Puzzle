@@ -1,3 +1,4 @@
+<!-- file: index.html -->
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -49,7 +50,13 @@
         imagePlaceholder: "[Espacio para la imagen]",
         puzzlePrompt: "Sin importar a dónde mires en un parque, siempre verás un...",
         puzzleHint: "Coloca la respuesta en el espacio para código",
-        inputPlaceholder: "Respuesta"
+        inputPlaceholder: "Respuesta",
+        foundAllPairs: "¡Encontraste todas las parejas!",
+        simonStart: "Observa la secuencia",
+        simonRepeat: "Repite la secuencia",
+        simonSuccess: "¡Correcto! Avanzando de nivel...",
+        simonFinalSuccess: "🎯 ¡Correcto! Dirigiendo a la última pista...",
+        simonFail: "Incorrecto. Volviendo al nivel 1."
       },
       en: {
         title: "Find the clues and enter the secret codes",
@@ -58,14 +65,125 @@
         winText: "🎉🎉🎉Congratulations! Here is the cache. Remember, no one should see you take it.",
         imagePlaceholder: "[Image placeholder]",
         puzzlePrompt: "No matter where you look in a park, you will always see a...",
-        puzzleHint: "Enter the answer in the code input area",
-        inputPlaceholder: "Answer"
+        puzzleHint: "Enter the answer in the code space",
+        inputPlaceholder: "Answer",
+        foundAllPairs: "You found all the pairs!",
+        simonStart: "Watch the sequence",
+        simonRepeat: "Repeat the sequence",
+        simonSuccess: "Correct! Moving to the next level...",
+        simonFinalSuccess: "🎯 Correct! Heading to the final clue...",
+        simonFail: "Wrong. Returning to level 1."
       }
     };
 
+    function getTranslation(lang) {
+      return translations[lang] || translations['es'];
+    }
+
+    function PuzzleScreen({ onBack, lang }) {
+      const t = getTranslation(lang);
+      return (
+        <div className="flex flex-col items-center justify-center text-center space-y-4">
+          <div className="h-16 flex items-center justify-center">
+            <p className="text-white text-xl typewriter">{t.puzzlePrompt}</p>
+          </div>
+          <p className="text-green-400 fade-in">{t.puzzleHint}</p>
+          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
+        </div>
+      );
+    }
+
+    function SimonGame({ onBack, lang }) {
+      const t = getTranslation(lang);
+      const gridSize = 4;
+      const totalButtons = gridSize * gridSize;
+      const [sequence, setSequence] = useState([]);
+      const [userInput, setUserInput] = useState([]);
+      const [level, setLevel] = useState(1);
+      const [activeIndex, setActiveIndex] = useState(-1);
+      const [isUserTurn, setIsUserTurn] = useState(false);
+      const [message, setMessage] = useState(t.simonStart);
+      const [pressedIndex, setPressedIndex] = useState(-1);
+
+      const colors = ['bg-red-600', 'bg-yellow-400', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-pink-600'];
+
+      useEffect(() => {
+        const sequenceLength = level === 1 ? 3 : level === 2 ? 5 : 7;
+        const newSeq = Array.from({ length: sequenceLength }, () => Math.floor(Math.random() * totalButtons));
+        setSequence(newSeq);
+        setMessage(t.simonStart);
+        setUserInput([]);
+        setIsUserTurn(false);
+
+        let i = 0;
+        const interval = setInterval(() => {
+          setActiveIndex(newSeq[i]);
+          i++;
+          if (i >= newSeq.length) {
+            clearInterval(interval);
+            setTimeout(() => {
+              setActiveIndex(-1);
+              setMessage(t.simonRepeat);
+              setIsUserTurn(true);
+            }, 600);
+          }
+        }, 800);
+      }, [level, lang]);
+
+      const handleClick = (index) => {
+        if (!isUserTurn) return;
+        setPressedIndex(index);
+        setTimeout(() => setPressedIndex(-1), 200);
+
+        const nextInput = [...userInput, index];
+        setUserInput(nextInput);
+        const current = nextInput.length - 1;
+        if (sequence[current] !== index) {
+          setMessage(t.simonFail);
+          setTimeout(() => setLevel(1), 1500);
+          return;
+        }
+        if (nextInput.length === sequence.length) {
+          if (level === 3) {
+            setMessage(t.simonFinalSuccess);
+            setTimeout(() => onBack(), 1500);
+          } else {
+            setMessage(t.simonSuccess);
+            setTimeout(() => setLevel(level + 1), 1200);
+          }
+        }
+      };
+
+      const getButtonClass = (index) => {
+        const base = "w-16 h-16 rounded border transition-all duration-300";
+        const color = colors[index % colors.length];
+        if (index === activeIndex || index === pressedIndex) {
+          return `${base} ${color} scale-110`;
+        }
+        return `${base} bg-zinc-800 border-green-500`;
+      };
+
+      return (
+        <div className="flex flex-col items-center space-y-4">
+          <h2 className="text-xl font-bold text-green-400">Nivel {level}</h2>
+          <p className="text-green-300">{message}</p>
+          <div className="grid grid-cols-4 gap-3 mt-4">
+            {Array.from({ length: totalButtons }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => handleClick(index)}
+                className={getButtonClass(index)}
+              />
+            ))}
+          </div>
+          <button onClick={onBack} className="mt-6 bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
+        </div>
+      );
+    }
+
     function CodeEntry({ onSuccess, lang, setLang }) {
+      const t = getTranslation(lang);
       const [codes, setCodes] = useState(["", "", "", "", ""]);
-      const t = translations[lang];
       const handleCodeChange = (i, value) => {
         const updated = [...codes];
         updated[i] = value.slice(0, 1);
@@ -103,49 +221,17 @@
       );
     }
 
-    function PuzzleScreen({ onBack, lang }) {
-      const [showHint, setShowHint] = useState(false);
-      const t = translations[lang];
-      useEffect(() => {
-        const timer = setTimeout(() => setShowHint(true), 4000);
-        return () => clearTimeout(timer);
-      }, []);
-
-      return (
-        <div className="flex flex-col items-center justify-center text-center space-y-4">
-          <div className="h-16 flex items-center justify-center">
-            <p className="text-white text-xl typewriter">{t.puzzlePrompt}</p>
-          </div>
-          {showHint && (
-            <p className="text-green-400 fade-in">{t.puzzleHint}</p>
-          )}
-          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
-        </div>
-      );
-    }
-
-    function CachePage({ onBack, lang }) {
-      const t = translations[lang];
-      return (
-        <div className="flex flex-col items-center text-center space-y-6">
-          <h1 className="text-2xl font-bold text-green-400 animate-pulse">{t.winText}</h1>
-          <div className="w-full max-w-xs h-64 bg-zinc-800 rounded-lg flex items-center justify-center">
-            <span className="text-zinc-500">{t.imagePlaceholder}</span>
-          </div>
-          <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
-        </div>
-      );
-    }
-
     function App() {
       const [screen, setScreen] = useState("entry");
       const [lang, setLang] = useState("es");
 
+      const commonProps = { lang };
+
       return screen === "video" ? <div>VideoScreen pendiente</div> :
-        screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} lang={lang} /> :
+        screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} {...commonProps} /> :
         screen === "arbol" ? <div>ArbolVideo pendiente</div> :
-        screen === "simon" ? <div>SimonGame pendiente</div> :
-        screen === "cache" ? <CachePage onBack={() => setScreen("entry")} lang={lang} /> :
+        screen === "simon" ? <SimonGame onBack={() => setScreen("cache")} {...commonProps} /> :
+        screen === "cache" ? <PuzzleScreen onBack={() => setScreen("entry")} {...commonProps} /> :
         <CodeEntry onSuccess={(target) => setScreen(target)} lang={lang} setLang={setLang} />;
     }
 
@@ -153,3 +239,4 @@
   </script>
 </body>
 </html>
+
