@@ -80,7 +80,7 @@
       const t = translations[lang];
       return (
         <div className="flex flex-col items-center text-center space-y-6">
-          <div className="w-full max-w-xl aspect-video">
+          <div className="w-full max-w-2xl aspect-[16/7]">
             <iframe className="w-full h-full rounded-lg" src={url} title="video pista" allowFullScreen></iframe>
           </div>
           <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
@@ -125,8 +125,13 @@
       return (
         <div className="flex flex-col items-center text-center space-y-6">
           <h1 className="text-2xl font-bold text-green-400 animate-pulse">{t.winText}</h1>
-          <div className="w-full max-w-xs h-64 bg-zinc-800 rounded-lg flex items-center justify-center">
-            <span className="text-zinc-500">{t.imagePlaceholder}</span>
+          <div className="w-full max-w-2xl aspect-[16/7]">
+            <iframe
+              className="w-full h-full rounded-lg"
+              src="https://www.youtube.com/embed/YLjLNPgFdSs"
+              title="video cache"
+              allowFullScreen
+            ></iframe>
           </div>
           <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
         </div>
@@ -290,4 +295,3 @@
   </script>
 </body>
 </html>
-
