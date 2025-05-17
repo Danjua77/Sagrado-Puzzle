@@ -19,6 +19,28 @@
       0% { background-color: #7f1d1d; }
       100% { background-color: #000000; }
     }
+    .typewriter {
+      display: inline-block;
+      border-right: 2px solid green;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 4s steps(60, end), blink-caret 0.75s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 100%; }
+    }
+    @keyframes blink-caret {
+      from, to { border-color: transparent; }
+      50% { border-color: green; }
+    }
+    .fade-in {
+      opacity: 0;
+      animation: fadeIn 1s ease-in forwards;
+    }
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
   </style>
 
   <!-- React + ReactDOM + Babel -->
@@ -30,7 +52,7 @@
   <div id="root"></div>
 
   <script type="text/babel">
-    const { useState } = React;
+    const { useState, useEffect } = React;
 
     function CodeEntry({ onSuccess }) {
       const [codes, setCodes] = useState(["", "", "", "", ""]);
@@ -46,7 +68,9 @@
         const body = document.getElementById("body");
 
         if (fullCode === "29074") {
-          onSuccess();
+          onSuccess("video");
+        } else if (fullCode === "98142") {
+          onSuccess("puzzle");
         } else {
           body.classList.add("bg-error");
           setTimeout(() => body.classList.remove("bg-error"), 1500);
@@ -101,13 +125,47 @@
       );
     }
 
-    function App() {
-      const [success, setSuccess] = useState(false);
+    function PuzzleScreen({ onBack }) {
+      const [showHint, setShowHint] = useState(false);
 
-      return success ? (
-        <VideoScreen onBack={() => setSuccess(false)} />
+      useEffect(() => {
+        const timer = setTimeout(() => setShowHint(true), 4000);
+        return () => clearTimeout(timer);
+      }, []);
+
+      return (
+        <div className="flex flex-col items-center justify-center text-center space-y-6">
+          <div className="mb-2 min-h-[3rem]">
+            <p className="text-green-200 text-xl typewriter">
+              Sin importar a donde mires en un parque siempre verás un...
+            </p>
+          </div>
+          <div className="min-h-[2rem]">
+            {showHint && (
+              <p className="text-green-400 text-lg animate-pulse fade-in">
+                Coloca la respuesta en el espacio para código
+              </p>
+            )}
+          </div>
+          <button
+            onClick={onBack}
+            className="bg-green-600 hover:bg-green-500 text-black font-semibold px-6 py-2 rounded"
+          >
+            Volver
+          </button>
+        </div>
+      );
+    }
+
+    function App() {
+      const [screen, setScreen] = useState("entry");
+
+      return screen === "video" ? (
+        <VideoScreen onBack={() => setScreen("entry")} />
+      ) : screen === "puzzle" ? (
+        <PuzzleScreen onBack={() => setScreen("entry")} />
       ) : (
-        <CodeEntry onSuccess={() => setSuccess(true)} />
+        <CodeEntry onSuccess={(target) => setScreen(target)} />
       );
     }
 
