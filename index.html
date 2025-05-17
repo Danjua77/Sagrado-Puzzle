@@ -39,7 +39,7 @@
 <body id="body" class="bg-black text-green-100 flex items-center justify-center min-h-screen p-4">
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect } = React;
+    const { useState, useEffect, useRef } = React;
 
     const translations = {
       es: {
@@ -115,8 +115,16 @@
       const [isUserTurn, setIsUserTurn] = useState(false);
       const [message, setMessage] = useState("");
       const [pressedIndex, setPressedIndex] = useState(-1);
+      const [gameFinished, setGameFinished] = useState(false);
+      const timeoutRef = useRef(null);
       const t = translations[lang];
-      const colors = ['bg-red-600', 'bg-yellow-400', 'bg-blue-600', 'bg-green-600', 'bg-purple-600', 'bg-pink-600'];
+
+      const colors = [
+        'bg-red-600', 'bg-yellow-400', 'bg-blue-600', 'bg-green-600',
+        'bg-purple-600', 'bg-pink-600', 'bg-orange-600', 'bg-cyan-600',
+        'bg-teal-600', 'bg-lime-600', 'bg-indigo-600', 'bg-rose-600',
+        'bg-emerald-600', 'bg-fuchsia-600', 'bg-sky-600', 'bg-amber-600'
+      ];
 
       useEffect(() => {
         const sequenceLength = level === 1 ? 3 : level === 2 ? 5 : 7;
@@ -132,19 +140,24 @@
           i++;
           if (i >= newSeq.length) {
             clearInterval(interval);
-            setTimeout(() => {
+            timeoutRef.current = setTimeout(() => {
               setActiveIndex(-1);
               setMessage(t.simonRepeat);
               setIsUserTurn(true);
             }, 600);
           }
         }, 800);
+
+        return () => {
+          clearInterval(interval);
+          clearTimeout(timeoutRef.current);
+        };
       }, [level]);
 
       const handleClick = (index) => {
-        if (!isUserTurn) return;
+        if (!isUserTurn || gameFinished) return;
         setPressedIndex(index);
-        setTimeout(() => setPressedIndex(-1), 200);
+        setTimeout(() => setPressedIndex(-1), 150);
 
         const nextInput = [...userInput, index];
         setUserInput(nextInput);
@@ -157,7 +170,8 @@
         if (nextInput.length === sequence.length) {
           if (level === 3) {
             setMessage(t.simonFinal);
-            setTimeout(() => onBack(), 1500);
+            setGameFinished(true);
+            setTimeout(() => onBack("cache"), 1500);
           } else {
             setMessage(t.simonSuccess);
             setTimeout(() => setLevel(level + 1), 1200);
@@ -166,7 +180,7 @@
       };
 
       const getButtonClass = (index) => {
-        const base = "w-16 h-16 rounded border transition-all duration-300";
+        const base = "w-16 h-16 rounded border transition-all duration-200";
         const color = colors[index % colors.length];
         if (index === activeIndex || index === pressedIndex) {
           return `${base} ${color} scale-110`;
@@ -187,7 +201,7 @@
               />
             ))}
           </div>
-          <button onClick={onBack} className="mt-6 bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
+          <button onClick={() => onBack("entry")} className="mt-6 bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
         </div>
       );
     }
@@ -239,7 +253,7 @@
       return screen === "video1" ? <VideoScreen url="https://www.youtube.com/embed/3KsR03Ir6xM" onBack={() => setScreen("entry")} /> :
         screen === "video2" ? <VideoScreen url="https://www.youtube.com/embed/VHYkZPRp5Bk" onBack={() => setScreen("entry")} /> :
         screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} lang={lang} /> :
-        screen === "simon" ? <SimonGame onBack={() => setScreen("cache")} lang={lang} /> :
+        screen === "simon" ? <SimonGame onBack={setScreen} lang={lang} /> :
         screen === "cache" ? <CachePage onBack={() => setScreen("entry")} lang={lang} /> :
         <CodeEntry onSuccess={(target) => setScreen(target)} lang={lang} setLang={setLang} />;
     }
