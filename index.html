@@ -140,16 +140,62 @@
 
     function CachePage({ onBack, lang }) {
       const t = translations[lang];
+      // Carrusel de imágenes
+      const images = ["./70635-1.jpeg", "./70635-2.jpeg", "./70635-3.jpeg"];
+      const [current, setCurrent] = React.useState(0);
+      const startX = React.useRef(null);
+
+      // Manejo de arrastre táctil
+      const handleTouchStart = (e) => {
+        startX.current = e.touches[0].clientX;
+      };
+      const handleTouchEnd = (e) => {
+        if (startX.current === null) return;
+        const delta = e.changedTouches[0].clientX - startX.current;
+        if (delta < -40 && current < images.length - 1) setCurrent(current + 1);
+        else if (delta > 40 && current > 0) setCurrent(current - 1);
+        startX.current = null;
+      };
+
+      // Manejo de arrastre con mouse (opcional)
+      const mouseStartX = React.useRef(null);
+      const handleMouseDown = (e) => {
+        mouseStartX.current = e.clientX;
+      };
+      const handleMouseUp = (e) => {
+        if (mouseStartX.current === null) return;
+        const delta = e.clientX - mouseStartX.current;
+        if (delta < -40 && current < images.length - 1) setCurrent(current + 1);
+        else if (delta > 40 && current > 0) setCurrent(current - 1);
+        mouseStartX.current = null;
+      };
+
       return (
         <div className="flex flex-col items-center text-center space-y-6">
           <h1 className="text-2xl font-bold text-green-400 animate-pulse">{t.winText}</h1>
-          <div className="w-full max-w-2xl aspect-[16/7]">
-            <iframe
-              className="w-full h-full rounded-lg"
-              src="https://www.youtube.com/embed/YLjLNPgFdSs"
-              title="video cache"
-              allowFullScreen
-            ></iframe>
+          <div
+            className="w-full max-w-2xl aspect-[16/7] flex items-center justify-center bg-zinc-900 rounded-lg border-2 border-green-700 overflow-hidden relative select-none"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onMouseDown={handleMouseDown}
+            onMouseUp={handleMouseUp}
+            style={{ touchAction: "pan-y" }}
+          >
+            <img
+              src={images[current]}
+              alt={`cache pista ${current + 1}`}
+              className="max-h-full max-w-full object-contain w-full h-full transition-all duration-300"
+              draggable={false}
+            />
+            {/* Puntos indicadores */}
+            <div className="absolute bottom-2 left-0 right-0 flex justify-center space-x-2">
+              {images.map((_, idx) => (
+                <span
+                  key={idx}
+                  className={`inline-block w-3 h-3 rounded-full ${idx === current ? "bg-green-400" : "bg-green-900"} transition-all`}
+                />
+              ))}
+            </div>
           </div>
           <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
         </div>
