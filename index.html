@@ -91,8 +91,14 @@
           {isVideo1 && (
             <h2 className="text-2xl font-bold text-green-400 mb-2">{video1Titles[lang]}</h2>
           )}
-          <div className="w-full max-w-2xl aspect-[16/7]">
-            <iframe className="w-full h-full rounded-lg" src={url} title="video pista" allowFullScreen></iframe>
+          <div className="w-full max-w-2xl aspect-[16/7] flex items-center justify-center bg-zinc-900 rounded-lg border-2 border-green-700">
+            {isVideo1 ? (
+              <img src="./98142" alt="pista 98142" className="max-h-full max-w-full object-contain" />
+            ) : isArbolVideo ? (
+              <span className="text-green-400 text-xl">{t.imagePlaceholder}</span>
+            ) : (
+              <iframe className="w-full h-full rounded-lg" src={url} title="video pista" allowFullScreen></iframe>
+            )}
           </div>
           <button onClick={onBack} className="bg-green-600 hover:bg-green-500 text-black px-4 py-2 rounded">{t.back}</button>
         </div>
