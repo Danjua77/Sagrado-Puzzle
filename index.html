@@ -49,6 +49,17 @@
   <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 </head>
 <body id="body" class="bg-black text-green-100 flex items-center justify-center min-h-screen p-4">
+  {/* Fondo blureado solo para la pantalla principal */}
+  <div id="blur-bg" style={{
+    position: "fixed",
+    inset: 0,
+    zIndex: 0,
+    pointerEvents: "none",
+    background: "center/cover no-repeat url('./Fondo.jpg')",
+    filter: "blur(12px) brightness(0.7)",
+    transition: "opacity 0.4s",
+    opacity: 1
+  }}></div>
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useRef } = React;
@@ -377,6 +388,12 @@
     function App() {
       const [screen, setScreen] = useState("entry");
       const [lang, setLang] = useState("es");
+
+      // Mostrar el fondo blureado solo en la pantalla principal
+      useEffect(() => {
+        const blurBg = document.getElementById("blur-bg");
+        if (blurBg) blurBg.style.opacity = screen === "entry" ? "1" : "0";
+      }, [screen]);
 
       return screen === "video1" ? <VideoScreen url="https://www.youtube.com/embed/3KsR03Ir6xM" onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "video2" ? <VideoScreen url="https://www.youtube.com/embed/VHYkZPRp5Bk" onBack={() => setScreen("entry")} lang={lang} /> :
