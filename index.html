@@ -339,7 +339,15 @@
         }
       };
       return (
-        <div className="text-center">
+        <div
+          className="text-center min-h-screen flex flex-col justify-center items-center"
+          style={{
+            backgroundImage: "url('./Fondo.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat"
+          }}
+        >
           <div className="mb-4">
             <select value={lang} onChange={(e) => setLang(e.target.value)} className="bg-zinc-900 border border-green-600 text-green-300 px-2 py-1 rounded">
               <option value="es">Español</option>
