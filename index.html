@@ -349,7 +349,12 @@
           }}
         >
           <div className="mb-4">
-            <select value={lang} onChange={(e) => setLang(e.target.value)} className="bg-zinc-900 border border-green-600 text-green-300 px-2 py-1 rounded">
+            <select
+              value={lang}
+              onChange={(e) => setLang(e.target.value)}
+              className="bg-green-600 border border-white text-white px-2 py-1 rounded font-semibold"
+              style={{ borderWidth: 2 }}
+            >
               <option value="es">Español</option>
               <option value="en">English</option>
             </select>
@@ -371,7 +376,7 @@
               {promoText}
             </span>
           </div>
-          <h2 className="text-2xl font-bold mb-6 text-green-300">{t.title}</h2>
+          <h2 className="text-2xl font-bold mb-6 text-green-600">{t.title}</h2>
           <div className="flex space-x-4 justify-center mb-6">
             {codes.map((code, i) => (
               <input
@@ -398,7 +403,13 @@
               />
             ))}
           </div>
-          <button onClick={handleAccept} className="bg-green-600 hover:bg-green-500 text-black font-semibold px-6 py-2 rounded">{t.buttonAccept}</button>
+          <button
+            onClick={handleAccept}
+            className="bg-green-600 border border-white text-white font-semibold px-6 py-2 rounded"
+            style={{ borderWidth: 2 }}
+          >
+            {t.buttonAccept}
+          </button>
         </div>
       );
     }
