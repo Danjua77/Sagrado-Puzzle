@@ -348,6 +348,52 @@
             backgroundRepeat: "no-repeat"
           }}
         >
+          {/* Elimina el texto animado cobre/bronce */}
+          {/* Texto "versión extendida" estilo amarillo, rotado y posicionado sobre el título */}
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              height: 0,
+              marginBottom: "2.5rem"
+            }}
+          >
+            <span
+              className="animate-promo"
+              style={{
+                position: "absolute",
+                left: "60%",
+                top: "2.2rem", // solo rueda un poco más abajo
+                transform: "rotate(-20deg)",
+                color: "#ffe44d",
+                fontWeight: "bold",
+                fontSize: "1.35rem",
+                textShadow: "2px 2px 0 #000, 0 0 8px #000, 0 0 2px #fff",
+                letterSpacing: "0.03em",
+                zIndex: 10,
+                pointerEvents: "none",
+                userSelect: "none"
+              }}
+            >
+              {promoText}
+            </span>
+          </div>
+          {/* Título grande con contorno neón blanco */}
+          <h1
+            className="text-5xl font-extrabold mb-6"
+            style={{
+              color: "#22c55e", // verde tailwind
+              textShadow: `
+                0 0 8px #fff,
+                0 0 16px #fff,
+                0 0 32px #fff,
+                0 0 64px #fff
+              `,
+              letterSpacing: "0.05em"
+            }}
+          >
+            Sagrado Puzzle
+          </h1>
           <div className="mb-4">
             <select
               value={lang}
@@ -359,8 +405,8 @@
               <option value="en">English</option>
             </select>
           </div>
-          {/* Texto promocional animado con color cobre/bronce */}
-          <div className="flex justify-center mb-2">
+          {/* Elimina el texto promocional animado con color cobre/bronce */}
+          {/* <div className="flex justify-center mb-2">
             <span
               className="font-extrabold text-lg animate-promo"
               style={{
@@ -375,7 +421,7 @@
             >
               {promoText}
             </span>
-          </div>
+          </div> */}
           <h2 className="text-2xl font-bold mb-6 text-green-600">{t.title}</h2>
           <div className="flex space-x-4 justify-center mb-6">
             {codes.map((code, i) => (
