@@ -320,6 +320,7 @@
       const [showImage, setShowImage] = React.useState(false);
       const [showTitle, setShowTitle] = React.useState(false);
       const [showText, setShowText] = React.useState(false);
+      const [showButton, setShowButton] = React.useState(false);
 
       React.useEffect(() => {
         const body = document.getElementById("body");
@@ -335,17 +336,18 @@
         body.style.backgroundPosition = "center";
         body.style.backgroundRepeat = "no-repeat";
         body.style.overflow = "hidden";
-        // Animación: baja arbol-chan, luego aparece título, luego texto
+        // Animación: baja arbol-chan, luego aparece título, luego texto, luego botón
         const t1 = setTimeout(() => setShowImage(true), 400); // pequeño delay inicial
         const t2 = setTimeout(() => setShowTitle(true), 1800); // después de bajar
         const t3 = setTimeout(() => setShowText(true), 2600); // después del título
+        const t4 = setTimeout(() => setShowButton(true), 3300); // después del texto
         return () => {
           body.style.backgroundImage = prevBg;
           body.style.backgroundSize = prevSize;
           body.style.backgroundPosition = prevPos;
           body.style.backgroundRepeat = prevRepeat;
           body.style.overflow = prevOverflow;
-          clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
+          clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); clearTimeout(t4);
         };
       }, []);
 
@@ -359,13 +361,17 @@
         maxHeight: "32vh",
         marginBottom: "1.2rem"
       };
-      // Fade-in para título y texto
+      // Fade-in para título, texto y botón
       const fadeInTitle = {
         opacity: showTitle ? 1 : 0,
         transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1)"
       };
       const fadeInText = {
         opacity: showText ? 1 : 0,
+        transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1)"
+      };
+      const fadeInButton = {
+        opacity: showButton ? 1 : 0,
         transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1)"
       };
 
@@ -410,15 +416,17 @@
             >
               Uy, disculpe, ese ya no es el código… resulta que con la inseguridad me dejaron a mí de celador para cuidar la siguiente pista
             </p>
-            {showText && (
-              <button
-                className="bg-green-600 hover:bg-green-500 text-black px-6 py-2 rounded text-lg font-semibold"
-                style={{ width: "90vw", maxWidth: 340 }}
-                onClick={onFinish}
-              >
-                Continuar
-              </button>
-            )}
+            <div style={fadeInButton}>
+              {showButton && (
+                <button
+                  className="bg-green-600 hover:bg-green-500 text-black px-6 py-2 rounded text-lg font-semibold"
+                  style={{ width: "90vw", maxWidth: 340 }}
+                  onClick={onFinish}
+                >
+                  ¿me lo puedes dar?
+                </button>
+              )}
+            </div>
           </div>
         </div>
       );
