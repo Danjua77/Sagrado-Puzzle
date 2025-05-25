@@ -318,6 +318,8 @@
     // --- NUEVO COMPONENTE PARA LA ANIMACIÓN ESPECIAL ---
     function SpecialAnimation({ onFinish }) {
       const [showImage, setShowImage] = React.useState(false);
+      const [showTitle, setShowTitle] = React.useState(false);
+      const [showText, setShowText] = React.useState(false);
 
       React.useEffect(() => {
         const body = document.getElementById("body");
@@ -333,23 +335,38 @@
         body.style.backgroundPosition = "center";
         body.style.backgroundRepeat = "no-repeat";
         body.style.overflow = "hidden";
-        // Muestra la imagen tras 2 segundos
-        const timer = setTimeout(() => setShowImage(true), 2000);
+        // Animación: baja arbol-chan, luego aparece título, luego texto
+        const t1 = setTimeout(() => setShowImage(true), 400); // pequeño delay inicial
+        const t2 = setTimeout(() => setShowTitle(true), 1800); // después de bajar
+        const t3 = setTimeout(() => setShowText(true), 2600); // después del título
         return () => {
-          // Restaura estilos previos
           body.style.backgroundImage = prevBg;
           body.style.backgroundSize = prevSize;
           body.style.backgroundPosition = prevPos;
           body.style.backgroundRepeat = prevRepeat;
           body.style.overflow = prevOverflow;
-          clearTimeout(timer);
+          clearTimeout(t1); clearTimeout(t2); clearTimeout(t3);
         };
       }, []);
 
-      // Animación de aparición lenta para el texto
-      const fadeInStyle = {
+      // Animación de bajada para la imagen
+      const imgStyle = {
+        transform: showImage ? "translateY(0)" : "translateY(-60vh)",
         opacity: showImage ? 1 : 0,
-        transition: "opacity 1.2s cubic-bezier(0.4,0,0.2,1)"
+        transition: "transform 1.2s cubic-bezier(0.4,0,0.2,1), opacity 1.2s cubic-bezier(0.4,0,0.2,1)",
+        width: "min(90vw, 420px)",
+        maxWidth: "100%",
+        maxHeight: "32vh",
+        marginBottom: "1.2rem"
+      };
+      // Fade-in para título y texto
+      const fadeInTitle = {
+        opacity: showTitle ? 1 : 0,
+        transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1)"
+      };
+      const fadeInText = {
+        opacity: showText ? 1 : 0,
+        transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1)"
       };
 
       return (
@@ -366,42 +383,43 @@
             padding: "2.5vw"
           }}
         >
-          {showImage && (
-            <div className="flex flex-col items-center justify-center w-full" style={fadeInStyle}>
-              <img
-                src="./arbol-chan.png"
-                alt="arbol-chan"
-                style={{
-                  width: "min(90vw, 420px)",
-                  maxWidth: "100%",
-                  maxHeight: "32vh",
-                  marginBottom: "1.2rem"
-                }}
-              />
-              <h2 className="text-3xl font-bold text-green-400 mb-2" style={{textAlign: "center"}}>arbol chan</h2>
-              <p
-                className="text-white text-lg mb-6"
-                style={{
-                  maxWidth: "95vw",
-                  textAlign: "center",
-                  lineHeight: 1.3,
-                  background: "rgba(0,0,0,0.45)",
-                  borderRadius: "0.75rem",
-                  padding: "1.1rem 1.2rem",
-                  fontWeight: 500
-                }}
-              >
-                Uy, disculpe, ese ya no es el código… resulta que con la inseguridad me dejaron a mí de celador para cuidar la siguiente pista
-              </p>
+          <div className="flex flex-col items-center justify-center w-full">
+            <img
+              src="./arbol-chan.png"
+              alt="arbol-chan"
+              style={imgStyle}
+            />
+            <h2
+              className="text-3xl font-bold text-green-400 mb-2"
+              style={{ textAlign: "center", ...fadeInTitle }}
+            >
+              arbol chan
+            </h2>
+            <p
+              className="text-white text-lg mb-6"
+              style={{
+                maxWidth: "95vw",
+                textAlign: "center",
+                lineHeight: 1.3,
+                background: "rgba(0,0,0,0.45)",
+                borderRadius: "0.75rem",
+                padding: "1.1rem 1.2rem",
+                fontWeight: 500,
+                ...fadeInText
+              }}
+            >
+              Uy, disculpe, ese ya no es el código… resulta que con la inseguridad me dejaron a mí de celador para cuidar la siguiente pista
+            </p>
+            {showText && (
               <button
                 className="bg-green-600 hover:bg-green-500 text-black px-6 py-2 rounded text-lg font-semibold"
-                style={{width: "90vw", maxWidth: 340}}
+                style={{ width: "90vw", maxWidth: 340 }}
                 onClick={onFinish}
               >
                 Continuar
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       );
     }
