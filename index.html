@@ -64,6 +64,13 @@
     .fade-bg.show {
       opacity: 1;
     }
+    .arbolchan-appear {
+      opacity: 0;
+      transition: opacity 1.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .arbolchan-appear.show {
+      opacity: 1;
+    }
     .arbolchan-drop {
       animation: arbolchanDrop 1.5s cubic-bezier(0.4,0,0.2,1) forwards;
       position: relative;
@@ -117,6 +124,20 @@
         simonSuccess: "Correct! Advancing to the next level...",
         simonFinal: "Correct! Heading to the final clue...",
         simonFail: "Incorrect. Returning to level 1."
+      }
+    };
+
+    // Traducciones para Arbol-chan
+    const arbolchanTexts = {
+      es: {
+        title: "arbol-chan",
+        text: "He robado la pista original y si la quieres tendrás que vencerme en un juego de... ¡PING PONG!",
+        button: "Continuar"
+      },
+      en: {
+        title: "arbol-chan",
+        text: "I have stolen the original clue and if you want it, you'll have to beat me in a game of... PING PONG!",
+        button: "Continue"
       }
     };
 
@@ -347,15 +368,15 @@
       );
     }
 
-    function ArbolChanScreen({ onContinue }) {
+    function ArbolChanScreen({ onContinue, lang }) {
       const [show, setShow] = useState(false);
       useEffect(() => {
         const t = setTimeout(() => setShow(true), 100);
         return () => clearTimeout(t);
       }, []);
+      const t = arbolchanTexts[lang];
       return (
-        <div
-          className="fixed inset-0 flex flex-col items-center justify-center"
+        <div className={`fixed inset-0 flex flex-col items-center justify-center arbolchan-appear${show ? " show" : ""}`}
           style={{
             backgroundImage: "url('./Fondo texto.jpg')",
             backgroundSize: "cover",
@@ -374,16 +395,20 @@
               style={{ transition: "opacity 0.5s" }}
             />
             <h1 className="text-4xl sm:text-5xl font-extrabold text-green-400 mb-4 text-center" style={{ textShadow: "0 0 8px #000" }}>
-              arbol-chan
+              {t.title}
             </h1>
             <p className="text-white text-lg sm:text-xl mb-10 max-w-2xl text-center" style={{ textShadow: "0 0 8px #000" }}>
-              He robado la pista original y si la quieres tendrás que vencerme en un juego de... <span className="font-bold text-green-300">¡PING PONG!</span>
+              {t.text.split("¡PING PONG!").map((part, idx, arr) =>
+                idx < arr.length - 1
+                  ? <>{part}<span className="font-bold text-green-300">¡PING PONG!</span></>
+                  : part
+              )}
             </p>
             <button
               onClick={onContinue}
               className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded text-xl font-bold shadow-lg"
             >
-              Continuar
+              {t.button}
             </button>
           </div>
         </div>
@@ -417,24 +442,24 @@
           setTimeout(() => body.classList.remove("bg-error"), 1500);
         }
       };
-      // Overlay de transición de fondo
+      // Overlay de transición de fondo y elementos
       const fadeBg = (
         <div
           className={`fade-bg${fade ? " show" : ""}`}
           style={{ backgroundImage: "url('./Fondo texto.jpg')" }}
         />
       );
-      // Si está en paso de Arbol-chan, muestra la pantalla especial
+      // Si está en paso de Arbol-chan, muestra la pantalla especial y pasa lang
       if (arbolStep === 2) {
-        return <ArbolChanScreen onContinue={() => onSuccess("video1")} />;
+        return <ArbolChanScreen onContinue={() => onSuccess("video1")} lang={lang} />;
       }
       return (
         <div
-          className={`text-center flex flex-col justify-center items-center transition-opacity duration-1500 ${fade ? "fade-out" : ""}`}
+          className={`text-center flex flex-col justify-center items-center transition-opacity duration-1500${fade ? " fade-out" : ""}`}
           style={{
             minHeight: "90vh",
             overflow: "hidden",
-            backgroundImage: fade ? "url('./Fondo.jpg')" : "url('./Fondo.jpg')",
+            backgroundImage: "url('./Fondo.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat"
