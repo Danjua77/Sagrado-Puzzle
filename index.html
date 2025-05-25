@@ -321,6 +321,7 @@
       const [showTitle, setShowTitle] = React.useState(false);
       const [showText, setShowText] = React.useState(false);
       const [showButton, setShowButton] = React.useState(false);
+      const [buttonClicked, setButtonClicked] = React.useState(false);
 
       React.useEffect(() => {
         const body = document.getElementById("body");
@@ -337,10 +338,10 @@
         body.style.backgroundRepeat = "no-repeat";
         body.style.overflow = "hidden";
         // Animación: baja arbol-chan, luego aparece título, luego texto, luego botón
-        const t1 = setTimeout(() => setShowImage(true), 400); // pequeño delay inicial
-        const t2 = setTimeout(() => setShowTitle(true), 1800); // después de bajar
-        const t3 = setTimeout(() => setShowText(true), 2600); // después del título
-        const t4 = setTimeout(() => setShowButton(true), 3300); // después del texto
+        const t1 = setTimeout(() => setShowImage(true), 400);
+        const t2 = setTimeout(() => setShowTitle(true), 1800);
+        const t3 = setTimeout(() => setShowText(true), 2600);
+        const t4 = setTimeout(() => setShowButton(true), 3300);
         return () => {
           body.style.backgroundImage = prevBg;
           body.style.backgroundSize = prevSize;
@@ -417,14 +418,29 @@
               Uy, disculpe, ese ya no es el código… resulta que con la inseguridad me dejaron a mí de celador para cuidar la siguiente pista
             </p>
             <div style={fadeInButton}>
-              {showButton && (
+              {showButton && !buttonClicked && (
                 <button
                   className="bg-green-600 hover:bg-green-500 text-black px-6 py-2 rounded text-lg font-semibold"
                   style={{ width: "90vw", maxWidth: 340 }}
-                  onClick={onFinish}
+                  onClick={() => setButtonClicked(true)}
                 >
-                  ¿me lo puedes dar?
+                  Ok
                 </button>
+              )}
+              {showButton && buttonClicked && (
+                <div
+                  className="text-white text-lg font-semibold text-center"
+                  style={{
+                    maxWidth: "95vw",
+                    background: "rgba(0,0,0,0.45)",
+                    borderRadius: "0.75rem",
+                    padding: "1.1rem 1.2rem",
+                    marginTop: "0.5rem",
+                    transition: "opacity 0.7s cubic-bezier(0.4,0,0.2,1)"
+                  }}
+                >
+                  con gusto se la daría su merced, pero necesita contestarme un acertijo
+                </div>
               )}
             </div>
           </div>
