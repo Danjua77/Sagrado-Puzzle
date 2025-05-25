@@ -318,35 +318,8 @@
     function CodeEntry({ onSuccess, lang, setLang }) {
       const [codes, setCodes] = useState(["", "", "", "", ""]);
       const t = translations[lang];
+      // Texto promocional por idioma
       const promoText = lang === "es" ? "versión extendida" : "extended version";
-
-      // Reproducir música en loop cuando se está en la página principal
-      useEffect(() => {
-        let audio = document.getElementById("main-audio");
-        if (!audio) {
-          audio = document.createElement("audio");
-          audio.id = "main-audio";
-          audio.src = "./musica de pagina de inicio.mp3";
-          audio.loop = true;
-          audio.volume = 0.5;
-          document.body.appendChild(audio);
-        }
-        // Intentar reproducir al hacer click en cualquier parte si autoplay falla
-        const tryPlay = () => {
-          audio.play().catch(() => {});
-          document.removeEventListener("click", tryPlay);
-        };
-        audio.play().catch(() => {
-          document.addEventListener("click", tryPlay);
-        });
-
-        return () => {
-          audio.pause();
-          audio.currentTime = 0;
-          document.removeEventListener("click", tryPlay);
-        };
-      }, []);
-
       const handleCodeChange = (i, value) => {
         const updated = [...codes];
         updated[i] = value.slice(0, 1);
