@@ -48,6 +48,22 @@
       transition: opacity 1.5s cubic-bezier(0.4,0,0.2,1);
       pointer-events: none;
     }
+    .fade-bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 50;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 1.5s cubic-bezier(0.4,0,0.2,1);
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+    .fade-bg.show {
+      opacity: 1;
+    }
     .arbolchan-drop {
       animation: arbolchanDrop 1.5s cubic-bezier(0.4,0,0.2,1) forwards;
       position: relative;
@@ -332,40 +348,40 @@
     }
 
     function ArbolChanScreen({ onContinue }) {
-      // Animación de entrada controlada por estado
       const [show, setShow] = useState(false);
       useEffect(() => {
-        const t = setTimeout(() => setShow(true), 100); // pequeño delay para animación
+        const t = setTimeout(() => setShow(true), 100);
         return () => clearTimeout(t);
       }, []);
       return (
         <div
-          className="flex flex-col items-center justify-center min-h-screen"
+          className="fixed inset-0 flex flex-col items-center justify-center"
           style={{
             backgroundImage: "url('./Fondo texto.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",
             minHeight: "100vh",
-            width: "100vw"
+            minWidth: "100vw",
+            zIndex: 100
           }}
         >
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center justify-center w-full h-full px-4">
             <img
               src="./Arbol-chan.png"
               alt="Arbol-chan"
-              className={show ? "arbolchan-drop w-64 mb-4" : "opacity-0 w-64 mb-4"}
+              className={show ? "arbolchan-drop w-56 sm:w-64 mb-6" : "opacity-0 w-56 sm:w-64 mb-6"}
               style={{ transition: "opacity 0.5s" }}
             />
-            <h1 className="text-4xl font-extrabold text-green-400 mb-2" style={{ textShadow: "0 0 8px #000" }}>
+            <h1 className="text-4xl sm:text-5xl font-extrabold text-green-400 mb-4 text-center" style={{ textShadow: "0 0 8px #000" }}>
               arbol-chan
             </h1>
-            <p className="text-white text-lg mb-8 max-w-xl" style={{ textShadow: "0 0 8px #000" }}>
+            <p className="text-white text-lg sm:text-xl mb-10 max-w-2xl text-center" style={{ textShadow: "0 0 8px #000" }}>
               He robado la pista original y si la quieres tendrás que vencerme en un juego de... <span className="font-bold text-green-300">¡PING PONG!</span>
             </p>
             <button
               onClick={onContinue}
-              className="bg-green-600 hover:bg-green-500 text-black px-6 py-3 rounded text-xl font-bold shadow-lg"
+              className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded text-xl font-bold shadow-lg"
             >
               Continuar
             </button>
@@ -401,6 +417,13 @@
           setTimeout(() => body.classList.remove("bg-error"), 1500);
         }
       };
+      // Overlay de transición de fondo
+      const fadeBg = (
+        <div
+          className={`fade-bg${fade ? " show" : ""}`}
+          style={{ backgroundImage: "url('./Fondo texto.jpg')" }}
+        />
+      );
       // Si está en paso de Arbol-chan, muestra la pantalla especial
       if (arbolStep === 2) {
         return <ArbolChanScreen onContinue={() => onSuccess("video1")} />;
@@ -411,12 +434,13 @@
           style={{
             minHeight: "90vh",
             overflow: "hidden",
-            backgroundImage: fade ? "url('./Fondo texto.jpg')" : "url('./Fondo.jpg')",
+            backgroundImage: fade ? "url('./Fondo.jpg')" : "url('./Fondo.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat"
           }}
         >
+          {fade && fadeBg}
           {/* Elimina el texto animado cobre/bronce */}
           {/* Texto "versión extendida" estilo amarillo, rotado y posicionado sobre el título */}
           <div
@@ -432,7 +456,7 @@
               style={{
                 position: "absolute",
                 left: "60%",
-                top: "2.2rem", // solo rueda un poco más abajo
+                top: "2.2rem",
                 transform: "rotate(-20deg)",
                 color: "#ffe44d",
                 fontWeight: "bold",
@@ -451,7 +475,7 @@
           <h1
             className="text-5xl font-extrabold mb-6"
             style={{
-              color: "#22c55e", // verde tailwind
+              color: "#22c55e",
               textShadow: `
                 0 0 8px #fff,
                 0 0 16px #fff,
