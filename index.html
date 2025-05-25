@@ -43,6 +43,22 @@
     .animate-promo {
       animation: promoScale 2s infinite cubic-bezier(0.4,0,0.2,1);
     }
+    .fade-out {
+      opacity: 0 !important;
+      transition: opacity 1.5s cubic-bezier(0.4,0,0.2,1);
+      pointer-events: none;
+    }
+    .arbolchan-drop {
+      animation: arbolchanDrop 1.5s cubic-bezier(0.4,0,0.2,1) forwards;
+      position: relative;
+      top: -300px;
+    }
+    @keyframes arbolchanDrop {
+      0% { top: -300px; opacity: 0; }
+      60% { top: 30px; opacity: 1; }
+      80% { top: -10px; }
+      100% { top: 0; opacity: 1; }
+    }
   </style>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
@@ -315,10 +331,54 @@
       );
     }
 
+    function ArbolChanScreen({ onContinue }) {
+      // Animación de entrada controlada por estado
+      const [show, setShow] = useState(false);
+      useEffect(() => {
+        const t = setTimeout(() => setShow(true), 100); // pequeño delay para animación
+        return () => clearTimeout(t);
+      }, []);
+      return (
+        <div
+          className="flex flex-col items-center justify-center min-h-screen"
+          style={{
+            backgroundImage: "url('./Fondo texto.jpg')",
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+            minHeight: "100vh",
+            width: "100vw"
+          }}
+        >
+          <div className="flex flex-col items-center">
+            <img
+              src="./Arbol-chan.png"
+              alt="Arbol-chan"
+              className={show ? "arbolchan-drop w-64 mb-4" : "opacity-0 w-64 mb-4"}
+              style={{ transition: "opacity 0.5s" }}
+            />
+            <h1 className="text-4xl font-extrabold text-green-400 mb-2" style={{ textShadow: "0 0 8px #000" }}>
+              arbol-chan
+            </h1>
+            <p className="text-white text-lg mb-8 max-w-xl" style={{ textShadow: "0 0 8px #000" }}>
+              He robado la pista original y si la quieres tendrás que vencerme en un juego de... <span className="font-bold text-green-300">¡PING PONG!</span>
+            </p>
+            <button
+              onClick={onContinue}
+              className="bg-green-600 hover:bg-green-500 text-black px-6 py-3 rounded text-xl font-bold shadow-lg"
+            >
+              Continuar
+            </button>
+          </div>
+        </div>
+      );
+    }
+
     function CodeEntry({ onSuccess, lang, setLang }) {
       const [codes, setCodes] = useState(["", "", "", "", ""]);
+      const [fade, setFade] = useState(false);
+      const [arbolStep, setArbolStep] = useState(0); // 0: normal, 1: fading, 2: show arbolchan
       const t = translations[lang];
-      // Texto promocional por idioma
       const promoText = lang === "es" ? "versión extendida" : "extended version";
       const handleCodeChange = (i, value) => {
         const updated = [...codes];
@@ -328,8 +388,11 @@
       const handleAccept = () => {
         const fullCode = codes.join("").toLowerCase();
         const body = document.getElementById("body");
-        if (fullCode === "29074") onSuccess("video1");
-        else if (fullCode === "98142") onSuccess("puzzle");
+        if (fullCode === "29074") {
+          setFade(true);
+          setArbolStep(1);
+          setTimeout(() => setArbolStep(2), 2000);
+        } else if (fullCode === "98142") onSuccess("puzzle");
         else if (["arbol", "trees"].includes(fullCode)) onSuccess("video2");
         else if (fullCode === "pizza") onSuccess("simon");
         else if (fullCode === "70635") onSuccess("cache");
@@ -338,13 +401,17 @@
           setTimeout(() => body.classList.remove("bg-error"), 1500);
         }
       };
+      // Si está en paso de Arbol-chan, muestra la pantalla especial
+      if (arbolStep === 2) {
+        return <ArbolChanScreen onContinue={() => onSuccess("video1")} />;
+      }
       return (
         <div
-          className="text-center flex flex-col justify-center items-center"
+          className={`text-center flex flex-col justify-center items-center transition-opacity duration-1500 ${fade ? "fade-out" : ""}`}
           style={{
-            minHeight: "90vh", // Reduce el espacio vertical para evitar scroll
+            minHeight: "90vh",
             overflow: "hidden",
-            backgroundImage: "url('./Fondo.jpg')",
+            backgroundImage: fade ? "url('./Fondo texto.jpg')" : "url('./Fondo.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat"
