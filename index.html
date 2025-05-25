@@ -318,8 +318,27 @@
     function CodeEntry({ onSuccess, lang, setLang }) {
       const [codes, setCodes] = useState(["", "", "", "", ""]);
       const t = translations[lang];
-      // Texto promocional por idioma
       const promoText = lang === "es" ? "versión extendida" : "extended version";
+
+      // Reproducir música en loop cuando se está en la página principal
+      useEffect(() => {
+        let audio = document.getElementById("main-audio");
+        if (!audio) {
+          audio = document.createElement("audio");
+          audio.id = "main-audio";
+          audio.src = "./musica de pagina de inicio.mp3";
+          audio.loop = true;
+          audio.volume = 0.5;
+          document.body.appendChild(audio);
+        }
+        audio.play().catch(() => {}); // Silencioso si el navegador bloquea autoplay
+
+        return () => {
+          audio.pause();
+          audio.currentTime = 0;
+        };
+      }, []);
+
       const handleCodeChange = (i, value) => {
         const updated = [...codes];
         updated[i] = value.slice(0, 1);
