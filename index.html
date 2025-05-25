@@ -331,11 +331,19 @@
           audio.volume = 0.5;
           document.body.appendChild(audio);
         }
-        audio.play().catch(() => {}); // Silencioso si el navegador bloquea autoplay
+        // Intentar reproducir al hacer click en cualquier parte si autoplay falla
+        const tryPlay = () => {
+          audio.play().catch(() => {});
+          document.removeEventListener("click", tryPlay);
+        };
+        audio.play().catch(() => {
+          document.addEventListener("click", tryPlay);
+        });
 
         return () => {
           audio.pause();
           audio.currentTime = 0;
+          document.removeEventListener("click", tryPlay);
         };
       }, []);
 
