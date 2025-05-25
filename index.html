@@ -340,8 +340,10 @@
       };
       return (
         <div
-          className="text-center min-h-screen flex flex-col justify-center items-center"
+          className="text-center flex flex-col justify-center items-center"
           style={{
+            minHeight: "90vh", // Reduce el espacio vertical para evitar scroll
+            overflow: "hidden",
             backgroundImage: "url('./Fondo.jpg')",
             backgroundSize: "cover",
             backgroundPosition: "center",
