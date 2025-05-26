@@ -436,9 +436,15 @@
           // Paddle jugador (abajo): rectángulo verde
           ctx.fillStyle = "#22c55e";
           ctx.fillRect(player.x, player.y, player.w, player.h);
-          // Paddle IA (arriba): imagen o fallback rectángulo
+          // Paddle IA (arriba): imagen más grande o fallback rectángulo
           if (aiImgLoaded && aiImgRef.current) {
-            ctx.drawImage(aiImgRef.current, ai.x, ai.y, ai.w, ai.h);
+            // Escala el tronco (por ejemplo, 2x)
+            const scale = 2;
+            const drawW = ai.w * scale;
+            const drawH = ai.h * scale;
+            const drawX = ai.x + ai.w/2 - drawW/2;
+            const drawY = ai.y + ai.h/2 - drawH/2;
+            ctx.drawImage(aiImgRef.current, drawX, drawY, drawW, drawH);
           } else {
             ctx.fillStyle = "#22c55e";
             ctx.fillRect(ai.x, ai.y, ai.w, ai.h);
