@@ -699,8 +699,20 @@
         />
       );
       // Si está en paso de Arbol-chan, muestra la pantalla especial y pasa lang
+      useEffect(() => {
+        if (arbolStep === 2) return; // No reiniciar si está mostrando ArbolChanScreen
+        setCodes(["", "", "", "", ""]);
+        setFade(false);
+        setArbolStep(0);
+      }, [lang]); // También puedes agregar una prop extra si lo necesitas
+
       if (arbolStep === 2) {
-        return <ArbolChanScreen onContinue={() => onSuccess("video1")} lang={lang} />;
+        return <ArbolChanScreen onContinue={() => {
+          setCodes(["", "", "", "", ""]);
+          setFade(false);
+          setArbolStep(0);
+          onSuccess("entry");
+        }} lang={lang} />;
       }
       return (
         <div
