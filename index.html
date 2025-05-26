@@ -320,23 +320,6 @@
                 }, 1200);
             }
         });
-
-        // Desvanecer y cambiar fondo al pulsar "Continuar"
-        btnContinuar.addEventListener('click', function() {
-            // Desvanecer arbol-chan-container
-            arbolChanContainer.classList.add('fade-out');
-            // Desvanecer container (opcional, para efecto global)
-            container.classList.add('fade-out');
-            setTimeout(() => {
-                // Cambiar fondo a "Fondo mesa.jpg"
-                container.style.backgroundImage = "url('Fondo mesa.jpg')";
-                // Ocultar arbol-chan-container
-                arbolChanContainer.style.display = 'none';
-                // Quitar fade-out y mostrar container con nuevo fondo
-                container.classList.remove('fade-out');
-                container.classList.add('fade-in');
-            }, 1200);
-        });
     </script>
 </body>
 </html>
