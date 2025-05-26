@@ -377,6 +377,10 @@
       const aiImgRef = React.useRef(null);
       const [aiImgLoaded, setAiImgLoaded] = React.useState(false);
 
+      // Imagen de fondo del tablero
+      const boardImgRef = React.useRef(null);
+      const [boardImgLoaded, setBoardImgLoaded] = React.useState(false);
+
       // Responsivo: ajusta tamaño del canvas
       React.useEffect(() => {
         function updateSize() {
@@ -396,6 +400,15 @@
         img.onload = () => setAiImgLoaded(true);
         img.onerror = () => setAiImgLoaded(false);
         aiImgRef.current = img;
+      }, []);
+
+      // Carga la imagen de fondo del tablero una sola vez
+      React.useEffect(() => {
+        const img = new window.Image();
+        img.src = "./tablero.jpg";
+        img.onload = () => setBoardImgLoaded(true);
+        img.onerror = () => setBoardImgLoaded(false);
+        boardImgRef.current = img;
       }, []);
 
       React.useEffect(() => {
@@ -425,9 +438,13 @@
           ctx.clearRect(0, 0, canvas.width, canvas.height);
           ctx.save();
           ctx.scale(scaleX, scaleY);
-          // Fondo
-          ctx.fillStyle = "#111";
-          ctx.fillRect(0, 0, W, H);
+          // Fondo: dibuja la imagen tablero.jpg si está cargada, si no, fondo sólido
+          if (boardImgLoaded && boardImgRef.current) {
+            ctx.drawImage(boardImgRef.current, 0, 0, W, H);
+          } else {
+            ctx.fillStyle = "#111";
+            ctx.fillRect(0, 0, W, H);
+          }
           // Líneas
           ctx.strokeStyle = "#22c55e";
           ctx.lineWidth = 2;
@@ -564,7 +581,7 @@
           canvas.removeEventListener("mousemove", onMove);
           canvas.removeEventListener("touchmove", onMove);
         };
-      }, [gameState, dimensions, aiImgLoaded]);
+      }, [gameState, dimensions, aiImgLoaded, boardImgLoaded]);
 
       // Pantalla de victoria
       if (gameState === "won") {
