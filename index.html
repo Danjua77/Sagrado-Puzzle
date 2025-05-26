@@ -158,30 +158,41 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             z-index: 10;
             opacity: 0;
             pointer-events: none;
             transition: opacity 1.2s ease;
         }
+        .arbol-chan-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            max-width: 350px;
+            margin: 0 auto;
+        }
         .arbol-chan-img {
             width: 60vw;
-            max-width: 320px;
-            min-width: 180px;
-            margin-top: -300px;
+            max-width: 220px;
+            min-width: 120px;
+            margin-top: 0;
             opacity: 0;
-            transition: margin-top 1.2s cubic-bezier(.77,0,.18,1), opacity 1.2s;
+            transition: opacity 1.2s, transform 1.2s cubic-bezier(.77,0,.18,1);
+            transform: translateY(-120px);
         }
         .arbol-chan-img.visible {
-            margin-top: 40px;
             opacity: 1;
+            transform: translateY(0);
         }
         .arbol-chan-titulo {
             font-family: 'Montserrat', Arial, sans-serif;
             color: #178a2c;
             font-size: 2.5rem;
             font-weight: bold;
-            margin-top: 1.5rem;
+            margin-top: 1.2rem;
+            margin-bottom: 0.7rem;
             text-align: center;
             text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
         }
@@ -189,12 +200,13 @@
             color: #fff;
             font-family: 'Roboto', Arial, sans-serif;
             font-size: 1.2rem;
-            margin-top: 1rem;
+            margin-top: 0.5rem;
+            margin-bottom: 1.2rem;
             text-align: center;
             text-shadow: 0 2px 8px #000;
         }
         .btn-continuar {
-            margin-top: 2.5rem;
+            margin-top: 0.5rem;
             font-size: 1.2rem;
             background: #178a2c;
             color: #fff;
@@ -210,6 +222,30 @@
         .btn-continuar:active {
             background: #176d13;
             border: 2px solid #ffe44d;
+        }
+        /* Fondo especial para la pantalla de mesa */
+        .mesa-fondo {
+            width: 100vw;
+            height: 100vh;
+            max-width: 430px;
+            max-height: 932px;
+            min-width: 320px;
+            min-height: 568px;
+            background: url('fonde mesa.jpg') no-repeat center center;
+            background-size: cover;
+            border-radius: 20px;
+            box-shadow: 0 0 20px 2px rgba(0,0,0,0.2);
+            position: relative;
+        }
+        @media (max-width: 430px) {
+            .mesa-fondo {
+                width: 100vw;
+                height: 100vh;
+                max-width: 100vw;
+                max-height: 100vh;
+                border-radius: 0;
+                box-shadow: none;
+            }
         }
     </style>
 </head>
@@ -231,10 +267,12 @@
         <button class="btn-aceptar" id="btn-aceptar">Aceptar</button>
     </div>
     <div class="arbol-chan-container" id="arbol-chan-container">
-        <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img" alt="Arbol Chan" />
-        <div class="arbol-chan-titulo" id="arbol-chan-titulo">arbol chan</div>
-        <div class="arbol-chan-texto" id="arbol-chan-texto">Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG</div>
-        <button class="btn-continuar" id="btn-continuar">Continuar</button>
+        <div class="arbol-chan-content">
+            <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img" alt="Arbol Chan" />
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo">arbol chan</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto">Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG</div>
+            <button class="btn-continuar" id="btn-continuar">Continuar</button>
+        </div>
     </div>
     <script>
         // Interacción para inputs: foco automático y estilos
@@ -263,25 +301,49 @@
         const titulo = document.getElementById('titulo-sagrado');
         const instrucciones = document.getElementById('instrucciones');
         const btnAceptar = document.getElementById('btn-aceptar');
+        const arbolChanTitulo = document.getElementById('arbol-chan-titulo');
+        const arbolChanTexto = document.getElementById('arbol-chan-texto');
+        let currentLang = idiomaSelect.value;
 
+        // Textos en ambos idiomas, incluyendo Arbol-chan y la pantalla de mesa
         const textos = {
             es: {
                 titulo: 'Sagrado<br>Puzzle',
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
-                aceptar: 'Aceptar'
+                aceptar: 'Aceptar',
+                arbolTitulo: 'arbol chan',
+                arbolTexto: 'Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG',
+                continuar: 'Continuar',
+                mesa: '¡Bienvenido a la mesa sagrada!'
             },
             en: {
                 titulo: 'Sacred<br>Puzzle',
                 instrucciones: 'Find the clues and enter the<br>secret codes',
-                aceptar: 'Accept'
+                aceptar: 'Accept',
+                arbolTitulo: 'arbol chan',
+                arbolTexto: 'If you want that clue, you must first beat me in a... game of PING-PONG',
+                continuar: 'Continue',
+                mesa: 'Welcome to the sacred table!'
             }
         };
 
-        idiomaSelect.addEventListener('change', function() {
-            const lang = idiomaSelect.value;
+        function updateTexts(lang) {
             titulo.innerHTML = textos[lang].titulo;
             instrucciones.innerHTML = textos[lang].instrucciones;
             btnAceptar.textContent = textos[lang].aceptar;
+            arbolChanTitulo.textContent = textos[lang].arbolTitulo;
+            arbolChanTexto.textContent = textos[lang].arbolTexto;
+            btnContinuar.textContent = textos[lang].continuar;
+            currentLang = lang;
+        }
+
+        idiomaSelect.addEventListener('change', function() {
+            updateTexts(idiomaSelect.value);
+            // Si ya estamos en la pantalla de mesa, actualizar el texto ahí también
+            const mesaTexto = document.getElementById('mesa-texto');
+            if (mesaTexto) {
+                mesaTexto.textContent = textos[idiomaSelect.value].mesa;
+            }
         });
 
         const container = document.querySelector('.container');
@@ -319,6 +381,16 @@
                     }, 1200);
                 }, 1200);
             }
+        });
+
+        // Nueva lógica para el botón "Continuar"
+        btnContinuar.addEventListener('click', function() {
+            // Oculta todo el contenido anterior y muestra la pantalla de mesa con texto traducible
+            document.body.innerHTML = `
+                <div class="container mesa-fondo">
+                    <div id="mesa-texto" style="color:#fff;text-align:center;font-family:'Montserrat',Arial,sans-serif;font-size:2rem;font-weight:bold;text-shadow:0 2px 12px #178a2c,0 0 12px #000,2px 2px 0 #fff;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90%;">${textos[currentLang].mesa}</div>
+                </div>
+            `;
         });
     </script>
 </body>
