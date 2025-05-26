@@ -49,29 +49,8 @@
             text-align: center;
             line-height: 1.1;
             margin-bottom: 0.5rem;
-            text-shadow: 0 4px 32px #fff, 0 0 32px #178a2c, 4px 4px 0 #fff, 0 0 0 #fff;
+            text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff, 0 0 0 #fff;
             letter-spacing: 1px;
-        }
-        .version-extendida {
-            position: absolute;
-            top: 235px;
-            right: 3%;
-            transform: translateX(50%);
-            color: #ffe44d;
-            font-size: 2rem;
-            font-weight: bold;
-            text-shadow: 2px 2px 4px #000, 0 2px 0 #fff;
-            font-family: 'Montserrat', Arial, sans-serif;
-            line-height: 1.1;
-            animation: bounce-scale 1.5s infinite alternate;
-        }
-        @keyframes bounce-scale {
-            0% {
-                transform: scale(1);
-            }
-            100% {
-                transform: scale(1.18);
-            }
         }
         .idioma-select {
             margin: 1.5rem 0 1.5rem 0;
@@ -153,12 +132,6 @@
             .titulo-sagrado {
                 font-size: 2.5rem;
             }
-            .version-extendida {
-                font-size: 1.2rem;
-                top: 30px;
-                right: 10px;
-                transform: translateX(0);
-            }
             .codigo-input {
                 width: 40px;
                 height: 40px;
@@ -170,7 +143,6 @@
 <body>
     <div class="container">
         <h1 class="titulo-sagrado" id="titulo-sagrado">Sagrado<br>Puzzle</h1>
-        <span class="version-extendida" id="version-extendida">versión<br>extendida</span>
         <select class="idioma-select" id="idioma-select">
             <option value="es">Español</option>
             <option value="en">English</option>
@@ -210,20 +182,17 @@
         // Cambio de idioma
         const idiomaSelect = document.getElementById('idioma-select');
         const titulo = document.getElementById('titulo-sagrado');
-        const version = document.getElementById('version-extendida');
         const instrucciones = document.getElementById('instrucciones');
         const btnAceptar = document.getElementById('btn-aceptar');
 
         const textos = {
             es: {
                 titulo: 'Sagrado<br>Puzzle',
-                version: 'versión<br>extendida',
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar'
             },
             en: {
                 titulo: 'Sacred<br>Puzzle',
-                version: 'extended<br>version',
                 instrucciones: 'Find the clues and enter the<br>secret codes',
                 aceptar: 'Accept'
             }
@@ -232,7 +201,6 @@
         idiomaSelect.addEventListener('change', function() {
             const lang = idiomaSelect.value;
             titulo.innerHTML = textos[lang].titulo;
-            version.innerHTML = textos[lang].version;
             instrucciones.innerHTML = textos[lang].instrucciones;
             btnAceptar.textContent = textos[lang].aceptar;
         });
