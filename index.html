@@ -377,10 +377,6 @@
       const aiImgRef = React.useRef(null);
       const [aiImgLoaded, setAiImgLoaded] = React.useState(false);
 
-      // Imagen de fondo de mesa
-      const bgImgRef = React.useRef(null);
-      const [bgImgLoaded, setBgImgLoaded] = React.useState(false);
-
       // Responsivo: ajusta tamaño del canvas
       React.useEffect(() => {
         function updateSize() {
@@ -393,20 +389,13 @@
         return () => window.removeEventListener("resize", updateSize);
       }, []);
 
-      // Carga la imagen de la raqueta IA y la imagen de fondo de mesa una sola vez
+      // Carga la imagen de la raqueta IA una sola vez
       React.useEffect(() => {
         const img = new window.Image();
         img.src = "./tronco png.png";
         img.onload = () => setAiImgLoaded(true);
         img.onerror = () => setAiImgLoaded(false);
         aiImgRef.current = img;
-
-        // Carga la imagen de fondo de mesa
-        const bg = new window.Image();
-        bg.src = "./Fondo mesa.jpg";
-        bg.onload = () => setBgImgLoaded(true);
-        bg.onerror = () => setBgImgLoaded(false);
-        bgImgRef.current = bg;
       }, []);
 
       React.useEffect(() => {
@@ -437,12 +426,8 @@
           ctx.save();
           ctx.scale(scaleX, scaleY);
           // Fondo
-          if (bgImgLoaded && bgImgRef.current) {
-            ctx.drawImage(bgImgRef.current, 0, 0, W, H);
-          } else {
-            ctx.fillStyle = "#111";
-            ctx.fillRect(0, 0, W, H);
-          }
+          ctx.fillStyle = "#111";
+          ctx.fillRect(0, 0, W, H);
           // Líneas
           ctx.strokeStyle = "#22c55e";
           ctx.lineWidth = 2;
