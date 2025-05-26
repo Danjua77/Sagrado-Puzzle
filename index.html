@@ -138,6 +138,79 @@
                 font-size: 1.3rem;
             }
         }
+        .fade-out {
+            opacity: 0;
+            transition: opacity 1.2s ease;
+        }
+        .fade-in {
+            opacity: 1;
+            transition: opacity 1.2s ease;
+        }
+        .hidden {
+            display: none !important;
+        }
+        .arbol-chan-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 1.2s ease;
+        }
+        .arbol-chan-img {
+            width: 60vw;
+            max-width: 320px;
+            min-width: 180px;
+            margin-top: -300px;
+            opacity: 0;
+            transition: margin-top 1.2s cubic-bezier(.77,0,.18,1), opacity 1.2s;
+        }
+        .arbol-chan-img.visible {
+            margin-top: 40px;
+            opacity: 1;
+        }
+        .arbol-chan-titulo {
+            font-family: 'Montserrat', Arial, sans-serif;
+            color: #178a2c;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            text-align: center;
+            text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+        }
+        .arbol-chan-texto {
+            color: #fff;
+            font-family: 'Roboto', Arial, sans-serif;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            text-align: center;
+            text-shadow: 0 2px 8px #000;
+        }
+        .btn-continuar {
+            margin-top: 2.5rem;
+            font-size: 1.2rem;
+            background: #178a2c;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 8px;
+            padding: 0.7rem 2.5rem;
+            font-weight: bold;
+            font-family: 'Montserrat', Arial, sans-serif;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+            cursor: pointer;
+            transition: background 0.2s, border 0.2s;
+        }
+        .btn-continuar:active {
+            background: #176d13;
+            border: 2px solid #ffe44d;
+        }
     </style>
 </head>
 <body>
@@ -156,6 +229,12 @@
             <input class="codigo-input" maxlength="1" autocomplete="off" />
         </div>
         <button class="btn-aceptar" id="btn-aceptar">Aceptar</button>
+    </div>
+    <div class="arbol-chan-container" id="arbol-chan-container">
+        <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img" alt="Arbol Chan" />
+        <div class="arbol-chan-titulo" id="arbol-chan-titulo">arbol chan</div>
+        <div class="arbol-chan-texto" id="arbol-chan-texto">Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG</div>
+        <button class="btn-continuar" id="btn-continuar">Continuar</button>
     </div>
     <script>
         // Interacción para inputs: foco automático y estilos
@@ -203,6 +282,43 @@
             titulo.innerHTML = textos[lang].titulo;
             instrucciones.innerHTML = textos[lang].instrucciones;
             btnAceptar.textContent = textos[lang].aceptar;
+        });
+
+        const container = document.querySelector('.container');
+        const arbolChanContainer = document.getElementById('arbol-chan-container');
+        const arbolChanImg = document.getElementById('arbol-chan-img');
+        const btnContinuar = document.getElementById('btn-continuar');
+        // Oculta la secuencia de Arbol-chan al inicio
+        arbolChanContainer.style.opacity = 0;
+        arbolChanContainer.style.pointerEvents = 'none';
+        arbolChanImg.classList.remove('visible');
+
+        document.getElementById('btn-aceptar').addEventListener('click', function() {
+            const code = Array.from(document.querySelectorAll('.codigo-input')).map(i => i.value).join('');
+            if (code === '29074') {
+                // Desvanecer todos los elementos
+                container.classList.add('fade-out');
+                setTimeout(() => {
+                    // Cambiar fondo
+                    container.style.backgroundImage = "url('Fondo texto.jpg')";
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                    // Ocultar elementos hijos
+                    Array.from(container.children).forEach(child => {
+                        if (!child.classList.contains('arbol-chan-container')) {
+                            child.classList.add('hidden');
+                        }
+                    });
+                    // Mostrar secuencia Arbol-chan
+                    setTimeout(() => {
+                        arbolChanContainer.style.opacity = 1;
+                        arbolChanContainer.style.pointerEvents = 'auto';
+                        setTimeout(() => {
+                            arbolChanImg.classList.add('visible');
+                        }, 800);
+                    }, 1200);
+                }, 1200);
+            }
         });
     </script>
 </body>
