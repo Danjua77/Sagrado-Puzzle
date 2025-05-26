@@ -372,7 +372,10 @@
       const canvasRef = React.useRef(null);
       const [gameState, setGameState] = React.useState("playing"); // "playing" | "won"
       const [dimensions, setDimensions] = React.useState({ width: 400, height: 600 });
-      const [restartKey, setRestartKey] = React.useState(0);
+
+      // Imagen de la raqueta IA
+      const aiImgRef = React.useRef(null);
+      const [aiImgLoaded, setAiImgLoaded] = React.useState(false);
 
       // Responsivo: ajusta tamaño del canvas
       React.useEffect(() => {
@@ -384,6 +387,15 @@
         updateSize();
         window.addEventListener("resize", updateSize);
         return () => window.removeEventListener("resize", updateSize);
+      }, []);
+
+      // Carga la imagen de la raqueta IA una sola vez
+      React.useEffect(() => {
+        const img = new window.Image();
+        img.src = "./tronco png.png";
+        img.onload = () => setAiImgLoaded(true);
+        img.onerror = () => setAiImgLoaded(false);
+        aiImgRef.current = img;
       }, []);
 
       React.useEffect(() => {
@@ -421,10 +433,22 @@
           ctx.lineWidth = 2;
           ctx.beginPath();
           ctx.moveTo(0, H/2); ctx.lineTo(W, H/2); ctx.stroke();
-          // Paddles
+          // Paddle jugador (abajo): rectángulo verde
           ctx.fillStyle = "#22c55e";
           ctx.fillRect(player.x, player.y, player.w, player.h);
-          ctx.fillRect(ai.x, ai.y, ai.w, ai.h);
+          // Paddle IA (arriba): imagen más grande o fallback rectángulo
+          if (aiImgLoaded && aiImgRef.current) {
+            // Escala el tronco (por ejemplo, 2x)
+            const scale = 2;
+            const drawW = ai.w * scale;
+            const drawH = ai.h * scale;
+            const drawX = ai.x + ai.w/2 - drawW/2;
+            const drawY = ai.y + ai.h/2 - drawH/2;
+            ctx.drawImage(aiImgRef.current, drawX, drawY, drawW, drawH);
+          } else {
+            ctx.fillStyle = "#22c55e";
+            ctx.fillRect(ai.x, ai.y, ai.w, ai.h);
+          }
           // Pelota
           ctx.beginPath();
           ctx.arc(ball.x, ball.y, ball.r, 0, 2*Math.PI);
@@ -489,8 +513,6 @@
             if (ai.score >= 3) {
               running = false;
               setTimeout(() => {
-                // Reinicia el juego incrementando restartKey
-                setRestartKey(k => k + 1);
                 setGameState("playing");
               }, 1200);
               return;
@@ -542,10 +564,9 @@
           canvas.removeEventListener("mousemove", onMove);
           canvas.removeEventListener("touchmove", onMove);
         };
-      // Agrega restartKey como dependencia
-      }, [gameState, dimensions, restartKey]);
+      }, [gameState, dimensions, aiImgLoaded]);
 
-      // Pantalla de victoria: solo muestra la pista y el botón que lleva directo a la página principal
+      // Pantalla de victoria
       if (gameState === "won") {
         return (
           <div className="flex flex-col items-center justify-center min-h-screen text-center bg-black bg-opacity-90" style={{ zIndex: 100 }}>
@@ -553,11 +574,12 @@
               {lang === "es" ? "Siguiente pista" : "Next clue"}
             </h1>
             <div className="w-64 h-40 border-4 border-green-400 rounded-lg flex items-center justify-center mb-8 bg-zinc-900">
+              {/* Imagen de pista o placeholder */}
               <img src="./pizza.jpeg" alt="pista pizza" className="max-h-full max-w-full object-contain" />
             </div>
             <button
               className="bg-green-600 hover:bg-green-500 text-white text-2xl font-bold px-8 py-4 rounded shadow-lg"
-              onClick={() => onWin("entry")}
+              onClick={onWin}
             >
               {lang === "es" ? "Continuar" : "Continue"}
             </button>
@@ -586,11 +608,6 @@
               ? "¡Gana 3 puntos antes que Arbol-chan!"
               : "Score 3 points before Arbol-chan!"}
           </div>
-          <div className="mt-2 text-yellow-300 text-base font-semibold">
-            {lang === "es"
-              ? "Si pierdes, el juego se reiniciará hasta que ganes."
-              : "If you lose, the game will restart until you win."}
-          </div>
         </div>
       );
     }
@@ -604,8 +621,8 @@
       }, []);
       const t = arbolchanTexts[lang];
       if (pong) {
-        // Muestra el juego Pong, y al ganar llama a onContinue con "entry"
-        return <PongGame onWin={() => onContinue("entry")} lang={lang} />;
+        // Muestra el juego Pong, y al ganar llama a onContinue
+        return <PongGame onWin={onContinue} lang={lang} />;
       }
       return (
         <div className={`fixed inset-0 flex flex-col items-center justify-center arbolchan-appear${show ? " show" : ""}`}
@@ -683,7 +700,7 @@
       );
       // Si está en paso de Arbol-chan, muestra la pantalla especial y pasa lang
       if (arbolStep === 2) {
-        return <ArbolChanScreen onContinue={onSuccess} lang={lang} />;
+        return <ArbolChanScreen onContinue={() => onSuccess("video1")} lang={lang} />;
       }
       return (
         <div
@@ -819,7 +836,7 @@
         screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "simon" ? <SimonGame onBack={setScreen} lang={lang} /> :
         screen === "cache" ? <CachePage onBack={() => setScreen("entry")} lang={lang} /> :
-        <CodeEntry onSuccess={setScreen} lang={lang} setLang={setLang} />;
+        <CodeEntry onSuccess={(target) => setScreen(target)} lang={lang} setLang={setLang} />;
     }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
