@@ -639,10 +639,9 @@
       );
     }
 
-    function CodeEntry({ onSuccess, lang, setLang }) {
+    function CodeEntry({ onSuccess, lang, setLang, arbolStep, setArbolStep }) {
       const [codes, setCodes] = useState(["", "", "", "", ""]);
       const [fade, setFade] = useState(false);
-      const [arbolStep, setArbolStep] = useState(0); // 0: normal, 1: fading, 2: show arbolchan
       const t = translations[lang];
       const promoText = lang === "es" ? "versión extendida" : "extended version";
       const handleCodeChange = (i, value) => {
@@ -675,7 +674,8 @@
       );
       // Si está en paso de Arbol-chan, muestra la pantalla especial y pasa lang
       if (arbolStep === 2) {
-        return <ArbolChanScreen onContinue={() => onSuccess("video1")} lang={lang} />;
+        // Ahora delega el control a App para volver a la pantalla principal
+        return <ArbolChanScreen onContinue={() => onSuccess("entry")} lang={lang} />;
       }
       return (
         <div
@@ -805,13 +805,35 @@
     function App() {
       const [screen, setScreen] = useState("entry");
       const [lang, setLang] = useState("es");
+      const [arbolStep, setArbolStep] = useState(0); // mover aquí el estado
+
+      // Modifica handleAccept para actualizar arbolStep en App
+      const codeEntryProps = {
+        onSuccess: (target) => {
+          if (target === "arbol") {
+            setArbolStep(1);
+            setTimeout(() => setArbolStep(2), 2000);
+          } else {
+            setScreen(target);
+          }
+        },
+        lang,
+        setLang,
+        arbolStep,
+        setArbolStep
+      };
+
+      // Si está en paso de Arbol-chan, muestra la pantalla especial
+      if (arbolStep === 2) {
+        return <ArbolChanScreen onContinue={() => { setArbolStep(0); setScreen("entry"); }} lang={lang} />;
+      }
 
       return screen === "video1" ? <VideoScreen url="https://www.youtube.com/embed/3KsR03Ir6xM" onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "video2" ? <VideoScreen url="https://www.youtube.com/embed/VHYkZPRp5Bk" onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "puzzle" ? <PuzzleScreen onBack={() => setScreen("entry")} lang={lang} /> :
         screen === "simon" ? <SimonGame onBack={setScreen} lang={lang} /> :
         screen === "cache" ? <CachePage onBack={() => setScreen("entry")} lang={lang} /> :
-        <CodeEntry onSuccess={(target) => setScreen(target)} lang={lang} setLang={setLang} />;
+        <CodeEntry {...codeEntryProps} />;
     }
 
     ReactDOM.createRoot(document.getElementById("root")).render(<App />);
