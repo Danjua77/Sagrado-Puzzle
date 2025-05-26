@@ -368,7 +368,7 @@
       );
     }
 
-    function PongGame({ onWin, lang }) {
+    function PongGame({ onWin, onLose, lang }) {
       const canvasRef = React.useRef(null);
       const [gameState, setGameState] = React.useState("playing"); // "playing" | "won"
       const [dimensions, setDimensions] = React.useState({ width: 400, height: 600 });
@@ -488,8 +488,8 @@
             if (ai.score >= 3) {
               running = false;
               setTimeout(() => {
-                setGameState("playing");
-              }, 1200);
+                setGameState("lost");
+              }, 600);
               return;
             }
             resetBall(-1);
@@ -549,7 +549,6 @@
               {lang === "es" ? "Siguiente pista" : "Next clue"}
             </h1>
             <div className="w-64 h-40 border-4 border-green-400 rounded-lg flex items-center justify-center mb-8 bg-zinc-900">
-              {/* Imagen de pista o placeholder */}
               <img src="./pizza.jpeg" alt="pista pizza" className="max-h-full max-w-full object-contain" />
             </div>
             <button
@@ -558,6 +557,44 @@
             >
               {lang === "es" ? "Continuar" : "Continue"}
             </button>
+          </div>
+        );
+      }
+      // Pantalla de derrota
+      if (gameState === "lost") {
+        // Usa la misma tipografía y formato, pero el texto es "jaja perdiste"
+        return (
+          <div className="fixed inset-0 flex flex-col items-center justify-center arbolchan-appear show"
+            style={{
+              backgroundImage: "url('./Fondo texto.jpg')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+              minHeight: "100vh",
+              minWidth: "100vw",
+              zIndex: 100
+            }}
+          >
+            <div className="flex flex-col items-center justify-center w-full h-full px-4">
+              <img
+                src="./Arbol-chan.png"
+                alt="Arbol-chan"
+                className="arbolchan-drop w-56 sm:w-64 mb-6"
+                style={{ transition: "opacity 0.5s" }}
+              />
+              <h1 className="text-4xl sm:text-5xl font-extrabold text-green-400 mb-4 text-center" style={{ textShadow: "0 0 8px #000" }}>
+                arbol-chan
+              </h1>
+              <p className="text-white text-lg sm:text-xl mb-10 max-w-2xl text-center" style={{ textShadow: "0 0 8px #000" }}>
+                {lang === "es" ? "jaja perdiste" : "haha you lost"}
+              </p>
+              <button
+                onClick={onLose}
+                className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded text-xl font-bold shadow-lg"
+              >
+                {lang === "es" ? "Continuar" : "Continue"}
+              </button>
+            </div>
           </div>
         );
       }
@@ -596,8 +633,8 @@
       }, []);
       const t = arbolchanTexts[lang];
       if (pong) {
-        // Muestra el juego Pong, y al ganar llama a onContinue
-        return <PongGame onWin={onContinue} lang={lang} />;
+        // Muestra el juego Pong, y al ganar o perder llama a onContinue
+        return <PongGame onWin={onContinue} onLose={onContinue} lang={lang} />;
       }
       return (
         <div className={`fixed inset-0 flex flex-col items-center justify-center arbolchan-appear${show ? " show" : ""}`}
