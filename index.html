@@ -327,7 +327,9 @@
                 arbolTitulo: 'arbol chan',
                 arbolTexto: 'Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG',
                 continuar: 'Continuar',
-                mesa: '¡Bienvenido a la mesa sagrada!'
+                mesa: '¡Bienvenido a la mesa sagrada!',
+                pongWin: 'Siguiente pista',
+                pongLose: '¡Perdiste!<br>Inténtalo de nuevo'
             },
             en: {
                 titulo: 'Sagrado<br>Puzzle',
@@ -336,7 +338,9 @@
                 arbolTitulo: 'arbol chan',
                 arbolTexto: 'If you want that clue, you must first beat me in a... game of PING-PONG',
                 continuar: 'Continue',
-                mesa: 'Welcome to the sacred table!'
+                mesa: 'Welcome to the sacred table!',
+                pongWin: 'Next clue',
+                pongLose: 'You lost!<br>Try again'
             }
         };
 
@@ -785,25 +789,28 @@
                 function showEndScreen(playerWon) {
                     const pongContainer = document.getElementById('pong-container');
                     let html = '';
+                    // --- idioma actual para textos del Pong ---
+                    const lang = currentLang || 'es';
+
                     if (playerWon) {
                         // espacio para pista 1
                         html = `
                             <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
-                                <h2 style="margin-top:0;">Siguiente pista</h2>
+                                <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
                                 <div id="pong-next-img" style="margin:0;">
                                     <!-- espacio para pista 1 -->
                                     <!-- Aquí puedes poner una imagen de la pista, por ejemplo: -->
                                     <!-- <img src="pista.png" alt="Pista" style="width:100%;height:100%;object-fit:contain;"> -->
                                 </div>
-                                <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">Continuar</button>
+                                <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                             </div>
                         `;
                     } else {
                         html = `
                             <div id="pong-end">
                                 <img src="Arbol-chan.png" class="arbol-img" alt="Arbol Chan" />
-                                <h2>¡Perdiste!<br>Inténtalo de nuevo</h2>
-                                <button id="pong-retry">Volver</button>
+                                <h2>${textos[lang].pongLose}</h2>
+                                <button id="pong-retry">${textos[lang].continuar}</button>
                             </div>
                         `;
                     }
