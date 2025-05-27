@@ -546,6 +546,7 @@
                 let ball = { x: 0, y: 0, vx: 0, vy: 0, size: ballSize() };
                 let running = true;
                 let touchX = null;
+                let speedMultiplier = 1; // Nuevo: multiplicador de velocidad
 
                 function resetPositions(servingToPlayer = false) {
                     const { w, h } = getGameSize();
@@ -560,7 +561,8 @@
                     ball.y = h/2 - ball.size/2;
                     // Serve ball
                     let angle = (Math.random() * 0.5 - 0.25); // -0.25 a 0.25 rad
-                    let speed = rel(0.012, 'h');
+                    let baseSpeed = rel(0.012, 'h');
+                    let speed = baseSpeed * speedMultiplier; // Aplica el multiplicador
                     if (servingToPlayer) {
                         ball.vy = -speed;
                         ball.vx = angle * speed * 2;
@@ -760,7 +762,8 @@
                     // Score
                     if (ball.y < 0) {
                         player.score++;
-                        if (player.score >= 3) {
+                        speedMultiplier += 0.18; // Aumenta la velocidad cada punto
+                        if (player.score >= 5) { // Cambiado de 3 a 5
                             running = false;
                             setTimeout(() => showEndScreen(true), 700);
                         } else {
@@ -769,7 +772,8 @@
                     }
                     if (ball.y + ball.size > getGameSize().h) {
                         ai.score++;
-                        if (ai.score >= 3) {
+                        speedMultiplier += 0.18; // Aumenta la velocidad cada punto
+                        if (ai.score >= 5) { // Cambiado de 3 a 5
                             running = false;
                             setTimeout(() => showEndScreen(false), 700);
                         } else {
@@ -838,6 +842,7 @@
 
                 // Start game
                 player.score = 0; ai.score = 0;
+                speedMultiplier = 1; // Reinicia el multiplicador al empezar
                 resetPositions(false);
                 running = true;
                 gameLoop();
