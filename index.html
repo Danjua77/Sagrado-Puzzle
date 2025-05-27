@@ -247,6 +247,19 @@
                 box-shadow: none;
             }
         }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            15% { transform: translateX(-12px); }
+            30% { transform: translateX(10px); }
+            45% { transform: translateX(-8px); }
+            60% { transform: translateX(6px); }
+            75% { transform: translateX(-4px); }
+            90% { transform: translateX(2px); }
+            100% { transform: translateX(0); }
+        }
+        .shake {
+            animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both;
+        }
     </style>
 </head>
 <body>
@@ -317,7 +330,7 @@
                 mesa: '¡Bienvenido a la mesa sagrada!'
             },
             en: {
-                titulo: 'Sacred<br>Puzzle',
+                titulo: 'Sagrado<br>Puzzle',
                 instrucciones: 'Find the clues and enter the<br>secret codes',
                 aceptar: 'Accept',
                 arbolTitulo: 'arbol chan',
@@ -380,6 +393,16 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
+            } else {
+                // Código incorrecto: animación de temblor
+                container.classList.remove('shake'); // reset si ya está
+                // Forzar reflow para reiniciar animación si se repite
+                void container.offsetWidth;
+                container.classList.add('shake');
+                // Quitar la clase después de la animación
+                setTimeout(() => {
+                    container.classList.remove('shake');
+                }, 450);
             }
         });
 
