@@ -892,334 +892,386 @@
 
         // Nueva lógica para el botón "Continuar" de la secuencia 2
         btnContinuar2.addEventListener('click', function() {
-            // MISMA LÓGICA QUE btnContinuar, puedes modificar aquí para la secuencia 2 en el futuro
-            (function() {
-                const canvas = document.getElementById('pong-canvas');
-                const ctx = canvas.getContext('2d');
+            document.body.innerHTML = `
+                <style>
+                    body, html {
+                        margin: 0; padding: 0; width: 100vw; height: 100vh; background: #178a2c;
+                        overflow: hidden;
+                    }
+                    #maze-container {
+                        width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
+                        background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
+                        background-size: cover;
+                        position: fixed; top: 0; left: 0;
+                        flex-direction: column;
+                    }
+                    #maze-canvas {
+                        background: #fff;
+                        border-radius: 18px;
+                        box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
+                        display: block;
+                        margin: 0 auto;
+                        width: 99vw;
+                        height: 75vw;
+                        max-width: 520px;
+                        max-height: 400px;
+                        min-width: 260px;
+                        min-height: 180px;
+                        aspect-ratio: 16/9;
+                        touch-action: none;
+                    }
+                    #maze-controls {
+                        position: fixed;
+                        left: 0;
+                        right: 0;
+                        bottom: 10px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        z-index: 2;
+                    }
+                    #maze-controls div {
+                        display: flex;
+                        gap: 10px;
+                    }
+                    #maze-controls button {
+                        width: 60px;
+                        height: 60px;
+                        font-size: 2em;
+                        border-radius: 50%;
+                        background: #178a2c;
+                        color: #fff;
+                        border: 2px solid #fff;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        font-weight: bold;
+                        box-shadow: 0 2px 8px #178a2c33;
+                        cursor: pointer;
+                        transition: background 0.2s, border 0.2s;
+                    }
+                    #maze-controls button:active {
+                        background: #ffe44d;
+                        color: #178a2c;
+                        border: 2px solid #ffe44d;
+                    }
+                    #maze-timer {
+                        margin-top: 1.2rem;
+                        font-size: 1.1rem;
+                        color: #fff;
+                        font-family: 'Roboto', Arial, sans-serif;
+                        text-shadow: 0 2px 8px #178a2c;
+                        text-align: center;
+                    }
+                    #pong-end {
+                        position: absolute;
+                        top: 0; left: 0; width: 100vw; height: 100vh;
+                        background: url('Fondo texto.jpg') no-repeat center center;
+                        background-size: cover;
+                        color: #178a2c;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 10;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                    }
+                    #pong-end .arbol-img {
+                        width: 38vw;
+                        max-width: 180px;
+                        min-width: 90px;
+                        margin-top: 2.5rem;
+                        margin-bottom: 1.2rem;
+                        filter: drop-shadow(0 4px 16px #fff);
+                    }
+                    #pong-end h2 {
+                        font-size: 2.2rem;
+                        margin-bottom: 2rem;
+                        color: #178a2c;
+                        text-align: center;
+                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                        margin-top: 0;
+                    }
+                    #pong-next-img-2 {
+                        width: 60vw;
+                        max-width: 300px;
+                        min-width: 120px;
+                        height: 180px;
+                        background: #fff;
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px #178a2c33;
+                    }
+                    #pong-end button {
+                        font-size: 1.3rem;
+                        background: #178a2c;
+                        color: #fff;
+                        border: 2px solid #fff;
+                        border-radius: 8px;
+                        padding: 0.7rem 2.5rem;
+                        font-weight: bold;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                        cursor: pointer;
+                        margin-top: 1.5rem;
+                        margin-bottom: 2rem;
+                    }
+                    #pong-end button:active {
+                        background: #176d13;
+                        border: 2px solid #ffe44d;
+                    }
+                </style>
+                <div id="maze-container">
+                    <canvas id="maze-canvas" width="480" height="240"></canvas>
+                    <div id="maze-timer"></div>
+                    <div id="maze-controls">
+                        <div>
+                            <button id="maze-up">▲</button>
+                        </div>
+                        <div style="margin-top:5px;">
+                            <button id="maze-left">◀</button>
+                            <button id="maze-down">▼</button>
+                            <button id="maze-right">▶</button>
+                        </div>
+                    </div>
+                </div>
+            `;
 
-                // --- Proporción 9:16, tablero horizontal ---
-                function getGameSize() {
-                    // El canvas ya tiene tamaño fijo por CSS, así que usamos esas dimensiones
-                    return { w: canvas.width, h: canvas.height };
-                }
+            // --- Juego Carrera Laberinto 2D adaptado ---
+            (function() {
+                const canvas = document.getElementById('maze-canvas');
+                const ctx = canvas.getContext('2d');
+                let W = canvas.width, H = canvas.height;
+
                 function resizeCanvas() {
-                    // Ajusta el tamaño real del canvas al tamaño mostrado
                     const rect = canvas.getBoundingClientRect();
                     canvas.width = rect.width;
                     canvas.height = rect.height;
+                    W = canvas.width; H = canvas.height;
                 }
                 resizeCanvas();
                 window.addEventListener('resize', resizeCanvas);
 
-                // --- Constantes y posiciones ---
-                function rel(val, axis) {
-                    const { w, h } = getGameSize();
-                    return axis === 'w' ? val * w : val * h;
-                }
-                // Raquetas horizontales (abajo/arriba)
-                function paddleW() { return rel(0.22, 'w'); }
-                function paddleH() { return rel(0.025, 'h'); }
-                function paddleMargin() { return rel(0.03, 'h'); }
-                function ballSize() { return rel(0.035, 'w'); }
-                let player = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
-                let ai = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
-                let ball = { x: 0, y: 0, vx: 0, vy: 0, size: ballSize() };
-                let running = true;
-                let touchX = null;
-                let speedMultiplier = 1;
+                // Laberinto aún más grande
+                const CELL = Math.floor(Math.min(W, H) / 12);
+                const MAZE_COLS = 26;
+                const MAZE_ROWS = 12;
 
-                function resetPositions(servingToPlayer = false) {
-                    const { w, h } = getGameSize();
-                    player.w = paddleW(); player.h = paddleH();
-                    ai.w = paddleW(); ai.h = paddleH();
-                    player.x = w/2 - player.w/2;
-                    player.y = h - paddleMargin() - player.h;
-                    ai.x = w/2 - ai.w/2;
-                    ai.y = paddleMargin();
-                    ball.size = ballSize();
-                    ball.x = w/2 - ball.size/2;
-                    ball.y = h/2 - ball.size/2;
-                    // Serve ball
-                    let angle = (Math.random() * 0.5 - 0.25); // -0.25 a 0.25 rad
-                    let baseSpeed = rel(0.012, 'h');
-                    let speed = baseSpeed * speedMultiplier; // Aplica el multiplicador
-                    if (servingToPlayer) {
-                        ball.vy = -speed;
-                        ball.vx = angle * speed * 2;
-                    } else {
-                        ball.vy = speed;
-                        ball.vx = angle * speed * 2;
+                // Jugadores
+                const PLAYER_SIZE = CELL * 0.7;
+                const PLAYER_OFFSET = (CELL - PLAYER_SIZE) / 2;
+
+                // Generar laberinto (DFS)
+                function generateMaze(cols, rows) {
+                    const maze = Array.from({length: rows}, () => Array(cols).fill(0));
+                    function carve(x, y) {
+                        maze[y][x] = 1;
+                        const dirs = [[1,0],[-1,0],[0,1],[0,-1]].sort(()=>Math.random()-0.5);
+                        for (const [dx,dy] of dirs) {
+                            const nx = x + dx*2, ny = y + dy*2;
+                            if (nx >= 0 && nx < cols && ny >= 0 && ny < rows && maze[ny][nx] === 0) {
+                                maze[y+dy][x+dx] = 1;
+                                carve(nx, ny);
+                            }
+                        }
                     }
+                    carve(0, Math.floor(rows/2));
+                    maze[Math.floor(rows/2)][0] = 1;
+                    maze[Math.floor(rows/2)][cols-1] = 1;
+                    return maze;
                 }
 
-                // --- Decoración tipo ping pong ---
-                function drawTable() {
-                    const { w, h } = getGameSize();
-                    // Fondo azul tipo mesa de ping pong
-                    ctx.save();
-                    ctx.fillStyle = "#2b4fa2";
-                    ctx.globalAlpha = 0.93;
-                    ctx.fillRect(rel(0.03, 'w'), rel(0.02, 'h'), w - rel(0.06, 'w'), h - rel(0.04, 'h'));
-                    ctx.globalAlpha = 1;
-                    // Líneas blancas del borde
-                    ctx.strokeStyle = "#fff";
-                    ctx.lineWidth = rel(0.012, 'w');
-                    ctx.strokeRect(rel(0.03, 'w'), rel(0.02, 'h'), w - rel(0.06, 'w'), h - rel(0.04, 'h'));
-                    // Línea central blanca
-                    ctx.beginPath();
-                    ctx.moveTo(rel(0.03, 'w'), h/2);
-                    ctx.lineTo(w - rel(0.03, 'w'), h/2);
-                    ctx.setLineDash([rel(0.04, 'w'), rel(0.025, 'w')]);
-                    ctx.lineWidth = rel(0.008, 'w');
-                    ctx.stroke();
-                    ctx.setLineDash([]);
-                    // Red (gris claro)
-                    ctx.beginPath();
-                    ctx.strokeStyle = "#e0e0e0";
-                    ctx.lineWidth = rel(0.012, 'h');
-                    ctx.moveTo(rel(0.03, 'w'), h/2);
-                    ctx.lineTo(w - rel(0.03, 'w'), h/2);
-                    ctx.stroke();
-                    ctx.restore();
+                const maze = generateMaze(MAZE_COLS, MAZE_ROWS);
+
+                // Jugador y IA
+                const player = {
+                    x: 0,
+                    y: Math.floor(MAZE_ROWS/2),
+                    color: '#ffe44d',
+                    path: [],
+                    step: 0,
+                };
+                const ai = {
+                    x: 0,
+                    y: Math.floor(MAZE_ROWS/2),
+                    color: '#178a2c', // IA ahora verde para mejor visibilidad
+                    path: [],
+                    step: 0,
+                };
+
+                // IA: encontrar camino óptimo (A*)
+                function heuristic(ax, ay, bx, by) {
+                    return Math.abs(ax-bx) + Math.abs(ay-by);
+                }
+                function findPath(sx, sy, ex, ey, maze, randomness=0) {
+                    const cols = maze[0].length, rows = maze.length;
+                    const open = [[sx, sy, 0, heuristic(sx,sy,ex,ey), null]];
+                    const visited = Array.from({length: rows}, () => Array(cols).fill(false));
+                    while (open.length) {
+                        let idx = 0;
+                        if (randomness > 0 && Math.random() < randomness && open.length > 1) {
+                            idx = Math.floor(Math.random() * open.length);
+                        }
+                        open.sort((a,b)=>a[2]+a[3]-b[2]-b[3]);
+                        const [x, y, g, h, prev] = open.splice(idx, 1)[0];
+                        if (x === ex && y === ey) {
+                            const path = [[x,y]];
+                            let p = prev;
+                            while (p) { path.push([p[0],p[1]]); p = p[4]; }
+                            return path.reverse();
+                        }
+                        if (visited[y][x]) continue;
+                        visited[y][x] = true;
+                        for (const [dx,dy] of [[1,0],[0,1],[0,-1],[-1,0]]) {
+                            const nx = x+dx, ny = y+dy;
+                            if (nx>=0 && nx<cols && ny>=0 && ny<rows && maze[ny][nx]===1 && !visited[ny][nx]) {
+                                open.push([nx,ny,g+1,heuristic(nx,ny,ex,ey), [x,y,g,h,prev]]);
+                            }
+                        }
+                    }
+                    return null;
                 }
 
-                function drawScore() {
-                    const { w, h } = getGameSize();
-                    ctx.font = `bold ${rel(0.08, 'w')}px 'Montserrat', Arial, sans-serif`;
-                    ctx.textAlign = "center";
-                    ctx.fillStyle = "#ffe44d";
-                    ctx.shadowColor = "#178a2c";
-                    ctx.shadowBlur = 8;
-                    ctx.fillText(player.score, w/2, h - rel(0.07, 'h'));
-                    ctx.fillText(ai.score, w/2, rel(0.11, 'h'));
-                    ctx.shadowBlur = 0;
-                }
-
-                function drawPaddle(p, isPlayer) {
-                    ctx.save();
-                    ctx.fillStyle = isPlayer ? "#ffe44d" : "#fff";
-                    ctx.shadowColor = isPlayer ? "#178a2c" : "#2b4fa2";
-                    ctx.shadowBlur = isPlayer ? 8 : 4;
-                    ctx.fillRect(p.x, p.y, p.w, p.h);
-                    ctx.restore();
-                }
-
-                function drawBall() {
-                    ctx.save();
-                    ctx.fillStyle = "#fff";
-                    ctx.shadowColor = "#ffe44d";
-                    ctx.shadowBlur = 8;
-                    ctx.beginPath();
-                    ctx.arc(ball.x + ball.size/2, ball.y + ball.size/2, ball.size/2, 0, 2*Math.PI);
-                    ctx.fill();
-                    ctx.restore();
-                }
+                player.path = findPath(player.x, player.y, MAZE_COLS-1, player.y, maze);
+                player.step = 0;
+                ai.path = findPath(ai.x, ai.y, MAZE_COLS-1, ai.y, maze, 0.2);
+                ai.step = 0;
 
                 function draw() {
-                    const { w, h } = getGameSize();
-                    ctx.clearRect(0, 0, w, h);
-                    drawTable();
-                    drawScore();
-                    drawPaddle(player, true);
-                    drawPaddle(ai, false);
-                    drawBall();
-                }
-
-                function clamp(val, min, max) {
-                    return Math.max(min, Math.min(max, val));
-                }
-
-                // Touch/mouse controls for player paddle (horizontal)
-                function handleMoveFromCanvas(x) {
-                    const { w } = getGameSize();
-                    player.x = clamp(x - player.w/2, rel(0.03, 'w'), w - rel(0.03, 'w') - player.w);
-                }
-                function getCanvasRelativeX(e) {
-                    const rect = canvas.getBoundingClientRect();
-                    if (e.touches && e.touches.length > 0) {
-                        return (e.touches[0].clientX - rect.left) * (canvas.width / rect.width);
-                    } else if (typeof e.clientX === "number") {
-                        return (e.clientX - rect.left) * (canvas.width / rect.width);
-                    }
-                    return 0;
-                }
-                canvas.addEventListener('touchstart', function(e) {
-                    handleMoveFromCanvas(getCanvasRelativeX(e));
-                    e.preventDefault();
-                });
-                canvas.addEventListener('touchmove', function(e) {
-                    handleMoveFromCanvas(getCanvasRelativeX(e));
-                    e.preventDefault();
-                });
-                canvas.addEventListener('mousedown', function(e) {
-                    handleMoveFromCanvas(getCanvasRelativeX(e));
-                    touchX = true;
-                });
-                canvas.addEventListener('mousemove', function(e) {
-                    if (touchX) {
-                        handleMoveFromCanvas(getCanvasRelativeX(e));
-                    }
-                });
-                canvas.addEventListener('mouseup', function() {
-                    touchX = null;
-                });
-                canvas.addEventListener('mouseleave', function() {
-                    touchX = null;
-                });
-                function aiMove() {
-                    const { w } = getGameSize();
-                    let center = ai.x + ai.w/2;
-                    let target = ball.x + ball.size/2;
-                    let dx = target - center;
-                    let maxSpeed = rel(0.00506, 'w');
-                    if (Math.abs(dx) > rel(0.09, 'w')) {
-                        dx = 0;
-                    } else if (Math.abs(dx) > maxSpeed) {
-                        dx = maxSpeed * Math.sign(dx);
-                    }
-                    ai.x = clamp(ai.x + dx, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
-                }
-
-                // Ball physics and collision (horizontal paddles)
-                function update() {
-                    const { w, h } = getGameSize();
-                    // Move ball
-                    ball.x += ball.vx;
-                    ball.y += ball.vy;
-
-                    // Wall collision (left/right)
-                    if (ball.x < 0) {
-                        ball.x = 0; ball.vx *= -1;
-                    }
-                    if (ball.x + ball.size > w) {
-                        ball.x = w - ball.size; ball.vx *= -1;
-                    }
-
-                    // Paddle collision (player, abajo)
-                    if (
-                        ball.y + ball.size >= player.y &&
-                        ball.y + ball.size <= player.y + player.h + rel(0.01, 'h') &&
-                        ball.x + ball.size > player.x &&
-                        ball.x < player.x + player.w &&
-                        ball.vy > 0
-                    ) {
-                        ball.y = player.y - ball.size;
-                        ball.vy *= -1;
-                        // Efecto según dónde pega
-                        let hit = ((ball.x + ball.size/2) - (player.x + player.w/2)) / (player.w/2);
-                        ball.vx += hit * rel(0.006, 'w');
-                        // Clamp speed
-                        let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
-                        let maxSpeed = rel(0.025, 'h');
-                        if (speed > maxSpeed) {
-                            ball.vx *= maxSpeed/speed;
-                            ball.vy *= maxSpeed/speed;
+                    ctx.clearRect(0,0,W,H);
+                    // Fondo blanco
+                    ctx.fillStyle = "#fff";
+                    ctx.fillRect(0, 0, W, H);
+                    // Laberinto
+                    const offsetX = Math.max(0, player.x - 2);
+                    for (let y=0; y<MAZE_ROWS; y++) {
+                        for (let x=0; x<MAZE_COLS; x++) {
+                            if (maze[y][x] === 0) {
+                                ctx.fillStyle = '#178a2c';
+                                ctx.fillRect((x-offsetX)*CELL, y*CELL, CELL, CELL);
+                            }
                         }
                     }
-                    // Paddle collision (AI, arriba)
-                    if (
-                        ball.y <= ai.y + ai.h &&
-                        ball.y >= ai.y - rel(0.01, 'h') &&
-                        ball.x + ball.size > ai.x &&
-                        ball.x < ai.x + ai.w &&
-                        ball.vy < 0
-                    ) {
-                        ball.y = ai.y + ai.h;
-                        ball.vy *= -1;
-                        let hit = ((ball.x + ball.size/2) - (ai.x + ai.w/2)) / (ai.w/2);
-                        ball.vx += hit * rel(0.006, 'w');
-                        let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
-                        let maxSpeed = rel(0.025, 'h');
-                        if (speed > maxSpeed) {
-                            ball.vx *= maxSpeed/speed;
-                            ball.vy *= maxSpeed/speed;
-                        }
-                    }
+                    // IA (verde con borde blanco)
+                    ctx.save();
+                    ctx.shadowColor = "#fff";
+                    ctx.shadowBlur = 6;
+                    ctx.fillStyle = ai.color;
+                    ctx.fillRect((ai.x-offsetX)*CELL+PLAYER_OFFSET, ai.y*CELL+PLAYER_OFFSET, PLAYER_SIZE, PLAYER_SIZE);
+                    ctx.restore();
+                    // Jugador
+                    ctx.fillStyle = player.color;
+                    ctx.fillRect((player.x-offsetX)*CELL+PLAYER_OFFSET, player.y*CELL+PLAYER_OFFSET, PLAYER_SIZE, PLAYER_SIZE);
+                }
 
-                    // Score
-                    if (ball.y < 0) {
-                        player.score++;
-                        speedMultiplier += 0.18; // Aumenta la velocidad cada punto
-                        if (player.score >= 5) {
-                            running = false;
-                            setTimeout(() => showEndScreen(true), 700);
-                        } else {
-                            resetPositions(false);
-                        }
+                function playerAdvance() {
+                    if (player.step < player.path.length-1) {
+                        player.step++;
+                        player.x = player.path[player.step][0];
+                        player.y = player.path[player.step][1];
                     }
-                    if (ball.y + ball.size > getGameSize().h) {
-                        ai.score++;
-                        speedMultiplier += 0.18; // Aumenta la velocidad cada punto
-                        if (ai.score >= 5) {
-                            running = false;
-                            setTimeout(() => showEndScreen(false), 700);
-                        } else {
-                            resetPositions(true);
-                        }
+                }
+                function aiAdvance() {
+                    if (ai.step < ai.path.length-1) {
+                        ai.step++;
+                        ai.x = ai.path[ai.step][0];
+                        ai.y = ai.path[ai.step][1];
                     }
                 }
 
-                function gameLoop() {
-                    if (!running) return;
-                    aiMove();
-                    update();
+                let finished = false;
+                function checkWin() {
+                    if (player.x === MAZE_COLS-1 && player.y === player.path[0][1]) {
+                        finished = true;
+                        setTimeout(()=>showEndScreen(true), 300);
+                    } else if (ai.x === MAZE_COLS-1 && ai.y === ai.path[0][1]) {
+                        finished = true;
+                        setTimeout(()=>showEndScreen(false), 300);
+                    }
+                }
+
+                function loop() {
                     draw();
-                    requestAnimationFrame(gameLoop);
+                    if (!finished) requestAnimationFrame(loop);
                 }
+                loop();
+
+                // IA 10% más rápida (intervalo menor)
+                setInterval(function() {
+                    if (finished) return;
+                    aiAdvance();
+                    checkWin();
+                }, 315);
+
+                function movePlayer(dx, dy) {
+                    if (finished) return;
+                    const nx = player.x + dx;
+                    const ny = player.y + dy;
+                    if (
+                        nx >= 0 && nx < MAZE_COLS &&
+                        ny >= 0 && ny < MAZE_ROWS &&
+                        maze[ny][nx] === 1
+                    ) {
+                        player.x = nx;
+                        player.y = ny;
+                        player.path.push([nx, ny]);
+                        checkWin();
+                    }
+                }
+
+                document.getElementById('maze-up').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(0, -1); });
+                document.getElementById('maze-down').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(0, 1); });
+                document.getElementById('maze-left').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(-1, 0); });
+                document.getElementById('maze-right').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(1, 0); });
+                document.getElementById('maze-up').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(0, -1); });
+                document.getElementById('maze-down').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(0, 1); });
+                document.getElementById('maze-left').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(-1, 0); });
+                document.getElementById('maze-right').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(1, 0); });
+
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') movePlayer(0, -1);
+                    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') movePlayer(0, 1);
+                    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') movePlayer(-1, 0);
+                    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') movePlayer(1, 0);
+                });
 
                 function showEndScreen(playerWon) {
-                    const pongContainer = document.getElementById('pong-container');
+                    const mazeContainer = document.getElementById('maze-container');
                     let html = '';
-                    // --- idioma actual para textos del Pong ---
                     const lang = currentLang || 'es';
-
                     if (playerWon) {
-                        // espacio para pista 2
                         html = `
                             <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
                                 <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
-                                <div id="pong-next-img" style="margin:0;">
+                                <div id="pong-next-img-2" style="margin:0;">
                                     <!-- espacio para pista 2 -->
+                                    <!-- <img src="pista2.png" alt="Pista 2" style="width:100%;height:100%;object-fit:contain;"> -->
                                 </div>
-                                <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
+                                <button id="pong-continue-2" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                             </div>
                         `;
                     } else {
                         html = `
                             <div id="pong-end">
                                 <img src="Arbol-chan.png" class="arbol-img" alt="Arbol Chan" />
-                                <h2>${textos[lang].pongLose}</h2>
-                                <button id="pong-retry">${textos[lang].continuar}</button>
+                                <h2>Abuelo-sama fue más rápido que tú</h2>
+                                <button id="pong-retry-2">${textos[lang].continuar}</button>
                             </div>
                         `;
                     }
-                    pongContainer.insertAdjacentHTML('beforeend', html);
+                    mazeContainer.insertAdjacentHTML('beforeend', html);
                     if (playerWon) {
-                        document.getElementById('pong-continue').onclick = function() {
+                        document.getElementById('pong-continue-2').onclick = function() {
                             location.reload();
                         };
-                    }
-                    if (!playerWon) {
-                        document.getElementById('pong-retry').onclick = function() {
+                    } else {
+                        document.getElementById('pong-retry-2').onclick = function() {
                             location.reload();
                         };
                     }
                 }
-
-                // Responsive: update paddle/ball sizes on resize
-                function updateSizes() {
-                    resetPositions();
-                }
-                window.addEventListener('resize', function() {
-                    updateSizes();
-                });
-
-                // Start game
-                player.score = 0; ai.score = 0;
-                speedMultiplier = 1; // Reinicia el multiplicador al empezar
-                resetPositions(false);
-                running = true;
-                gameLoop();
             })();
         });
     </script>
