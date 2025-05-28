@@ -594,6 +594,7 @@
                     let running = true;
                     let touchX = null;
                     let speedMultiplier = 1; // Nuevo: multiplicador de velocidad
+                    let ballSpeedFactor = 1; // Nuevo: factor de velocidad acumulado por colisiones
 
                     function resetPositions(servingToPlayer = false) {
                         const { w, h } = getGameSize();
@@ -609,7 +610,7 @@
                         // Serve ball
                         let angle = (Math.random() * 0.5 - 0.25); // -0.25 a 0.25 rad
                         let baseSpeed = rel(0.012, 'h');
-                        let speed = baseSpeed * speedMultiplier; // Aplica el multiplicador
+                        let speed = baseSpeed * speedMultiplier * ballSpeedFactor; // Aplica ambos multiplicadores
                         if (servingToPlayer) {
                             ball.vy = -speed;
                             ball.vx = angle * speed * 2;
@@ -617,8 +618,6 @@
                             ball.vy = speed;
                             ball.vx = angle * speed * 2;
                         }
-                        // Reinicia temporizadores solo si el juego sigue
-                        if (running !== false) startAiTimer();
                     }
 
                     // --- Decoración tipo ping pong ---
@@ -684,70 +683,14 @@
                         ctx.restore();
                     }
 
-                    // --- NUEVO: Temporizadores para la barra IA ---
-                    let aiTimer = 10; // segundos
-                    let aiFrozen = false;
-                    let aiFreezeTimer = 3; // segundos
-                    let aiTimerInterval = null;
-                    let aiFreezeInterval = null;
-
-                    // --- IA muy inteligente ---
-                    function aiMove() {
-                        if (aiFrozen) return;
-                        const { w } = getGameSize();
-                        let center = ai.x + ai.w/2;
-                        let target = ball.x + ball.size/2;
-                        let dx = target - center;
-                        // IA inteligente: sigue la bola con precisión y velocidad alta
-                        let maxSpeed = rel(0.025, 'w'); // velocidad alta
-                        if (Math.abs(dx) > maxSpeed) {
-                            dx = maxSpeed * Math.sign(dx);
-                        }
-                        ai.x = clamp(ai.x + dx, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
-                    }
-
-                    // --- Dibuja temporizador debajo de la barra IA ---
-                    function drawAiTimer() {
-                        const { w } = getGameSize();
-                        ctx.save();
-                        let timerText, color;
-                        if (!aiFrozen) {
-                            timerText = aiTimer.toFixed(1);
-                            color = "#fff";
-                        } else {
-                            timerText = aiFreezeTimer.toFixed(1);
-                            color = "#2196f3";
-                        }
-                        ctx.font = `bold ${rel(0.06, 'w')}px 'Montserrat', Arial, sans-serif`;
-                        ctx.textAlign = "center";
-                        ctx.fillStyle = color;
-                        ctx.shadowColor = "#178a2c";
-                        ctx.shadowBlur = 8;
-                        // Posición: debajo de la barra IA
-                        ctx.fillText(timerText, ai.x + ai.w/2, ai.y + ai.h + rel(0.045, 'h'));
-                        ctx.shadowBlur = 0;
-                        ctx.restore();
-                    }
-
                     function draw() {
                         const { w, h } = getGameSize();
                         ctx.clearRect(0, 0, w, h);
                         drawTable();
                         drawScore();
                         drawPaddle(player, true);
-                        // Cambia color de la barra IA si está congelada
-                        ctx.save();
-                        if (aiFrozen) {
-                            ctx.fillStyle = "#2196f3";
-                            ctx.shadowColor = "#2196f3";
-                            ctx.shadowBlur = 8;
-                            ctx.fillRect(ai.x, ai.y, ai.w, ai.h);
-                            ctx.restore();
-                        } else {
-                            drawPaddle(ai, false);
-                        }
+                        drawPaddle(ai, false);
                         drawBall();
-                        drawAiTimer();
                     }
 
                     function clamp(val, min, max) {
@@ -792,6 +735,22 @@
                         touchX = null;
                     });
 
+                    // IA fácil: sigue la bola si está cerca y con velocidad baja (25% más rápida que la base)
+                    function aiMove() {
+                        const { w } = getGameSize();
+                        let center = ai.x + ai.w/2;
+                        let target = ball.x + ball.size/2;
+                        let dx = target - center;
+                        let maxSpeed = rel(0.00506, 'w'); // 0.0046 * 1.10 = 0.00506
+                        // Solo sigue la bola si está cerca
+                        if (Math.abs(dx) > rel(0.09, 'w')) {
+                            dx = 0;
+                        } else if (Math.abs(dx) > maxSpeed) {
+                            dx = maxSpeed * Math.sign(dx);
+                        }
+                        ai.x = clamp(ai.x + dx, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
+                    }
+
                     // Ball physics and collision (horizontal paddles)
                     function update() {
                         const { w, h } = getGameSize();
@@ -820,6 +779,10 @@
                             // Efecto según dónde pega
                             let hit = ((ball.x + ball.size/2) - (player.x + player.w/2)) / (player.w/2);
                             ball.vx += hit * rel(0.006, 'w');
+                            // Aumenta velocidad un 5% en cada colisión con paleta
+                            ball.vx *= 1.05;
+                            ball.vy *= 1.05;
+                            ballSpeedFactor *= 1.05;
                             // Clamp speed
                             let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
                             let maxSpeed = rel(0.025, 'h');
@@ -828,7 +791,7 @@
                                 ball.vy *= maxSpeed/speed;
                             }
                         }
-                        // Paddle collision (AI, arriba) -- SIEMPRE rebota normal, aunque esté azul
+                        // Paddle collision (AI, arriba)
                         if (
                             ball.y <= ai.y + ai.h &&
                             ball.y >= ai.y - rel(0.01, 'h') &&
@@ -840,6 +803,10 @@
                             ball.vy *= -1;
                             let hit = ((ball.x + ball.size/2) - (ai.x + ai.w/2)) / (ai.w/2);
                             ball.vx += hit * rel(0.006, 'w');
+                            // Aumenta velocidad un 5% en cada colisión con paleta
+                            ball.vx *= 1.05;
+                            ball.vy *= 1.05;
+                            ballSpeedFactor *= 1.05;
                             let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
                             let maxSpeed = rel(0.025, 'h');
                             if (speed > maxSpeed) {
@@ -852,6 +819,7 @@
                         if (ball.y < 0) {
                             player.score++;
                             speedMultiplier += 0.18; // Aumenta la velocidad cada punto
+                            // La pelota nueva mantiene el factor de velocidad acumulado
                             if (player.score >= 5) { // Cambiado de 3 a 5
                                 running = false;
                                 setTimeout(() => showEndScreen(true), 700);
@@ -862,6 +830,7 @@
                         if (ball.y + ball.size > getGameSize().h) {
                             ai.score++;
                             speedMultiplier += 0.18; // Aumenta la velocidad cada punto
+                            // La pelota nueva mantiene el factor de velocidad acumulado
                             if (ai.score >= 5) { // Cambiado de 3 a 5
                                 running = false;
                                 setTimeout(() => showEndScreen(false), 700);
@@ -880,7 +849,6 @@
                     }
 
                     function showEndScreen(playerWon) {
-                        stopAllTimers();
                         const pongContainer = document.getElementById('pong-container');
                         let html = '';
                         // --- idioma actual para textos del Pong ---
@@ -922,43 +890,6 @@
                         }
                     }
 
-                    // NUEVO: Lógica de temporizador IA
-                    function startAiTimer() {
-                        aiTimer = 10;
-                        aiFrozen = false;
-                        if (aiTimerInterval) clearInterval(aiTimerInterval);
-                        aiTimerInterval = setInterval(() => {
-                            if (!running) { clearInterval(aiTimerInterval); return; }
-                            aiTimer -= 0.1;
-                            if (aiTimer <= 0) {
-                                aiTimer = 0;
-                                aiFrozen = true;
-                                startAiFreeze();
-                                clearInterval(aiTimerInterval);
-                            }
-                        }, 100);
-                    }
-                    function startAiFreeze() {
-                        aiFreezeTimer = 3;
-                        if (aiFreezeInterval) clearInterval(aiFreezeInterval);
-                        aiFreezeInterval = setInterval(() => {
-                            if (!running) { clearInterval(aiFreezeInterval); return; }
-                            aiFreezeTimer -= 0.1;
-                            if (aiFreezeTimer <= 0) {
-                                aiFreezeTimer = 0;
-                                aiFrozen = false;
-                                startAiTimer();
-                                clearInterval(aiFreezeInterval);
-                            }
-                        }, 100);
-                    }
-
-                    // --- detener temporizadores al terminar ---
-                    function stopAllTimers() {
-                        if (aiTimerInterval) clearInterval(aiTimerInterval);
-                        if (aiFreezeInterval) clearInterval(aiFreezeInterval);
-                    }
-
                     // Responsive: update paddle/ball sizes on resize
                     function updateSizes() {
                         resetPositions();
@@ -970,9 +901,9 @@
                     // Start game
                     player.score = 0; ai.score = 0;
                     speedMultiplier = 1; // Reinicia el multiplicador al empezar
+                    ballSpeedFactor = 1; // Reinicia el factor de velocidad acumulado
                     resetPositions(false);
                     running = true;
-                    startAiTimer(); // Inicia temporizador IA al comenzar
                     gameLoop();
                 })();
             }
