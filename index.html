@@ -588,7 +588,7 @@
                     function netGap() { return rel(0.025, 'w'); }
 
                     // --- NUEVAS VARIABLES PARA TEMPORIZADOR DE IA ---
-                    let aiTimer = 5.0; // segundos restantes para movimiento
+                    let aiTimer = 15.0; // segundos restantes para movimiento (fijo en 15)
                     let aiFrozen = false;
                     let aiFreezeTimer = 0; // segundos restantes de congelamiento
                     let aiTimerLastUpdate = Date.now();
@@ -628,10 +628,8 @@
                             ball.vx *= baseSpeed/speed;
                             ball.vy *= baseSpeed/speed;
                         }
-                        // Reinicia temporizador de IA
-                        aiTimer = 5.0;
-                        aiFrozen = false;
-                        aiFreezeTimer = 0;
+                        // --- SOLO REINICIAR EL TEMPORIZADOR DE IA CUANDO SE INICIA EL JUEGO, NO EN CADA PUNTO ---
+                        // No modificar aiTimer, aiFrozen, aiFreezeTimer aquí
                         aiTimerLastUpdate = Date.now();
                     }
 
@@ -809,7 +807,7 @@
                             aiFreezeTimer -= dt;
                             if (aiFreezeTimer <= 0) {
                                 aiFrozen = false;
-                                aiTimer = 5.0;
+                                aiTimer = 15.0; // SIEMPRE vuelve a 15 segundos
                                 aiFreezeTimer = 0;
                             }
                         }
@@ -887,10 +885,7 @@
                                 setTimeout(() => showEndScreen(true), 700);
                             } else {
                                 resetPositions(false);
-                                // Sumar 5s al temporizador de IA si NO está congelada
-                                if (!aiFrozen) {
-                                    aiTimer += 5.0;
-                                }
+                                // Ya no sumamos tiempo, el contador siempre es 15
                             }
                         }
                         if (ball.y + ball.size > getGameSize().h) {
@@ -901,6 +896,7 @@
                                 setTimeout(() => showEndScreen(false), 700);
                             } else {
                                 resetPositions(true);
+                                // Ya no reiniciamos ni sumamos tiempo, el contador siempre es 15
                             }
                         }
                     }
@@ -965,6 +961,9 @@
 
                     // Start game
                     player.score = 0; ai.score = 0;
+                    aiTimer = 15.0;
+                    aiFrozen = false;
+                    aiFreezeTimer = 0;
                     resetPositions(false);
                     running = true;
                     gameLoop();
