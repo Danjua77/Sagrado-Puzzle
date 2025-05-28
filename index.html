@@ -554,7 +554,7 @@
                     </div>
                 `;
 
-                // Pong game logic (zona de juego más pequeña, IA más fácil, decoración tipo ping pong)
+                // Pong game logic (zona de juego más pequeña, IA casi invencible, velocidad de pelota constante)
                 (function() {
                     const canvas = document.getElementById('pong-canvas');
                     const ctx = canvas.getContext('2d');
@@ -593,8 +593,7 @@
                     let ball = { x: 0, y: 0, vx: 0, vy: 0, size: ballSize() };
                     let running = true;
                     let touchX = null;
-                    let speedMultiplier = 1; // Nuevo: multiplicador de velocidad
-                    let ballSpeedFactor = 1; // Nuevo: factor de velocidad acumulado por colisiones
+                    // Elimina speedMultiplier y ballSpeedFactor para velocidad constante
 
                     function resetPositions(servingToPlayer = false) {
                         const { w, h } = getGameSize();
@@ -609,14 +608,19 @@
                         ball.y = h/2 - ball.size/2;
                         // Serve ball
                         let angle = (Math.random() * 0.5 - 0.25); // -0.25 a 0.25 rad
-                        let baseSpeed = rel(0.012, 'h');
-                        let speed = baseSpeed * speedMultiplier * ballSpeedFactor; // Aplica ambos multiplicadores
+                        let baseSpeed = rel(0.018, 'h'); // velocidad constante, un poco más rápida
                         if (servingToPlayer) {
-                            ball.vy = -speed;
-                            ball.vx = angle * speed * 2;
+                            ball.vy = -baseSpeed;
+                            ball.vx = angle * baseSpeed * 2;
                         } else {
-                            ball.vy = speed;
-                            ball.vx = angle * speed * 2;
+                            ball.vy = baseSpeed;
+                            ball.vx = angle * baseSpeed * 2;
+                        }
+                        // Normaliza la velocidad para que siempre sea igual
+                        let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
+                        if (speed !== 0) {
+                            ball.vx *= baseSpeed/speed;
+                            ball.vy *= baseSpeed/speed;
                         }
                     }
 
@@ -735,20 +739,16 @@
                         touchX = null;
                     });
 
-                    // IA fácil: sigue la bola si está cerca y con velocidad baja (25% más rápida que la base)
+                    // IA casi invencible: sigue la bola perfectamente, sin límite de velocidad
                     function aiMove() {
                         const { w } = getGameSize();
                         let center = ai.x + ai.w/2;
                         let target = ball.x + ball.size/2;
                         let dx = target - center;
-                        let maxSpeed = rel(0.00506, 'w'); // 0.0046 * 1.10 = 0.00506
-                        // Solo sigue la bola si está cerca
-                        if (Math.abs(dx) > rel(0.09, 'w')) {
-                            dx = 0;
-                        } else if (Math.abs(dx) > maxSpeed) {
-                            dx = maxSpeed * Math.sign(dx);
-                        }
-                        ai.x = clamp(ai.x + dx, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
+                        // Sin límite de velocidad: mueve la paleta directamente al centro de la bola
+                        ai.x += dx;
+                        // Clamp para no salirse del área de juego
+                        ai.x = clamp(ai.x, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
                     }
 
                     // Ball physics and collision (horizontal paddles)
@@ -779,16 +779,12 @@
                             // Efecto según dónde pega
                             let hit = ((ball.x + ball.size/2) - (player.x + player.w/2)) / (player.w/2);
                             ball.vx += hit * rel(0.006, 'w');
-                            // Aumenta velocidad un 5% en cada colisión con paleta
-                            ball.vx *= 1.05;
-                            ball.vy *= 1.05;
-                            ballSpeedFactor *= 1.05;
-                            // Clamp speed
+                            // Mantener velocidad constante SIEMPRE
+                            let baseSpeed = rel(0.018, 'h');
                             let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
-                            let maxSpeed = rel(0.025, 'h');
-                            if (speed > maxSpeed) {
-                                ball.vx *= maxSpeed/speed;
-                                ball.vy *= maxSpeed/speed;
+                            if (speed !== 0) {
+                                ball.vx *= baseSpeed/speed;
+                                ball.vy *= baseSpeed/speed;
                             }
                         }
                         // Paddle collision (AI, arriba)
@@ -803,24 +799,20 @@
                             ball.vy *= -1;
                             let hit = ((ball.x + ball.size/2) - (ai.x + ai.w/2)) / (ai.w/2);
                             ball.vx += hit * rel(0.006, 'w');
-                            // Aumenta velocidad un 5% en cada colisión con paleta
-                            ball.vx *= 1.05;
-                            ball.vy *= 1.05;
-                            ballSpeedFactor *= 1.05;
+                            // Mantener velocidad constante SIEMPRE
+                            let baseSpeed = rel(0.018, 'h');
                             let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
-                            let maxSpeed = rel(0.025, 'h');
-                            if (speed > maxSpeed) {
-                                ball.vx *= maxSpeed/speed;
-                                ball.vy *= maxSpeed/speed;
+                            if (speed !== 0) {
+                                ball.vx *= baseSpeed/speed;
+                                ball.vy *= baseSpeed/speed;
                             }
                         }
 
                         // Score
                         if (ball.y < 0) {
                             player.score++;
-                            speedMultiplier += 0.18; // Aumenta la velocidad cada punto
-                            // La pelota nueva mantiene el factor de velocidad acumulado
-                            if (player.score >= 5) { // Cambiado de 3 a 5
+                            // NO aumentar velocidad nunca
+                            if (player.score >= 5) {
                                 running = false;
                                 setTimeout(() => showEndScreen(true), 700);
                             } else {
@@ -829,9 +821,8 @@
                         }
                         if (ball.y + ball.size > getGameSize().h) {
                             ai.score++;
-                            speedMultiplier += 0.18; // Aumenta la velocidad cada punto
-                            // La pelota nueva mantiene el factor de velocidad acumulado
-                            if (ai.score >= 5) { // Cambiado de 3 a 5
+                            // NO aumentar velocidad nunca
+                            if (ai.score >= 5) {
                                 running = false;
                                 setTimeout(() => showEndScreen(false), 700);
                             } else {
@@ -900,8 +891,6 @@
 
                     // Start game
                     player.score = 0; ai.score = 0;
-                    speedMultiplier = 1; // Reinicia el multiplicador al empezar
-                    ballSpeedFactor = 1; // Reinicia el factor de velocidad acumulado
                     resetPositions(false);
                     running = true;
                     gameLoop();
