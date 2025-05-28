@@ -1045,25 +1045,32 @@
                 const ctx = canvas.getContext('2d');
                 let W = canvas.width, H = canvas.height;
 
-                function resizeCanvas() {
-                    const rect = canvas.getBoundingClientRect();
-                    canvas.width = rect.width;
-                    canvas.height = rect.height;
-                    W = canvas.width; H = canvas.height;
+                // Calcula el máximo número de columnas y filas para que el laberinto ocupe toda la celda
+                function getOptimalMazeSize() {
+                    // Queremos celdas cuadradas y que el laberinto ocupe todo el canvas
+                    // Limita el tamaño máximo para que siga siendo jugable
+                    const maxCols = 60, maxRows = 40, minCell = 14;
+                    let cols = Math.floor(W / minCell);
+                    let rows = Math.floor(H / minCell);
+                    cols = Math.min(cols, maxCols);
+                    rows = Math.min(rows, maxRows);
+                    // Asegura que sean impares para mejor generación de laberinto
+                    if (cols % 2 === 0) cols--;
+                    if (rows % 2 === 0) rows--;
+                    return {cols, rows};
                 }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
 
-                // Laberinto aún más grande
-                const CELL = Math.floor(Math.min(W, H) / 12);
-                const MAZE_COLS = 26;
-                const MAZE_ROWS = 12;
+                let MAZE_COLS, MAZE_ROWS, CELL, OFFSET_X, OFFSET_Y, maze, player, ai;
 
-                // Jugadores
-                const PLAYER_SIZE = CELL * 0.7;
-                const PLAYER_OFFSET = (CELL - PLAYER_SIZE) / 2;
+                function recalcCellAndOffsets() {
+                    const size = getOptimalMazeSize();
+                    MAZE_COLS = size.cols;
+                    MAZE_ROWS = size.rows;
+                    CELL = Math.min(W / MAZE_COLS, H / MAZE_ROWS);
+                    OFFSET_X = (W - (CELL * MAZE_COLS)) / 2;
+                    OFFSET_Y = (H - (CELL * MAZE_ROWS)) / 2;
+                }
 
-                // Generar laberinto (DFS)
                 function generateMaze(cols, rows) {
                     const maze = Array.from({length: rows}, () => Array(cols).fill(0));
                     function carve(x, y) {
@@ -1083,23 +1090,48 @@
                     return maze;
                 }
 
-                const maze = generateMaze(MAZE_COLS, MAZE_ROWS);
+                function getPlayerSize() {
+                    return CELL * 0.7;
+                }
+                function getPlayerOffset() {
+                    return (CELL - getPlayerSize()) / 2;
+                }
 
-                // Jugador y IA
-                const player = {
-                    x: 0,
-                    y: Math.floor(MAZE_ROWS/2),
-                    color: '#ffe44d',
-                    path: [],
-                    step: 0,
-                };
-                const ai = {
-                    x: 0,
-                    y: Math.floor(MAZE_ROWS/2),
-                    color: '#178a2c', // IA ahora verde para mejor visibilidad
-                    path: [],
-                    step: 0,
-                };
+                function resetMazeAndPlayers() {
+                    recalcCellAndOffsets();
+                    maze = generateMaze(MAZE_COLS, MAZE_ROWS);
+                    player = {
+                        x: 0,
+                        y: Math.floor(MAZE_ROWS/2),
+                        color: '#ffe44d',
+                        path: [],
+                        step: 0,
+                    };
+                    ai = {
+                        x: 0,
+                        y: Math.floor(MAZE_ROWS/2),
+                        color: '#178a2c',
+                        path: [],
+                        step: 0,
+                    };
+                    player.path = findPath(player.x, player.y, MAZE_COLS-1, player.y, maze);
+                    player.step = 0;
+                    ai.path = findPath(ai.x, ai.y, MAZE_COLS-1, ai.y, maze, 0.2);
+                    ai.step = 0;
+                }
+
+                function resizeCanvas() {
+                    const rect = canvas.getBoundingClientRect();
+                    canvas.width = rect.width;
+                    canvas.height = rect.height;
+                    W = canvas.width; H = canvas.height;
+                    resetMazeAndPlayers();
+                }
+                resizeCanvas();
+                window.addEventListener('resize', function() {
+                    resizeCanvas();
+                    draw();
+                });
 
                 // IA: encontrar camino óptimo (A*)
                 function heuristic(ax, ay, bx, by) {
@@ -1134,36 +1166,54 @@
                     return null;
                 }
 
-                player.path = findPath(player.x, player.y, MAZE_COLS-1, player.y, maze);
-                player.step = 0;
-                ai.path = findPath(ai.x, ai.y, MAZE_COLS-1, ai.y, maze, 0.2);
-                ai.step = 0;
+                resetMazeAndPlayers();
 
                 function draw() {
                     ctx.clearRect(0,0,W,H);
-                    // Fondo blanco
                     ctx.fillStyle = "#fff";
                     ctx.fillRect(0, 0, W, H);
                     // Laberinto
-                    const offsetX = Math.max(0, player.x - 2);
                     for (let y=0; y<MAZE_ROWS; y++) {
                         for (let x=0; x<MAZE_COLS; x++) {
                             if (maze[y][x] === 0) {
                                 ctx.fillStyle = '#178a2c';
-                                ctx.fillRect((x-offsetX)*CELL, y*CELL, CELL, CELL);
+                                ctx.fillRect(OFFSET_X + x*CELL, OFFSET_Y + y*CELL, CELL, CELL);
                             }
                         }
                     }
+                    // Meta: cuadro azul brillante titilando
+                    const goalX = MAZE_COLS-1, goalY = Math.floor(MAZE_ROWS/2);
+                    const t = Date.now();
+                    const glow = 0.5 + 0.5 * Math.sin(t/220); // titileo
+                    ctx.save();
+                    ctx.shadowColor = "#2196f3";
+                    ctx.shadowBlur = 18 + 18*glow;
+                    ctx.globalAlpha = 0.7 + 0.3*glow;
+                    ctx.fillStyle = "#2196f3";
+                    ctx.fillRect(
+                        OFFSET_X + goalX*CELL + 2,
+                        OFFSET_Y + goalY*CELL + 2,
+                        CELL-4, CELL-4
+                    );
+                    ctx.restore();
+
                     // IA (verde con borde blanco)
                     ctx.save();
                     ctx.shadowColor = "#fff";
                     ctx.shadowBlur = 6;
                     ctx.fillStyle = ai.color;
-                    ctx.fillRect((ai.x-offsetX)*CELL+PLAYER_OFFSET, ai.y*CELL+PLAYER_OFFSET, PLAYER_SIZE, PLAYER_SIZE);
+                    ctx.fillRect(
+                        OFFSET_X + ai.x*CELL + getPlayerOffset(),
+                        OFFSET_Y + ai.y*CELL + getPlayerOffset(),
+                        getPlayerSize(), getPlayerSize()
+                    );
                     ctx.restore();
-                    // Jugador
                     ctx.fillStyle = player.color;
-                    ctx.fillRect((player.x-offsetX)*CELL+PLAYER_OFFSET, player.y*CELL+PLAYER_OFFSET, PLAYER_SIZE, PLAYER_SIZE);
+                    ctx.fillRect(
+                        OFFSET_X + player.x*CELL + getPlayerOffset(),
+                        OFFSET_Y + player.y*CELL + getPlayerOffset(),
+                        getPlayerSize(), getPlayerSize()
+                    );
                 }
 
                 function playerAdvance() {
@@ -1198,12 +1248,12 @@
                 }
                 loop();
 
-                // IA 10% más rápida (intervalo menor)
+                // IA más rápida: avanza cada 180 ms
                 setInterval(function() {
                     if (finished) return;
                     aiAdvance();
                     checkWin();
-                }, 315);
+                }, 180);
 
                 function movePlayer(dx, dy) {
                     if (finished) return;
