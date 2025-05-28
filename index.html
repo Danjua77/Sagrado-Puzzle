@@ -696,21 +696,16 @@
                         ctx.font = `bold ${rel(0.06, 'w')}px 'Montserrat', Arial, sans-serif`;
                         ctx.textAlign = "center";
                         ctx.textBaseline = "top";
-                        let timerText = "";
-                        let color = "#2196f3";
-                        if (aiFrozen) {
-                            timerText = Math.ceil(aiFreezeTimer).toString();
-                            color = "#2196f3";
-                        } else {
-                            timerText = Math.ceil(aiTimer).toString();
-                            color = "#178a2c";
-                        }
+                        // Color: azul si congelado, blanco si no
+                        let color = aiFrozen ? "#2196f3" : "#fff";
+                        let timerValue = aiFrozen ? aiFreezeTimer : aiTimer;
+                        // Mostrar segundos y decimas (ej: 12.3)
+                        let timerText = timerValue.toFixed(1);
                         // Posición: justo debajo de la raqueta de la IA
                         const timerX = ai.x + ai.w/2;
                         const timerY = ai.y + ai.h + rel(0.012, 'h');
-                        // Solo el número, sin círculo ni texto extra
                         ctx.fillStyle = color;
-                        ctx.shadowColor = "#fff";
+                        ctx.shadowColor = "#178a2c";
                         ctx.shadowBlur = 8;
                         ctx.fillText(timerText, timerX, timerY);
                         ctx.restore();
