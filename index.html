@@ -1324,12 +1324,12 @@
                 }
                 loop();
 
-                // IA más rápida: avanza cada 180 ms
+                // IA más rápida: avanza cada 350 ms
                 setInterval(function() {
                     if (finished) return;
                     aiAdvance();
                     checkWin();
-                }, 180);
+                }, 315);
 
                 function movePlayer(dx, dy) {
                     if (finished) return;
