@@ -291,7 +291,7 @@
     <div class="arbol-chan-container" id="arbol-chan-container-2">
         <div class="arbol-chan-content">
             <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img-2" alt="Arbol Chan" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">Abuelo-sama</div>
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">arbol-chan</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto-2">¡Demuéstrame que eres más rápido que yo si quieres la siguiente pista!</div>
             <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
         </div>
@@ -1248,12 +1248,12 @@
                 }
                 loop();
 
-                // IA más rápida: avanza cada 180 ms
+                // IA más rápida: avanza cada 225 ms
                 setInterval(function() {
                     if (finished) return;
                     aiAdvance();
                     checkWin();
-                }, 180);
+                }, 198); // Cambiado de 180 a 225 ms para que sea 10% más lenta
 
                 function movePlayer(dx, dy) {
                     if (finished) return;
