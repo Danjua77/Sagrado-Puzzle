@@ -587,6 +587,12 @@
                     function netSeg() { return rel(0.045, 'w'); }
                     function netGap() { return rel(0.025, 'w'); }
 
+                    // --- NUEVAS VARIABLES PARA TEMPORIZADOR DE IA ---
+                    let aiTimer = 5.0; // segundos restantes para movimiento
+                    let aiFrozen = false;
+                    let aiFreezeTimer = 0; // segundos restantes de congelamiento
+                    let aiTimerLastUpdate = Date.now();
+
                     // Estado del juego
                     let player = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
                     let ai = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
@@ -622,6 +628,11 @@
                             ball.vx *= baseSpeed/speed;
                             ball.vy *= baseSpeed/speed;
                         }
+                        // Reinicia temporizador de IA
+                        aiTimer = 5.0;
+                        aiFrozen = false;
+                        aiFreezeTimer = 0;
+                        aiTimerLastUpdate = Date.now();
                     }
 
                     // --- Decoración tipo ping pong ---
@@ -669,10 +680,41 @@
 
                     function drawPaddle(p, isPlayer) {
                         ctx.save();
-                        ctx.fillStyle = isPlayer ? "#ffe44d" : "#fff";
+                        if (!isPlayer && aiFrozen) {
+                            ctx.fillStyle = "#2196f3"; // azul durante congelamiento
+                        } else {
+                            ctx.fillStyle = isPlayer ? "#ffe44d" : "#fff";
+                        }
                         ctx.shadowColor = isPlayer ? "#178a2c" : "#2b4fa2";
                         ctx.shadowBlur = isPlayer ? 8 : 4;
                         ctx.fillRect(p.x, p.y, p.w, p.h);
+                        ctx.restore();
+                    }
+
+                    // --- DIBUJAR TEMPORIZADOR DE IA ---
+                    function drawAITimer() {
+                        const { w } = getGameSize();
+                        ctx.save();
+                        ctx.font = `bold ${rel(0.06, 'w')}px 'Montserrat', Arial, sans-serif`;
+                        ctx.textAlign = "center";
+                        ctx.textBaseline = "top";
+                        let timerText = "";
+                        let color = "#2196f3";
+                        if (aiFrozen) {
+                            timerText = Math.ceil(aiFreezeTimer).toString();
+                            color = "#2196f3";
+                        } else {
+                            timerText = Math.ceil(aiTimer).toString();
+                            color = "#178a2c";
+                        }
+                        // Posición: justo debajo de la raqueta de la IA
+                        const timerX = ai.x + ai.w/2;
+                        const timerY = ai.y + ai.h + rel(0.012, 'h');
+                        // Solo el número, sin círculo ni texto extra
+                        ctx.fillStyle = color;
+                        ctx.shadowColor = "#fff";
+                        ctx.shadowBlur = 8;
+                        ctx.fillText(timerText, timerX, timerY);
                         ctx.restore();
                     }
 
@@ -695,6 +737,8 @@
                         drawPaddle(player, true);
                         drawPaddle(ai, false);
                         drawBall();
+                        // --- DIBUJAR TEMPORIZADOR DE IA DE FORMA CLARA Y VISIBLE ---
+                        drawAITimer();
                     }
 
                     function clamp(val, min, max) {
@@ -741,6 +785,7 @@
 
                     // IA casi invencible: sigue la bola perfectamente, sin límite de velocidad
                     function aiMove() {
+                        if (aiFrozen) return; // No mover si está congelada
                         const { w } = getGameSize();
                         let center = ai.x + ai.w/2;
                         let target = ball.x + ball.size/2;
@@ -751,9 +796,34 @@
                         ai.x = clamp(ai.x, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
                     }
 
+                    // --- ACTUALIZAR TEMPORIZADOR DE IA ---
+                    function updateAITimer(dt) {
+                        if (!aiFrozen) {
+                            aiTimer -= dt;
+                            if (aiTimer <= 0) {
+                                aiFrozen = true;
+                                aiFreezeTimer = 3.0;
+                                aiTimer = 0;
+                            }
+                        } else {
+                            aiFreezeTimer -= dt;
+                            if (aiFreezeTimer <= 0) {
+                                aiFrozen = false;
+                                aiTimer = 5.0;
+                                aiFreezeTimer = 0;
+                            }
+                        }
+                    }
+
                     // Ball physics and collision (horizontal paddles)
                     function update() {
                         const { w, h } = getGameSize();
+                        // --- TEMPORIZADOR DE IA ---
+                        let now = Date.now();
+                        let dt = (now - aiTimerLastUpdate) / 1000;
+                        aiTimerLastUpdate = now;
+                        if (running) updateAITimer(dt);
+
                         // Move ball
                         ball.x += ball.vx;
                         ball.y += ball.vy;
@@ -817,6 +887,10 @@
                                 setTimeout(() => showEndScreen(true), 700);
                             } else {
                                 resetPositions(false);
+                                // Sumar 5s al temporizador de IA si NO está congelada
+                                if (!aiFrozen) {
+                                    aiTimer += 5.0;
+                                }
                             }
                         }
                         if (ball.y + ball.size > getGameSize().h) {
