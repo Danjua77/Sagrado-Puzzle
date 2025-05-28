@@ -283,7 +283,7 @@
         <div class="arbol-chan-content">
             <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img" alt="Arbol Chan" />
             <div class="arbol-chan-titulo" id="arbol-chan-titulo">arbol-chan</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto">Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto">En cada código tendrás un reto para <span style="color:#178a2c;font-weight:bold;">superar</span> y cuando lo hagas obtendrás la siguiente pista, busca todas las pistas para poder encontrar el caché</div>
             <button class="btn-continuar" id="btn-continuar">Continuar</button>
         </div>
     </div>
@@ -291,7 +291,7 @@
     <div class="arbol-chan-container" id="arbol-chan-container-2">
         <div class="arbol-chan-content">
             <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img-2" alt="Arbol Chan" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">arbol-chan</div>
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">Abuelo-sama</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto-2">¡Demuéstrame que eres más rápido que yo si quieres la siguiente pista!</div>
             <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
         </div>
@@ -452,442 +452,449 @@
         });
 
         // Nueva lógica para el botón "Continuar" de la secuencia 1
+        let arbolChanDialogStep = 0;
         btnContinuar.addEventListener('click', function() {
-            // Reemplaza el contenido del body con el juego de Pong (zona de juego más pequeña, IA más fácil, decoración tipo ping pong)
-            document.body.innerHTML = `
-                <style>
-                    body, html {
-                        margin: 0; padding: 0; width: 100vw; height: 100vh; background: #178a2c;
-                        overflow: hidden;
+            if (arbolChanDialogStep === 0) {
+                // Primer clic: cambia el texto y espera otro clic
+                arbolChanTexto.innerHTML = "Juega ping-pong para obtener la siguiente pista, <span style='color:#178a2c;font-weight:bold;'>resiste</span> hasta que tu oponente falle y gana";
+                arbolChanDialogStep = 1;
+            } else {
+                // Segundo clic: inicia el juego de Pong
+                document.body.innerHTML = `
+                    <style>
+                        body, html {
+                            margin: 0; padding: 0; width: 100vw; height: 100vh; background: #178a2c;
+                            overflow: hidden;
+                        }
+                        #pong-container {
+                            width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
+                            background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
+                            background-size: cover;
+                            position: fixed; top: 0; left: 0;
+                        }
+                        #pong-canvas {
+                            background: transparent;
+                            display: block;
+                            margin: auto;
+                            /* Zona de juego más pequeña para ver fondo */
+                            width: 92vw;
+                            height: 70vh;
+                            max-width: 370px;
+                            max-height: 620px;
+                            aspect-ratio: 9/16;
+                            border-radius: 18px;
+                            box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
+                            touch-action: none;
+                        }
+                        #pong-end {
+                            position: absolute;
+                            top: 0; left: 0; width: 100vw; height: 100vh;
+                            background: url('Fondo texto.jpg') no-repeat center center;
+                            background-size: cover;
+                            color: #178a2c;
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center; /* centrado vertical */
+                            z-index: 10;
+                            font-family: 'Montserrat', Arial, sans-serif;
+                            /* Eliminar padding/margin extra */
+                        }
+                        #pong-end .arbol-img {
+                            width: 38vw;
+                            max-width: 180px;
+                            min-width: 90px;
+                            margin-top: 2.5rem;
+                            margin-bottom: 1.2rem;
+                            filter: drop-shadow(0 4px 16px #fff);
+                        }
+                        #pong-end h2 {
+                            font-size: 2.2rem;
+                            margin-bottom: 2rem;
+                            color: #178a2c;
+                            text-align: center;
+                            text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                            margin-top: 0; /* quitar margen superior */
+                        }
+                        #pong-next-img {
+                            width: 60vw;
+                            max-width: 300px;
+                            min-width: 120px;
+                            height: 180px;
+                            background: #fff;
+                            margin: 0; /* quitar margen vertical */
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            border-radius: 12px;
+                            overflow: hidden;
+                            box-shadow: 0 2px 12px #178a2c33;
+                        }
+                        #pong-end button {
+                            font-size: 1.3rem;
+                            background: #178a2c;
+                            color: #fff;
+                            border: 2px solid #fff;
+                            border-radius: 8px;
+                            padding: 0.7rem 2.5rem;
+                            font-weight: bold;
+                            font-family: 'Montserrat', Arial, sans-serif;
+                            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                            cursor: pointer;
+                            margin-top: 1.5rem;
+                            margin-bottom: 2rem;
+                        }
+                        #pong-end button:active {
+                            background: #176d13;
+                            border: 2px solid #ffe44d;
+                        }
+                    </style>
+                    <div id="pong-container">
+                        <canvas id="pong-canvas"></canvas>
+                    </div>
+                `;
+
+                // Pong game logic (zona de juego más pequeña, IA más fácil, decoración tipo ping pong)
+                (function() {
+                    const canvas = document.getElementById('pong-canvas');
+                    const ctx = canvas.getContext('2d');
+
+                    // --- Proporción 9:16, tablero horizontal ---
+                    function getGameSize() {
+                        // El canvas ya tiene tamaño fijo por CSS, así que usamos esas dimensiones
+                        return { w: canvas.width, h: canvas.height };
                     }
-                    #pong-container {
-                        width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
-                        background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
-                        background-size: cover;
-                        position: fixed; top: 0; left: 0;
+                    function resizeCanvas() {
+                        // Ajusta el tamaño real del canvas al tamaño mostrado
+                        const rect = canvas.getBoundingClientRect();
+                        canvas.width = rect.width;
+                        canvas.height = rect.height;
                     }
-                    #pong-canvas {
-                        background: transparent;
-                        display: block;
-                        margin: auto;
-                        /* Zona de juego más pequeña para ver fondo */
-                        width: 92vw;
-                        height: 70vh;
-                        max-width: 370px;
-                        max-height: 620px;
-                        aspect-ratio: 9/16;
-                        border-radius: 18px;
-                        box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
-                        touch-action: none;
+                    resizeCanvas();
+                    window.addEventListener('resize', resizeCanvas);
+
+                    // --- Constantes y posiciones ---
+                    function rel(val, axis) {
+                        const { w, h } = getGameSize();
+                        return axis === 'w' ? val * w : val * h;
                     }
-                    #pong-end {
-                        position: absolute;
-                        top: 0; left: 0; width: 100vw; height: 100vh;
-                        background: url('Fondo texto.jpg') no-repeat center center;
-                        background-size: cover;
-                        color: #178a2c;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center; /* centrado vertical */
-                        z-index: 10;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        /* Eliminar padding/margin extra */
+                    // Raquetas horizontales (abajo/arriba)
+                    function paddleW() { return rel(0.22, 'w'); }
+                    function paddleH() { return rel(0.025, 'h'); }
+                    function paddleMargin() { return rel(0.03, 'h'); }
+                    function ballSize() { return rel(0.035, 'w'); }
+                    function netH() { return rel(0.012, 'h'); }
+                    function netSeg() { return rel(0.045, 'w'); }
+                    function netGap() { return rel(0.025, 'w'); }
+
+                    // Estado del juego
+                    let player = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
+                    let ai = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
+                    let ball = { x: 0, y: 0, vx: 0, vy: 0, size: ballSize() };
+                    let running = true;
+                    let touchX = null;
+                    let speedMultiplier = 1; // Nuevo: multiplicador de velocidad
+
+                    function resetPositions(servingToPlayer = false) {
+                        const { w, h } = getGameSize();
+                        player.w = paddleW(); player.h = paddleH();
+                        ai.w = paddleW(); ai.h = paddleH();
+                        player.x = w/2 - player.w/2;
+                        player.y = h - paddleMargin() - player.h;
+                        ai.x = w/2 - ai.w/2;
+                        ai.y = paddleMargin();
+                        ball.size = ballSize();
+                        ball.x = w/2 - ball.size/2;
+                        ball.y = h/2 - ball.size/2;
+                        // Serve ball
+                        let angle = (Math.random() * 0.5 - 0.25); // -0.25 a 0.25 rad
+                        let baseSpeed = rel(0.012, 'h');
+                        let speed = baseSpeed * speedMultiplier; // Aplica el multiplicador
+                        if (servingToPlayer) {
+                            ball.vy = -speed;
+                            ball.vx = angle * speed * 2;
+                        } else {
+                            ball.vy = speed;
+                            ball.vx = angle * speed * 2;
+                        }
                     }
-                    #pong-end .arbol-img {
-                        width: 38vw;
-                        max-width: 180px;
-                        min-width: 90px;
-                        margin-top: 2.5rem;
-                        margin-bottom: 1.2rem;
-                        filter: drop-shadow(0 4px 16px #fff);
+
+                    // --- Decoración tipo ping pong ---
+                    function drawTable() {
+                        const { w, h } = getGameSize();
+                        // Fondo azul tipo mesa de ping pong
+                        ctx.save();
+                        ctx.fillStyle = "#2b4fa2";
+                        ctx.globalAlpha = 0.93;
+                        ctx.fillRect(rel(0.03, 'w'), rel(0.02, 'h'), w - rel(0.06, 'w'), h - rel(0.04, 'h'));
+                        ctx.globalAlpha = 1;
+                        // Líneas blancas del borde
+                        ctx.strokeStyle = "#fff";
+                        ctx.lineWidth = rel(0.012, 'w');
+                        ctx.strokeRect(rel(0.03, 'w'), rel(0.02, 'h'), w - rel(0.06, 'w'), h - rel(0.04, 'h'));
+                        // Línea central blanca
+                        ctx.beginPath();
+                        ctx.moveTo(rel(0.03, 'w'), h/2);
+                        ctx.lineTo(w - rel(0.03, 'w'), h/2);
+                        ctx.setLineDash([rel(0.04, 'w'), rel(0.025, 'w')]);
+                        ctx.lineWidth = rel(0.008, 'w');
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                        // Red (gris claro)
+                        ctx.beginPath();
+                        ctx.strokeStyle = "#e0e0e0";
+                        ctx.lineWidth = rel(0.012, 'h');
+                        ctx.moveTo(rel(0.03, 'w'), h/2);
+                        ctx.lineTo(w - rel(0.03, 'w'), h/2);
+                        ctx.stroke();
+                        ctx.restore();
                     }
-                    #pong-end h2 {
-                        font-size: 2.2rem;
-                        margin-bottom: 2rem;
-                        color: #178a2c;
-                        text-align: center;
-                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
-                        margin-top: 0; /* quitar margen superior */
+
+                    function drawScore() {
+                        const { w, h } = getGameSize();
+                        ctx.font = `bold ${rel(0.08, 'w')}px 'Montserrat', Arial, sans-serif`;
+                        ctx.textAlign = "center";
+                        ctx.fillStyle = "#ffe44d";
+                        ctx.shadowColor = "#178a2c";
+                        ctx.shadowBlur = 8;
+                        ctx.fillText(player.score, w/2, h - rel(0.07, 'h'));
+                        ctx.fillText(ai.score, w/2, rel(0.11, 'h'));
+                        ctx.shadowBlur = 0;
                     }
-                    #pong-next-img {
-                        width: 60vw;
-                        max-width: 300px;
-                        min-width: 120px;
-                        height: 180px;
-                        background: #fff;
-                        margin: 0; /* quitar margen vertical */
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 12px;
-                        overflow: hidden;
-                        box-shadow: 0 2px 12px #178a2c33;
+
+                    function drawPaddle(p, isPlayer) {
+                        ctx.save();
+                        ctx.fillStyle = isPlayer ? "#ffe44d" : "#fff";
+                        ctx.shadowColor = isPlayer ? "#178a2c" : "#2b4fa2";
+                        ctx.shadowBlur = isPlayer ? 8 : 4;
+                        ctx.fillRect(p.x, p.y, p.w, p.h);
+                        ctx.restore();
                     }
-                    #pong-end button {
-                        font-size: 1.3rem;
-                        background: #178a2c;
-                        color: #fff;
-                        border: 2px solid #fff;
-                        border-radius: 8px;
-                        padding: 0.7rem 2.5rem;
-                        font-weight: bold;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-                        cursor: pointer;
-                        margin-top: 1.5rem;
-                        margin-bottom: 2rem;
+
+                    function drawBall() {
+                        ctx.save();
+                        ctx.fillStyle = "#fff";
+                        ctx.shadowColor = "#ffe44d";
+                        ctx.shadowBlur = 8;
+                        ctx.beginPath();
+                        ctx.arc(ball.x + ball.size/2, ball.y + ball.size/2, ball.size/2, 0, 2*Math.PI);
+                        ctx.fill();
+                        ctx.restore();
                     }
-                    #pong-end button:active {
-                        background: #176d13;
-                        border: 2px solid #ffe44d;
+
+                    function draw() {
+                        const { w, h } = getGameSize();
+                        ctx.clearRect(0, 0, w, h);
+                        drawTable();
+                        drawScore();
+                        drawPaddle(player, true);
+                        drawPaddle(ai, false);
+                        drawBall();
                     }
-                </style>
-                <div id="pong-container">
-                    <canvas id="pong-canvas"></canvas>
-                </div>
-            `;
 
-            // Pong game logic (zona de juego más pequeña, IA más fácil, decoración tipo ping pong)
-            (function() {
-                const canvas = document.getElementById('pong-canvas');
-                const ctx = canvas.getContext('2d');
-
-                // --- Proporción 9:16, tablero horizontal ---
-                function getGameSize() {
-                    // El canvas ya tiene tamaño fijo por CSS, así que usamos esas dimensiones
-                    return { w: canvas.width, h: canvas.height };
-                }
-                function resizeCanvas() {
-                    // Ajusta el tamaño real del canvas al tamaño mostrado
-                    const rect = canvas.getBoundingClientRect();
-                    canvas.width = rect.width;
-                    canvas.height = rect.height;
-                }
-                resizeCanvas();
-                window.addEventListener('resize', resizeCanvas);
-
-                // --- Constantes y posiciones ---
-                function rel(val, axis) {
-                    const { w, h } = getGameSize();
-                    return axis === 'w' ? val * w : val * h;
-                }
-                // Raquetas horizontales (abajo/arriba)
-                function paddleW() { return rel(0.22, 'w'); }
-                function paddleH() { return rel(0.025, 'h'); }
-                function paddleMargin() { return rel(0.03, 'h'); }
-                function ballSize() { return rel(0.035, 'w'); }
-                function netH() { return rel(0.012, 'h'); }
-                function netSeg() { return rel(0.045, 'w'); }
-                function netGap() { return rel(0.025, 'w'); }
-
-                // Estado del juego
-                let player = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
-                let ai = { x: 0, y: 0, w: paddleW(), h: paddleH(), score: 0 };
-                let ball = { x: 0, y: 0, vx: 0, vy: 0, size: ballSize() };
-                let running = true;
-                let touchX = null;
-                let speedMultiplier = 1; // Nuevo: multiplicador de velocidad
-
-                function resetPositions(servingToPlayer = false) {
-                    const { w, h } = getGameSize();
-                    player.w = paddleW(); player.h = paddleH();
-                    ai.w = paddleW(); ai.h = paddleH();
-                    player.x = w/2 - player.w/2;
-                    player.y = h - paddleMargin() - player.h;
-                    ai.x = w/2 - ai.w/2;
-                    ai.y = paddleMargin();
-                    ball.size = ballSize();
-                    ball.x = w/2 - ball.size/2;
-                    ball.y = h/2 - ball.size/2;
-                    // Serve ball
-                    let angle = (Math.random() * 0.5 - 0.25); // -0.25 a 0.25 rad
-                    let baseSpeed = rel(0.012, 'h');
-                    let speed = baseSpeed * speedMultiplier; // Aplica el multiplicador
-                    if (servingToPlayer) {
-                        ball.vy = -speed;
-                        ball.vx = angle * speed * 2;
-                    } else {
-                        ball.vy = speed;
-                        ball.vx = angle * speed * 2;
+                    function clamp(val, min, max) {
+                        return Math.max(min, Math.min(max, val));
                     }
-                }
 
-                // --- Decoración tipo ping pong ---
-                function drawTable() {
-                    const { w, h } = getGameSize();
-                    // Fondo azul tipo mesa de ping pong
-                    ctx.save();
-                    ctx.fillStyle = "#2b4fa2";
-                    ctx.globalAlpha = 0.93;
-                    ctx.fillRect(rel(0.03, 'w'), rel(0.02, 'h'), w - rel(0.06, 'w'), h - rel(0.04, 'h'));
-                    ctx.globalAlpha = 1;
-                    // Líneas blancas del borde
-                    ctx.strokeStyle = "#fff";
-                    ctx.lineWidth = rel(0.012, 'w');
-                    ctx.strokeRect(rel(0.03, 'w'), rel(0.02, 'h'), w - rel(0.06, 'w'), h - rel(0.04, 'h'));
-                    // Línea central blanca
-                    ctx.beginPath();
-                    ctx.moveTo(rel(0.03, 'w'), h/2);
-                    ctx.lineTo(w - rel(0.03, 'w'), h/2);
-                    ctx.setLineDash([rel(0.04, 'w'), rel(0.025, 'w')]);
-                    ctx.lineWidth = rel(0.008, 'w');
-                    ctx.stroke();
-                    ctx.setLineDash([]);
-                    // Red (gris claro)
-                    ctx.beginPath();
-                    ctx.strokeStyle = "#e0e0e0";
-                    ctx.lineWidth = rel(0.012, 'h');
-                    ctx.moveTo(rel(0.03, 'w'), h/2);
-                    ctx.lineTo(w - rel(0.03, 'w'), h/2);
-                    ctx.stroke();
-                    ctx.restore();
-                }
-
-                function drawScore() {
-                    const { w, h } = getGameSize();
-                    ctx.font = `bold ${rel(0.08, 'w')}px 'Montserrat', Arial, sans-serif`;
-                    ctx.textAlign = "center";
-                    ctx.fillStyle = "#ffe44d";
-                    ctx.shadowColor = "#178a2c";
-                    ctx.shadowBlur = 8;
-                    ctx.fillText(player.score, w/2, h - rel(0.07, 'h'));
-                    ctx.fillText(ai.score, w/2, rel(0.11, 'h'));
-                    ctx.shadowBlur = 0;
-                }
-
-                function drawPaddle(p, isPlayer) {
-                    ctx.save();
-                    ctx.fillStyle = isPlayer ? "#ffe44d" : "#fff";
-                    ctx.shadowColor = isPlayer ? "#178a2c" : "#2b4fa2";
-                    ctx.shadowBlur = isPlayer ? 8 : 4;
-                    ctx.fillRect(p.x, p.y, p.w, p.h);
-                    ctx.restore();
-                }
-
-                function drawBall() {
-                    ctx.save();
-                    ctx.fillStyle = "#fff";
-                    ctx.shadowColor = "#ffe44d";
-                    ctx.shadowBlur = 8;
-                    ctx.beginPath();
-                    ctx.arc(ball.x + ball.size/2, ball.y + ball.size/2, ball.size/2, 0, 2*Math.PI);
-                    ctx.fill();
-                    ctx.restore();
-                }
-
-                function draw() {
-                    const { w, h } = getGameSize();
-                    ctx.clearRect(0, 0, w, h);
-                    drawTable();
-                    drawScore();
-                    drawPaddle(player, true);
-                    drawPaddle(ai, false);
-                    drawBall();
-                }
-
-                function clamp(val, min, max) {
-                    return Math.max(min, Math.min(max, val));
-                }
-
-                // Touch/mouse controls for player paddle (horizontal)
-                function handleMoveFromCanvas(x) {
-                    const { w } = getGameSize();
-                    player.x = clamp(x - player.w/2, rel(0.03, 'w'), w - rel(0.03, 'w') - player.w);
-                }
-                function getCanvasRelativeX(e) {
-                    const rect = canvas.getBoundingClientRect();
-                    if (e.touches && e.touches.length > 0) {
-                        return (e.touches[0].clientX - rect.left) * (canvas.width / rect.width);
-                    } else if (typeof e.clientX === "number") {
-                        return (e.clientX - rect.left) * (canvas.width / rect.width);
+                    // Touch/mouse controls for player paddle (horizontal)
+                    function handleMoveFromCanvas(x) {
+                        const { w } = getGameSize();
+                        player.x = clamp(x - player.w/2, rel(0.03, 'w'), w - rel(0.03, 'w') - player.w);
                     }
-                    return 0;
-                }
-                canvas.addEventListener('touchstart', function(e) {
-                    handleMoveFromCanvas(getCanvasRelativeX(e));
-                    e.preventDefault();
-                });
-                canvas.addEventListener('touchmove', function(e) {
-                    handleMoveFromCanvas(getCanvasRelativeX(e));
-                    e.preventDefault();
-                });
-                canvas.addEventListener('mousedown', function(e) {
-                    handleMoveFromCanvas(getCanvasRelativeX(e));
-                    touchX = true;
-                });
-                canvas.addEventListener('mousemove', function(e) {
-                    if (touchX) {
+                    function getCanvasRelativeX(e) {
+                        const rect = canvas.getBoundingClientRect();
+                        if (e.touches && e.touches.length > 0) {
+                            return (e.touches[0].clientX - rect.left) * (canvas.width / rect.width);
+                        } else if (typeof e.clientX === "number") {
+                            return (e.clientX - rect.left) * (canvas.width / rect.width);
+                        }
+                        return 0;
+                    }
+                    canvas.addEventListener('touchstart', function(e) {
                         handleMoveFromCanvas(getCanvasRelativeX(e));
-                    }
-                });
-                canvas.addEventListener('mouseup', function() {
-                    touchX = null;
-                });
-                canvas.addEventListener('mouseleave', function() {
-                    touchX = null;
-                });
+                        e.preventDefault();
+                    });
+                    canvas.addEventListener('touchmove', function(e) {
+                        handleMoveFromCanvas(getCanvasRelativeX(e));
+                        e.preventDefault();
+                    });
+                    canvas.addEventListener('mousedown', function(e) {
+                        handleMoveFromCanvas(getCanvasRelativeX(e));
+                        touchX = true;
+                    });
+                    canvas.addEventListener('mousemove', function(e) {
+                        if (touchX) {
+                            handleMoveFromCanvas(getCanvasRelativeX(e));
+                        }
+                    });
+                    canvas.addEventListener('mouseup', function() {
+                        touchX = null;
+                    });
+                    canvas.addEventListener('mouseleave', function() {
+                        touchX = null;
+                    });
 
-                // IA fácil: sigue la bola si está cerca y con velocidad baja (25% más rápida que la base)
-                function aiMove() {
-                    const { w } = getGameSize();
-                    let center = ai.x + ai.w/2;
-                    let target = ball.x + ball.size/2;
-                    let dx = target - center;
-                    let maxSpeed = rel(0.00506, 'w'); // 0.0046 * 1.10 = 0.00506
-                    // Solo sigue la bola si está cerca
-                    if (Math.abs(dx) > rel(0.09, 'w')) {
-                        dx = 0;
-                    } else if (Math.abs(dx) > maxSpeed) {
-                        dx = maxSpeed * Math.sign(dx);
-                    }
-                    ai.x = clamp(ai.x + dx, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
-                }
-
-                // Ball physics and collision (horizontal paddles)
-                function update() {
-                    const { w, h } = getGameSize();
-                    // Move ball
-                    ball.x += ball.vx;
-                    ball.y += ball.vy;
-
-                    // Wall collision (left/right)
-                    if (ball.x < 0) {
-                        ball.x = 0; ball.vx *= -1;
-                    }
-                    if (ball.x + ball.size > w) {
-                        ball.x = w - ball.size; ball.vx *= -1;
+                    // IA fácil: sigue la bola si está cerca y con velocidad baja (25% más rápida que la base)
+                    function aiMove() {
+                        const { w } = getGameSize();
+                        let center = ai.x + ai.w/2;
+                        let target = ball.x + ball.size/2;
+                        let dx = target - center;
+                        let maxSpeed = rel(0.00506, 'w'); // 0.0046 * 1.10 = 0.00506
+                        // Solo sigue la bola si está cerca
+                        if (Math.abs(dx) > rel(0.09, 'w')) {
+                            dx = 0;
+                        } else if (Math.abs(dx) > maxSpeed) {
+                            dx = maxSpeed * Math.sign(dx);
+                        }
+                        ai.x = clamp(ai.x + dx, rel(0.03, 'w'), w - rel(0.03, 'w') - ai.w);
                     }
 
-                    // Paddle collision (player, abajo)
-                    if (
-                        ball.y + ball.size >= player.y &&
-                        ball.y + ball.size <= player.y + player.h + rel(0.01, 'h') &&
-                        ball.x + ball.size > player.x &&
-                        ball.x < player.x + player.w &&
-                        ball.vy > 0
-                    ) {
-                        ball.y = player.y - ball.size;
-                        ball.vy *= -1;
-                        // Efecto según dónde pega
-                        let hit = ((ball.x + ball.size/2) - (player.x + player.w/2)) / (player.w/2);
-                        ball.vx += hit * rel(0.006, 'w');
-                        // Clamp speed
-                        let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
-                        let maxSpeed = rel(0.025, 'h');
-                        if (speed > maxSpeed) {
-                            ball.vx *= maxSpeed/speed;
-                            ball.vy *= maxSpeed/speed;
+                    // Ball physics and collision (horizontal paddles)
+                    function update() {
+                        const { w, h } = getGameSize();
+                        // Move ball
+                        ball.x += ball.vx;
+                        ball.y += ball.vy;
+
+                        // Wall collision (left/right)
+                        if (ball.x < 0) {
+                            ball.x = 0; ball.vx *= -1;
+                        }
+                        if (ball.x + ball.size > w) {
+                            ball.x = w - ball.size; ball.vx *= -1;
+                        }
+
+                        // Paddle collision (player, abajo)
+                        if (
+                            ball.y + ball.size >= player.y &&
+                            ball.y + ball.size <= player.y + player.h + rel(0.01, 'h') &&
+                            ball.x + ball.size > player.x &&
+                            ball.x < player.x + player.w &&
+                            ball.vy > 0
+                        ) {
+                            ball.y = player.y - ball.size;
+                            ball.vy *= -1;
+                            // Efecto según dónde pega
+                            let hit = ((ball.x + ball.size/2) - (player.x + player.w/2)) / (player.w/2);
+                            ball.vx += hit * rel(0.006, 'w');
+                            // Clamp speed
+                            let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
+                            let maxSpeed = rel(0.025, 'h');
+                            if (speed > maxSpeed) {
+                                ball.vx *= maxSpeed/speed;
+                                ball.vy *= maxSpeed/speed;
+                            }
+                        }
+                        // Paddle collision (AI, arriba)
+                        if (
+                            ball.y <= ai.y + ai.h &&
+                            ball.y >= ai.y - rel(0.01, 'h') &&
+                            ball.x + ball.size > ai.x &&
+                            ball.x < ai.x + ai.w &&
+                            ball.vy < 0
+                        ) {
+                            ball.y = ai.y + ai.h;
+                            ball.vy *= -1;
+                            let hit = ((ball.x + ball.size/2) - (ai.x + ai.w/2)) / (ai.w/2);
+                            ball.vx += hit * rel(0.006, 'w');
+                            let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
+                            let maxSpeed = rel(0.025, 'h');
+                            if (speed > maxSpeed) {
+                                ball.vx *= maxSpeed/speed;
+                                ball.vy *= maxSpeed/speed;
+                            }
+                        }
+
+                        // Score
+                        if (ball.y < 0) {
+                            player.score++;
+                            speedMultiplier += 0.18; // Aumenta la velocidad cada punto
+                            if (player.score >= 5) { // Cambiado de 3 a 5
+                                running = false;
+                                setTimeout(() => showEndScreen(true), 700);
+                            } else {
+                                resetPositions(false);
+                            }
+                        }
+                        if (ball.y + ball.size > getGameSize().h) {
+                            ai.score++;
+                            speedMultiplier += 0.18; // Aumenta la velocidad cada punto
+                            if (ai.score >= 5) { // Cambiado de 3 a 5
+                                running = false;
+                                setTimeout(() => showEndScreen(false), 700);
+                            } else {
+                                resetPositions(true);
+                            }
                         }
                     }
-                    // Paddle collision (AI, arriba)
-                    if (
-                        ball.y <= ai.y + ai.h &&
-                        ball.y >= ai.y - rel(0.01, 'h') &&
-                        ball.x + ball.size > ai.x &&
-                        ball.x < ai.x + ai.w &&
-                        ball.vy < 0
-                    ) {
-                        ball.y = ai.y + ai.h;
-                        ball.vy *= -1;
-                        let hit = ((ball.x + ball.size/2) - (ai.x + ai.w/2)) / (ai.w/2);
-                        ball.vx += hit * rel(0.006, 'w');
-                        let speed = Math.sqrt(ball.vx*ball.vx + ball.vy*ball.vy);
-                        let maxSpeed = rel(0.025, 'h');
-                        if (speed > maxSpeed) {
-                            ball.vx *= maxSpeed/speed;
-                            ball.vy *= maxSpeed/speed;
-                        }
+
+                    function gameLoop() {
+                        if (!running) return;
+                        aiMove();
+                        update();
+                        draw();
+                        requestAnimationFrame(gameLoop);
                     }
 
-                    // Score
-                    if (ball.y < 0) {
-                        player.score++;
-                        speedMultiplier += 0.18; // Aumenta la velocidad cada punto
-                        if (player.score >= 5) { // Cambiado de 3 a 5
-                            running = false;
-                            setTimeout(() => showEndScreen(true), 700);
-                        } else {
-                            resetPositions(false);
-                        }
-                    }
-                    if (ball.y + ball.size > getGameSize().h) {
-                        ai.score++;
-                        speedMultiplier += 0.18; // Aumenta la velocidad cada punto
-                        if (ai.score >= 5) { // Cambiado de 3 a 5
-                            running = false;
-                            setTimeout(() => showEndScreen(false), 700);
-                        } else {
-                            resetPositions(true);
-                        }
-                    }
-                }
+                    function showEndScreen(playerWon) {
+                        const pongContainer = document.getElementById('pong-container');
+                        let html = '';
+                        // --- idioma actual para textos del Pong ---
+                        const lang = currentLang || 'es';
 
-                function gameLoop() {
-                    if (!running) return;
-                    aiMove();
-                    update();
-                    draw();
-                    requestAnimationFrame(gameLoop);
-                }
-
-                function showEndScreen(playerWon) {
-                    const pongContainer = document.getElementById('pong-container');
-                    let html = '';
-                    // --- idioma actual para textos del Pong ---
-                    const lang = currentLang || 'es';
-
-                    if (playerWon) {
-                        // espacio para pista 1
-                        html = `
-                            <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
-                                <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
-                                <div id="pong-next-img" style="margin:0;">
-                                    <!-- espacio para pista 1 -->
-                                    <!-- Aquí puedes poner una imagen de la pista, por ejemplo: -->
-                                    <!-- <img src="pista.png" alt="Pista" style="width:100%;height:100%;object-fit:contain;"> -->
+                        if (playerWon) {
+                            // espacio para pista 1
+                            html = `
+                                <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
+                                    <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
+                                    <div id="pong-next-img" style="margin:0;">
+                                        <!-- espacio para pista 1 -->
+                                        <!-- Aquí puedes poner una imagen de la pista, por ejemplo: -->
+                                        <!-- <img src="pista.png" alt="Pista" style="width:100%;height:100%;object-fit:contain;"> -->
+                                    </div>
+                                    <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                                 </div>
-                                <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
-                            </div>
-                        `;
-                    } else {
-                        html = `
-                            <div id="pong-end">
-                                <img src="Arbol-chan.png" class="arbol-img" alt="Arbol Chan" />
-                                <h2>${textos[lang].pongLose}</h2>
-                                <button id="pong-retry">${textos[lang].continuar}</button>
-                            </div>
-                        `;
+                            `;
+                        } else {
+                            html = `
+                                <div id="pong-end">
+                                    <img src="Arbol-chan.png" class="arbol-img" alt="Arbol Chan" />
+                                    <h2>${textos[lang].pongLose}</h2>
+                                    <button id="pong-retry">${textos[lang].continuar}</button>
+                                </div>
+                            `;
+                        }
+                        pongContainer.insertAdjacentHTML('beforeend', html);
+                        if (playerWon) {
+                            document.getElementById('pong-continue').onclick = function() {
+                                location.reload();
+                            };
+                        }
+                        if (!playerWon) {
+                            document.getElementById('pong-retry').onclick = function() {
+                                // Recargar la pantalla principal de códigos
+                                location.reload();
+                            };
+                        }
                     }
-                    pongContainer.insertAdjacentHTML('beforeend', html);
-                    if (playerWon) {
-                        document.getElementById('pong-continue').onclick = function() {
-                            location.reload();
-                        };
-                    }
-                    if (!playerWon) {
-                        document.getElementById('pong-retry').onclick = function() {
-                            // Recargar la pantalla principal de códigos
-                            location.reload();
-                        };
-                    }
-                }
 
-                // Responsive: update paddle/ball sizes on resize
-                function updateSizes() {
-                    resetPositions();
-                }
-                window.addEventListener('resize', function() {
-                    updateSizes();
-                });
+                    // Responsive: update paddle/ball sizes on resize
+                    function updateSizes() {
+                        resetPositions();
+                    }
+                    window.addEventListener('resize', function() {
+                        updateSizes();
+                    });
 
-                // Start game
-                player.score = 0; ai.score = 0;
-                speedMultiplier = 1; // Reinicia el multiplicador al empezar
-                resetPositions(false);
-                running = true;
-                gameLoop();
-            })();
+                    // Start game
+                    player.score = 0; ai.score = 0;
+                    speedMultiplier = 1; // Reinicia el multiplicador al empezar
+                    resetPositions(false);
+                    running = true;
+                    gameLoop();
+                })();
+            }
         });
 
         // Nueva lógica para el botón "Continuar" de la secuencia 2
@@ -1248,12 +1255,12 @@
                 }
                 loop();
 
-                // IA más rápida: avanza cada 225 ms
+                // IA más rápida: avanza cada 180 ms
                 setInterval(function() {
                     if (finished) return;
                     aiAdvance();
                     checkWin();
-                }, 198); // Cambiado de 180 a 225 ms para que sea 10% más lenta
+                }, 180);
 
                 function movePlayer(dx, dy) {
                     if (finished) return;
