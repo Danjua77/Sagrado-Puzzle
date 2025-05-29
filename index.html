@@ -292,7 +292,9 @@
         <div class="arbol-chan-content">
             <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img-2" alt="Árbol-chan" />
             <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">Árbol-chan</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto-2">¡Demuéstrame que eres más rápido que yo si quieres la siguiente pista!</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto-2">
+                Corre y no solo gana, también <span style='color:#178a2c;font-weight:bold;'>demuestra</span> que nadie te puede alcanzar
+            </div>
             <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
         </div>
     </div>
@@ -334,7 +336,7 @@
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
                 arbolTitulo: 'Árbol-chan',
-                arbolTexto: 'Si quieres esa pista, primero tendrás que vencerme en un.... juego de PING-PONG',
+                arbolTexto: 'En cada código tendrás un reto para <span style="color:#178a2c;font-weight:bold;">superar</span> y cuando lo hagas obtendrás la siguiente pista, busca todas las pistas para poder encontrar el caché',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
@@ -345,7 +347,7 @@
                 instrucciones: 'Find the clues and enter the<br>secret codes',
                 aceptar: 'Accept',
                 arbolTitulo: 'Árbol-chan',
-                arbolTexto: 'If you want that clue, you must first beat me in a... game of PING-PONG',
+                arbolTexto: 'For each code you will have a challenge to <span style="color:#178a2c;font-weight:bold;">overcome</span> and when you do, you will get the next clue. Find all the clues to locate the cache.',
                 continuar: 'Continue',
                 mesa: 'Welcome to the sacred table!',
                 pongWin: 'Next clue',
@@ -358,8 +360,16 @@
             instrucciones.innerHTML = textos[lang].instrucciones;
             btnAceptar.textContent = textos[lang].aceptar;
             arbolChanTitulo.textContent = textos[lang].arbolTitulo;
-            arbolChanTexto.textContent = textos[lang].arbolTexto;
+            arbolChanTexto.innerHTML = textos[lang].arbolTexto;
             btnContinuar.textContent = textos[lang].continuar;
+            // Actualiza la segunda secuencia de Árbol-chan
+            arbolChanTitulo2.textContent = textos[lang].arbolTitulo;
+            if (lang === 'en') {
+                arbolChanTexto2.innerHTML = "Run and not only win, but also <span style='color:#178a2c;font-weight:bold;'>prove</span> that no one can catch you";
+            } else {
+                arbolChanTexto2.innerHTML = "Corre y no solo gana, también <span style='color:#178a2c;font-weight:bold;'>demuestra</span> que nadie te puede alcanzar";
+            }
+            btnContinuar2.textContent = textos[lang].continuar;
             currentLang = lang;
         }
 
@@ -456,7 +466,11 @@
         btnContinuar.addEventListener('click', function() {
             if (arbolChanDialogStep === 0) {
                 // Primer clic: cambia el texto y espera otro clic
-                arbolChanTexto.innerHTML = "Juega ping-pong para obtener la siguiente pista, <span style='color:#178a2c;font-weight:bold;'>resiste</span> hasta que tu oponente falle y gana";
+                if (currentLang === 'en') {
+                    arbolChanTexto.innerHTML = "Play ping-pong to get the next clue, <span style='color:#178a2c;font-weight:bold;'>hold on</span> until your opponent misses and win";
+                } else {
+                    arbolChanTexto.innerHTML = "Juega ping-pong para obtener la siguiente pista, <span style='color:#178a2c;font-weight:bold;'>resiste</span> hasta que tu oponente falle y gana";
+                }
                 arbolChanDialogStep = 1;
             } else {
                 // Segundo clic: inicia el juego de Pong
