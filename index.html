@@ -1072,11 +1072,13 @@
                     }
                     #maze-timer {
                         margin-top: 1.2rem;
-                        font-size: 1.1rem;
+                        font-size: 2.1rem;
                         color: #fff;
-                        font-family: 'Roboto', Arial, sans-serif;
-                        text-shadow: 0 2px 8px #178a2c;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        text-shadow: 0 2px 12px #178a2c, 0 0 12px #fff, 2px 2px 0 #178a2c;
+                        letter-spacing: 1px;
                         text-align: center;
+                        margin-bottom: 0.2em;
                     }
                     #pong-end {
                         position: absolute;
@@ -1141,8 +1143,9 @@
                     }
                 </style>
                 <div id="maze-container">
+                    <!-- NUEVO: Contador visual arriba del canvas -->
+                    <div id="maze-timer" style="font-family:'Montserrat',Arial,sans-serif;font-size:2.1rem;color:#fff;text-shadow:0 2px 12px #178a2c,0 0 12px #fff,2px 2px 0 #178a2c;letter-spacing:1px;text-align:center;margin-bottom:0.2em;"></div>
                     <canvas id="maze-canvas" width="480" height="240"></canvas>
-                    <div id="maze-timer"></div>
                     <div id="maze-controls">
                         <div>
                             <button id="maze-up">▲</button>
@@ -1349,12 +1352,54 @@
                 }
 
                 let finished = false;
+                // NUEVO: Cronómetro visual reversa cíclico y bloqueo de movimiento en fase extra
+                let mazeTimerDiv = document.getElementById('maze-timer');
+                let phase = 'main'; // 'main' o 'extra'
+                let mainTime = 7.0;
+                let extraTime = 2.0;
+                let timerValue = mainTime;
+                let lastTick = Date.now();
+                let playerLocked = false; // NUEVO: indica si el jugador está bloqueado
+
+                function updateTimerDisplay() {
+                    if (finished) return;
+                    let now = Date.now();
+                    let dt = (now - lastTick) / 1000;
+                    lastTick = now;
+                    timerValue -= dt;
+                    if (phase === 'main') {
+                        if (timerValue <= 0) {
+                            phase = 'extra';
+                            timerValue = extraTime;
+                            playerLocked = true; // Bloquea movimiento al iniciar fase extra
+                        }
+                    } else if (phase === 'extra') {
+                        if (timerValue <= 0) {
+                            phase = 'main';
+                            timerValue = mainTime;
+                            playerLocked = false; // Desbloquea movimiento al volver a fase main
+                        }
+                    }
+                    // Estilo y color según fase
+                    mazeTimerDiv.textContent = timerValue > 0 ? timerValue.toFixed(1) : '0.0';
+                    if (phase === 'main') {
+                        mazeTimerDiv.style.color = '#ffe44d';
+                        mazeTimerDiv.style.textShadow = "0 2px 12px #178a2c, 0 0 12px #fff, 2px 2px 0 #178a2c";
+                    } else {
+                        mazeTimerDiv.style.color = '#ff4444';
+                        mazeTimerDiv.style.textShadow = "0 2px 12px #fff, 0 0 12px #ff4444, 2px 2px 0 #fff";
+                    }
+                }
+                let timerInterval = setInterval(updateTimerDisplay, 60);
+
                 function checkWin() {
                     if (player.x === MAZE_COLS-1 && player.y === player.path[0][1]) {
                         finished = true;
+                        clearInterval(timerInterval);
                         setTimeout(()=>showEndScreen(true), 300);
                     } else if (ai.x === MAZE_COLS-1 && ai.y === ai.path[0][1]) {
                         finished = true;
+                        clearInterval(timerInterval);
                         setTimeout(()=>showEndScreen(false), 300);
                     }
                 }
@@ -1370,10 +1415,11 @@
                     if (finished) return;
                     aiAdvance();
                     checkWin();
-                }, 230); // velocidad ajustada a 300 ms (más rápido)
+                }, 270); // velocidad ajustada a 300 ms (más rápido)
 
                 function movePlayer(dx, dy) {
                     if (finished) return;
+                    if (playerLocked) return; // Bloquea movimiento en fase extra
                     const nx = player.x + dx;
                     const ny = player.y + dy;
                     if (
