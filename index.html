@@ -405,7 +405,7 @@
 
         document.getElementById('btn-aceptar').addEventListener('click', function() {
             const code = Array.from(document.querySelectorAll('.codigo-input')).map(i => i.value).join('');
-            if (code === '29074') {
+            if (code === '18122') {
                 // Desvanecer todos los elementos
                 container.classList.add('fade-out');
                 setTimeout(() => {
@@ -448,6 +448,9 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
+            } else if (code === '29074') {
+                // Código 29074 deshabilitado temporalmente: no hace nada
+                // Puedes mostrar un mensaje si lo deseas, por ahora simplemente no responde
             } else {
                 // Código incorrecto: animación de temblor
                 container.classList.remove('shake'); // reset si ya está
