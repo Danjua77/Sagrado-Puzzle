@@ -263,12 +263,6 @@
     </style>
 </head>
 <body>
-    <!-- Música de fondo -->
-    <audio id="bg-music" src="musicapp.mp3" loop style="display:none"></audio>
-    <!-- Botón de música (inicia apagado) -->
-    <button id="music-toggle" style="position: absolute; top: 18px; right: 18px; z-index: 20; background: rgba(23,138,44,0.85); color: #fff; border: none; border-radius: 50%; width: 48px; height: 48px; font-size: 1.7rem; box-shadow: 0 2px 8px #178a2c44; cursor: pointer; display: flex; align-items: center; justify-content: center;">
-        🔇
-    </button>
     <div class="container">
         <h1 class="titulo-sagrado" id="titulo-sagrado">Sagrado<br>Puzzle</h1>
         <select class="idioma-select" id="idioma-select">
@@ -470,61 +464,6 @@
             }
         });
 
-        const bgMusic = document.getElementById('bg-music');
-        bgMusic.volume = 0.5;
-
-        // Estado de la música: inicia apagado
-        let musicStarted = false;
-        let musicEnabled = false;
-        const musicToggleBtn = document.getElementById('music-toggle');
-
-        function updateMusicButton() {
-            musicToggleBtn.textContent = musicEnabled ? '🔊' : '🔇';
-            musicToggleBtn.title = musicEnabled ? 'Desactivar música' : 'Activar música';
-        }
-
-        function tryPlayMusic() {
-            if (!musicStarted && musicEnabled) {
-                bgMusic.play().then(() => {
-                    musicStarted = true;
-                }).catch(() => {});
-            }
-        }
-
-        function pauseMusic() {
-            if (!bgMusic.paused) bgMusic.pause();
-        }
-        function playMusic() {
-            if (musicEnabled) {
-                bgMusic.currentTime = 0;
-                bgMusic.play().catch(()=>{});
-            }
-        }
-
-        // Botón para activar/desactivar música
-        musicToggleBtn.addEventListener('click', function(e) {
-            musicEnabled = !musicEnabled;
-            updateMusicButton();
-            if (musicEnabled) {
-                tryPlayMusic();
-            } else {
-                pauseMusic();
-            }
-        });
-
-        // El usuario debe activar la música manualmente, así que no se reproduce automáticamente
-        // Oculta el botón de música en minijuegos y lo muestra al volver
-        function hideMusicButton() {
-            musicToggleBtn.style.display = 'none';
-        }
-        function showMusicButton() {
-            musicToggleBtn.style.display = 'flex';
-        }
-
-        // Mostrar el botón al cargar la pantalla principal
-        showMusicButton();
-        updateMusicButton();
-
         // Nueva lógica para el botón "Continuar" de la secuencia 1
         let arbolChanDialogStep = 0;
         btnContinuar.addEventListener('click', function() {
@@ -538,8 +477,6 @@
                 arbolChanDialogStep = 1;
             } else {
                 // Segundo clic: inicia el juego de Pong
-                pauseMusic();
-                hideMusicButton();
                 document.body.innerHTML = `
                     <style>
                         body, html {
@@ -1040,15 +977,12 @@
                         pongContainer.insertAdjacentHTML('beforeend', html);
                         if (playerWon) {
                             document.getElementById('pong-continue').onclick = function() {
-                                playMusic();
-                                showMusicButton();
                                 location.reload();
                             };
                         }
                         if (!playerWon) {
                             document.getElementById('pong-retry').onclick = function() {
-                                playMusic();
-                                showMusicButton();
+                                // Recargar la pantalla principal de códigos
                                 location.reload();
                             };
                         }
@@ -1076,8 +1010,6 @@
 
         // Nueva lógica para el botón "Continuar" de la secuencia 2
         btnContinuar2.addEventListener('click', function() {
-            pauseMusic();
-            hideMusicButton();
             document.body.innerHTML = `
                 <style>
                     body, html {
@@ -1482,8 +1414,7 @@
                             <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
                                 <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
                                 <div id="pong-next-img-2" style="margin:0;">
-                                    <!-- espacio para pista 2 -->
-                                    <!-- <img src="pista2.png" alt="Pista 2" style="width:100%;height:100%;object-fit:contain;"> -->
+                                    <img src="silla1.jpeg" alt="Pista 2" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
                                 </div>
                                 <button id="pong-continue-2" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                             </div>
@@ -1500,14 +1431,10 @@
                     mazeContainer.insertAdjacentHTML('beforeend', html);
                     if (playerWon) {
                         document.getElementById('pong-continue-2').onclick = function() {
-                            playMusic();
-                            showMusicButton();
                             location.reload();
                         };
                     } else {
                         document.getElementById('pong-retry-2').onclick = function() {
-                            playMusic();
-                            showMusicButton();
                             location.reload();
                         };
                     }
