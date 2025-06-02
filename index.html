@@ -337,7 +337,10 @@
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
                 arbolTitulo: 'Árbol-chan',
-                arbolTexto: 'En cada código tendrás un reto para <span style="color:#178a2c;font-weight:bold;">superar</span> y cuando lo hagas obtendrás la siguiente pista, busca todas las pistas para poder encontrar el caché',
+                arbolTexto: '¿Así que estás buscando el famoso tesoro del parque, eh?<br>Si lo quieres, tendrás que superar varios retos. Para encontrarlos, deberás seguir las pistas que están escondidas por todo el parque.'.replace(
+                    'superar',
+                    '<span style="color:#178a2c;font-weight:bold;">superar</span>'
+                ),
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
@@ -482,7 +485,7 @@
                 if (currentLang === 'en') {
                     arbolChanTexto.innerHTML = "Play ping-pong to get the next clue, <span style='color:#178a2c;font-weight:bold;'>hold on</span> until your opponent misses and win";
                 } else {
-                    arbolChanTexto.innerHTML = "Juega ping-pong para obtener la siguiente pista, <span style='color:#178a2c;font-weight:bold;'>resiste</span> hasta que tu oponente falle y gana";
+                    arbolChanTexto.innerHTML = "¡Así que si quieres tu primera pista, tendrás que <span style='color:#178a2c;font-weight:bold;'>demostrar</span> que eres mejor que yo en una partida de ping pong!";
                 }
                 arbolChanDialogStep = 1;
             } else {
