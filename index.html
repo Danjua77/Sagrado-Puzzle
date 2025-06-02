@@ -435,7 +435,7 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === '72971') {
+            } else if (code === 'pizza') {
                 // Reproducir audio de código aceptado
                 audioCodigoAceptado.currentTime = 0;
                 audioCodigoAceptado.play();
@@ -458,7 +458,7 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === '29074') {
+            } else if (code === '13122' || code === '72971' || code === '29074') {
                 // Código deshabilitado: no hacer nada
                 // Puedes mostrar un mensaje si lo deseas, pero aquí simplemente no ocurre nada
             } else {
@@ -1424,8 +1424,7 @@
                             <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
                                 <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
                                 <div id="pong-next-img-2" style="margin:0;">
-                                    <!-- espacio para pista 2 -->
-                                    <!-- <img src="pista2.png" alt="Pista 2" style="width:100%;height:100%;object-fit:contain;"> -->
+                                    <img src="iguana.jpeg" alt="Pista 2" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
                                 </div>
                                 <button id="pong-continue-2" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                             </div>
