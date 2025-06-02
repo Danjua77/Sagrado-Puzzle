@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8"
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Sagrado</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -337,10 +337,7 @@
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
                 arbolTitulo: 'Árbol-chan',
-                arbolTexto: '¿Así que estás buscando el famoso tesoro del parque, eh?<br>Si lo quieres, tendrás que superar varios retos. Para encontrarlos, deberás seguir las pistas que están escondidas por todo el parque.'.replace(
-                    'superar',
-                    '<span style="color:#178a2c;font-weight:bold;">superar</span>'
-                ),
+                arbolTexto: 'En cada código tendrás un reto para <span style="color:#178a2c;font-weight:bold;">superar</span> y cuando lo hagas obtendrás la siguiente pista, busca todas las pistas para poder encontrar el caché',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
@@ -438,7 +435,7 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === 'pizza') {
+            } else if (code === '72971') {
                 // Reproducir audio de código aceptado
                 audioCodigoAceptado.currentTime = 0;
                 audioCodigoAceptado.play();
@@ -461,7 +458,7 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === '13122' || code === '72971' || code === '29074') {
+            } else if (code === '29074') {
                 // Código deshabilitado: no hacer nada
                 // Puedes mostrar un mensaje si lo deseas, pero aquí simplemente no ocurre nada
             } else {
@@ -485,7 +482,7 @@
                 if (currentLang === 'en') {
                     arbolChanTexto.innerHTML = "Play ping-pong to get the next clue, <span style='color:#178a2c;font-weight:bold;'>hold on</span> until your opponent misses and win";
                 } else {
-                    arbolChanTexto.innerHTML = "¡Así que si quieres tu primera pista, tendrás que <span style='color:#178a2c;font-weight:bold;'>demostrar</span> que eres mejor que yo en una partida de ping pong!";
+                    arbolChanTexto.innerHTML = "¡Así que si quieres tu primera pista, tendrás que <span style='color:#178a2c;font-weight:bold;'>demostrar</span> que eres mejor que yo en una partida de ping-pong!";
                 }
                 arbolChanDialogStep = 1;
             } else {
@@ -1427,7 +1424,8 @@
                             <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
                                 <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
                                 <div id="pong-next-img-2" style="margin:0;">
-                                    <img src="iguana.jpeg" alt="Pista 2" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
+                                    <!-- espacio para pista 2 -->
+                                    <!-- <img src="pista2.png" alt="Pista 2" style="width:100%;height:100%;object-fit:contain;"> -->
                                 </div>
                                 <button id="pong-continue-2" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                             </div>
