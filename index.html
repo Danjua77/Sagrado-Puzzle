@@ -298,6 +298,15 @@
             <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
         </div>
     </div>
+    <!-- NUEVA SECUENCIA ARBOL-CHAN PARA EL CÓDIGO 13122 (COPIA DE 18122) -->
+    <div class="arbol-chan-container" id="arbol-chan-container-13122">
+        <div class="arbol-chan-content">
+            <img src="gymbro.png" class="arbol-chan-img" id="arbol-chan-img-13122" alt="Gymbro" />
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-13122">GymBro-Shi</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto-13122">¿Quién te crees para pensar que eres tan Gymbro como yo?</div>
+            <button class="btn-continuar" id="btn-continuar-13122">Continuar</button>
+        </div>
+    </div>
     <audio id="audio-codigo-aceptado" src="codigo aceptado.mp3" preload="auto"></audio>
     <script>
         // Interacción para inputs: foco automático y estilos
@@ -371,6 +380,10 @@
                 arbolChanTexto2.innerHTML = "Corre y no solo gana, también <span style='color:#178a2c;font-weight:bold;'>demuestra</span> que nadie te puede alcanzar";
             }
             btnContinuar2.textContent = textos[lang].continuar;
+            // Actualiza la secuencia 13122
+            arbolChanTitulo13122.textContent = lang === 'en' ? 'GymBro-Shi' : 'GymBro-Shi';
+            arbolChanTexto13122.innerHTML = "¿Quién te crees para pensar que eres tan Gymbro como yo?";
+            btnContinuar13122.textContent = textos[lang].continuar;
             currentLang = lang;
         }
 
@@ -404,6 +417,17 @@
         arbolChanContainer2.style.pointerEvents = 'none';
         arbolChanImg2.classList.remove('visible');
 
+        // Referencias para la secuencia 13122
+        const arbolChanContainer13122 = document.getElementById('arbol-chan-container-13122');
+        const arbolChanImg13122 = document.getElementById('arbol-chan-img-13122');
+        const btnContinuar13122 = document.getElementById('btn-continuar-13122');
+        const arbolChanTitulo13122 = document.getElementById('arbol-chan-titulo-13122');
+        const arbolChanTexto13122 = document.getElementById('arbol-chan-texto-13122');
+        // Oculta la secuencia de Arbol-chan 13122 al inicio
+        arbolChanContainer13122.style.opacity = 0;
+        arbolChanContainer13122.style.pointerEvents = 'none';
+        arbolChanImg13122.classList.remove('visible');
+
         // Referencia al audio
         const audioCodigoAceptado = document.getElementById('audio-codigo-aceptado');
 
@@ -432,6 +456,32 @@
                         arbolChanContainer.style.pointerEvents = 'auto';
                         setTimeout(() => {
                             arbolChanImg.classList.add('visible');
+                        }, 800);
+                    }, 1200);
+                }, 1200);
+            } else if (code === '13122') {
+                // Reproducir audio de código aceptado
+                audioCodigoAceptado.currentTime = 0;
+                audioCodigoAceptado.play();
+                // Desvanecer todos los elementos
+                container.classList.add('fade-out');
+                setTimeout(() => {
+                    // Cambiar fondo
+                    container.style.backgroundImage = "url('Fondo texto.jpg')";
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                    // Ocultar elementos hijos
+                    Array.from(container.children).forEach(child => {
+                        if (!child.classList.contains('arbol-chan-container')) {
+                            child.classList.add('hidden');
+                        }
+                    });
+                    // Mostrar secuencia Arbol-chan 13122
+                    setTimeout(() => {
+                        arbolChanContainer13122.style.opacity = 1;
+                        arbolChanContainer13122.style.pointerEvents = 'auto';
+                        setTimeout(() => {
+                            arbolChanImg13122.classList.add('visible');
                         }, 800);
                     }, 1200);
                 }, 1200);
@@ -482,7 +532,7 @@
                 if (currentLang === 'en') {
                     arbolChanTexto.innerHTML = "Play ping-pong to get the next clue, <span style='color:#178a2c;font-weight:bold;'>hold on</span> until your opponent misses and win";
                 } else {
-                    arbolChanTexto.innerHTML = "¡Así qué si quieres tu primera pista, tendrás que <span style='color:#178a2c;font-weight:bold;'>demostrar</span> que eres mejor que yo en una partida de ping-pong!";
+                    arbolChanTexto.innerHTML = "Juega ping-pong para obtener la siguiente pista, <span style='color:#178a2c;font-weight:bold;'>resiste</span> hasta que tu oponente falle y gana";
                 }
                 arbolChanDialogStep = 1;
             } else {
@@ -961,9 +1011,7 @@
                     function showEndScreen(playerWon) {
                         const pongContainer = document.getElementById('pong-container');
                         let html = '';
-                        // --- idioma actual para textos del Pong ---
                         const lang = currentLang || 'es';
-
                         if (playerWon) {
                             // espacio para pista 1
                             html = `
@@ -978,8 +1026,8 @@
                         } else {
                             html = `
                                 <div id="pong-end">
-                                    <img src="Arbol-chan.png" class="arbol-img" alt="Árbol-chan" />
-                                    <h2>Árbol-chan fue más rápido que tú</h2>
+                                    <img src="gymbro.png" class="arbol-img" alt="Gymbro" />
+                                    <h2>GymBro-Shi fue más rápido que tú</h2>
                                     <button id="pong-retry">${textos[lang].continuar}</button>
                                 </div>
                             `;
@@ -992,7 +1040,6 @@
                         }
                         if (!playerWon) {
                             document.getElementById('pong-retry').onclick = function() {
-                                // Recargar la pantalla principal de códigos
                                 location.reload();
                             };
                         }
