@@ -298,6 +298,7 @@
             <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
         </div>
     </div>
+    <audio id="audio-codigo-aceptado" src="codigo aceptado.mp3" preload="auto"></audio>
     <script>
         // Interacción para inputs: foco automático y estilos
         const inputs = document.querySelectorAll('.codigo-input');
@@ -403,9 +404,15 @@
         arbolChanContainer2.style.pointerEvents = 'none';
         arbolChanImg2.classList.remove('visible');
 
+        // Referencia al audio
+        const audioCodigoAceptado = document.getElementById('audio-codigo-aceptado');
+
         document.getElementById('btn-aceptar').addEventListener('click', function() {
             const code = Array.from(document.querySelectorAll('.codigo-input')).map(i => i.value).join('');
             if (code === '18122') {
+                // Reproducir audio de código aceptado
+                audioCodigoAceptado.currentTime = 0;
+                audioCodigoAceptado.play();
                 // Desvanecer todos los elementos
                 container.classList.add('fade-out');
                 setTimeout(() => {
@@ -429,6 +436,9 @@
                     }, 1200);
                 }, 1200);
             } else if (code === '72971') {
+                // Reproducir audio de código aceptado
+                audioCodigoAceptado.currentTime = 0;
+                audioCodigoAceptado.play();
                 // SECUENCIA PARA ARBOL-CHAN 2
                 container.classList.add('fade-out');
                 setTimeout(() => {
@@ -1414,7 +1424,8 @@
                             <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
                                 <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
                                 <div id="pong-next-img-2" style="margin:0;">
-                                    <img src="silla1.jpeg" alt="Pista 2" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
+                                    <!-- espacio para pista 2 -->
+                                    <!-- <img src="pista2.png" alt="Pista 2" style="width:100%;height:100%;object-fit:contain;"> -->
                                 </div>
                                 <button id="pong-continue-2" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                             </div>
