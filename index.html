@@ -1796,6 +1796,11 @@
                             const j = Math.floor(Math.random() * (i + 1));
                             [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
                         }
+                        // Fuerza la ficha vacía (size*size-1) a la última posición
+                        const emptyIdx = tiles.indexOf(size * size - 1);
+                        if (emptyIdx !== size * size - 1) {
+                            [tiles[emptyIdx], tiles[size * size - 1]] = [tiles[size * size - 1], tiles[emptyIdx]];
+                        }
                     } while (!isSolvable(tiles) || isSolved());
                     emptyIndex = tiles.indexOf(size * size - 1);
                 }
