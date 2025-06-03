@@ -1527,8 +1527,8 @@
                     } else {
                         html = `
                             <div id="pong-end">
-                                <img src="abuelo.sama (2).png" class="arbol-img" alt="Abuelo-sama" />
-                                <h2>Abuelo-sama fue más rápido que tú</h2>
+                                <img src="Arbol-chan.png" class="arbol-img" alt="Árbol-chan" />
+                                <h2>Árbol-chan fue más rápido que tú</h2>
                                 <button id="pong-retry-2">${textos[lang].continuar}</button>
                             </div>
                         `;
@@ -1553,9 +1553,9 @@
             if (gymbroDialogStep === 0) {
                 // Cambia el texto al mensaje de la pesa
                 if (currentLang === 'en') {
-                    arbolChanTexto13122.textContent = "If you are as gymbro as you think, hold this weight for 90 seconds";
+                    arbolChanTexto13122.innerHTML = "If you are as gymbro as you think, <span style='color:#178a2c;font-weight:bold;'>hold</span> this weight for 90 seconds";
                 } else {
-                    arbolChanTexto13122.textContent = "Si eres tan gymbro como lo crees ser, resiste esta pesa durante 90 segundos";
+                    arbolChanTexto13122.innerHTML = "Si eres tan gymbro como lo crees ser, <span style='color:#178a2c;font-weight:bold;'>resiste</span> esta pesa durante 90 segundos";
                 }
                 gymbroDialogStep = 1;
             } else {
