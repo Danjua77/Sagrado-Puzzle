@@ -1499,6 +1499,22 @@
                 }
             })();
         });
+
+        // Nueva lógica para el botón "Continuar" de la secuencia 13122
+        let gymbroDialogStep = 0;
+        btnContinuar13122.addEventListener('click', function() {
+            if (gymbroDialogStep === 0) {
+                // Cambia el texto al mensaje de la pesa
+                if (currentLang === 'en') {
+                    arbolChanTexto13122.textContent = "If you are as gymbro as you think, hold this weight for 90 seconds";
+                } else {
+                    arbolChanTexto13122.textContent = "Si eres tan gymbro como lo crees ser, resiste esta pesa durante 90 segundos";
+                }
+                gymbroDialogStep = 1;
+            } else {
+                // Aquí puedes agregar la lógica para el reto de la pesa si lo deseas
+            }
+        });
     </script>
 </body>
 </html>
