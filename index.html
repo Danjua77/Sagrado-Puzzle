@@ -1332,7 +1332,7 @@
                     ai = {
                         x: 0,
                         y: Math.floor(MAZE_ROWS/2),
-                        color: '#ff2222', // Cambiado de verde a rojo
+                        color: '#178a2c',
                         path: [],
                         step: 0,
                     };
@@ -1565,7 +1565,320 @@
 
         // Nueva lógica para el botón "Continuar" de la secuencia 98142
         btnContinuar98142.addEventListener('click', function() {
-            // Aquí puedes agregar la lógica para el reto de la secuencia 98142
+            // Juego de rompecabezas deslizante con estética del resto de juegos
+            document.body.innerHTML = `
+                <style>
+                    body, html {
+                        margin: 0; padding: 0; width: 100vw; height: 100vh;
+                        background: url('fonde mesa.jpg') no-repeat center center;
+                        background-size: cover;
+                        overflow: hidden;
+                    }
+                    #puzzle-bg {
+                        width: 100vw;
+                        height: 100vh;
+                        max-width: 430px;
+                        max-height: 932px;
+                        min-width: 320px;
+                        min-height: 568px;
+                        /* Fondo tipo carta igual a los otros juegos: degradado blanco-verde */
+                        background: linear-gradient(180deg, #fff 0%, #e8f5e9 60%, #178a2c 100%);
+                        border-radius: 20px;
+                        box-shadow: 0 0 20px 2px rgba(0,0,0,0.2);
+                        position: relative;
+                        margin: 0 auto;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                    @media (max-width: 430px) {
+                        #puzzle-bg {
+                            width: 100vw;
+                            height: 100vh;
+                            max-width: 100vw;
+                            max-height: 100vh;
+                            border-radius: 0;
+                            box-shadow: none;
+                        }
+                    }
+                    #puzzle-title {
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        font-size: 2.1rem;
+                        color: #178a2c;
+                        font-weight: 700;
+                        text-align: center;
+                        margin-top: 2.2rem;
+                        margin-bottom: 0.7rem;
+                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                        letter-spacing: 1px;
+                    }
+                    #puzzle-container {
+                        width: 92vw;
+                        height: 92vw;
+                        max-width: 370px;
+                        max-height: 370px;
+                        min-width: 220px;
+                        min-height: 220px;
+                        display: grid;
+                        grid-template-columns: repeat(4, 1fr);
+                        grid-template-rows: repeat(4, 1fr);
+                        gap: 2px;
+                        margin: 0 auto 1.2rem auto;
+                        border: 2.5px solid #fff;
+                        background: #222;
+                        border-radius: 16px;
+                        box-shadow: 0 2px 12px #178a2c33;
+                        position: relative;
+                        aspect-ratio: 1/1;
+                    }
+                    .tile {
+                        width: 100%;
+                        height: 100%;
+                        background-image: url('rompecabezas.png');
+                        background-size: 400% 400%;
+                        cursor: pointer;
+                        transition: box-shadow 0.2s, filter 0.2s;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                        font-size: 0;
+                        border-radius: 8px;
+                        border: none;
+                        outline: none;
+                    }
+                    .tile:active {
+                        filter: brightness(1.15);
+                        box-shadow: 0 0 0 2px #ffe44d;
+                    }
+                    .empty {
+                        background: #222;
+                        cursor: default;
+                        box-shadow: none;
+                    }
+                    #restart-btn {
+                        display: block;
+                        margin: 0 auto 1.2rem auto;
+                        padding: 0.7rem 2.2rem;
+                        font-size: 1.1rem;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        font-weight: bold;
+                        background: #178a2c;
+                        color: #fff;
+                        border: 2px solid #fff;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 8px #178a2c33;
+                        cursor: pointer;
+                        transition: background 0.2s, border 0.2s;
+                    }
+                    #restart-btn:active {
+                        background: #ffe44d;
+                        color: #178a2c;
+                        border: 2px solid #ffe44d;
+                    }
+                    @media (max-width: 430px) {
+                        #puzzle-title {
+                            font-size: 1.3rem;
+                            margin-top: 1.2rem;
+                        }
+                        #puzzle-container {
+                            min-width: 140px;
+                            min-height: 140px;
+                        }
+                        #restart-btn {
+                            font-size: 1rem;
+                            padding: 0.5rem 1.2rem;
+                        }
+                    }
+                    #pong-end {
+                        position: absolute;
+                        top: 0; left: 0; width: 100vw; height: 100vh;
+                        background: url('Fondo texto.jpg') no-repeat center center;
+                        background-size: cover;
+                        color: #178a2c;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 10;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                    }
+                    #pong-end h2 {
+                        font-size: 2.2rem;
+                        margin-bottom: 2rem;
+                        color: #178a2c;
+                        text-align: center;
+                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                        margin-top: 0;
+                    }
+                    #pong-next-img-98142 {
+                        width: 60vw;
+                        max-width: 300px;
+                        min-width: 120px;
+                        height: 180px;
+                        background: #fff;
+                        margin: 0;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 2px 12px #178a2c33;
+                    }
+                    #pong-end button {
+                        font-size: 1.3rem;
+                        background: #178a2c;
+                        color: #fff;
+                        border: 2px solid #fff;
+                        border-radius: 8px;
+                        padding: 0.7rem 2.5rem;
+                        font-weight: bold;
+                        font-family: 'Montserrat', Arial, sans-serif;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                        cursor: pointer;
+                        margin-top: 1.5rem;
+                        margin-bottom: 2rem;
+                    }
+                    #pong-end button:active {
+                        background: #176d13;
+                        border: 2px solid #ffe44d;
+                    }
+                </style>
+                <div id="puzzle-bg">
+                    <div id="puzzle-title">Resuelve el rompecabezas</div>
+                    <button id="restart-btn">${currentLang === 'en' ? 'Restart' : 'Reiniciar'}</button>
+                    <div id="puzzle-container"></div>
+                </div>
+            `;
+
+            // --- Lógica del rompecabezas deslizante ---
+            (function() {
+                const size = 4;
+                const container = document.getElementById('puzzle-container');
+                let tiles = [];
+                let emptyIndex = size * size - 1;
+
+                function createTiles() {
+                    tiles = [];
+                    for (let i = 0; i < size * size; i++) {
+                        tiles.push(i);
+                    }
+                }
+
+                function shuffleTiles() {
+                    // Fisher-Yates shuffle, asegurando que sea resoluble
+                    do {
+                        for (let i = tiles.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+                        }
+                    } while (!isSolvable(tiles) || isSolved());
+                    emptyIndex = tiles.indexOf(size * size - 1);
+                }
+
+                function isSolvable(arr) {
+                    let invCount = 0;
+                    for (let i = 0; i < arr.length - 1; i++) {
+                        for (let j = i + 1; j < arr.length; j++) {
+                            if (arr[i] !== size*size-1 && arr[j] !== size*size-1 && arr[i] > arr[j]) invCount++;
+                        }
+                    }
+                    const emptyRow = Math.floor(arr.indexOf(size*size-1) / size);
+                    if (size % 2 === 0) {
+                        return ((invCount + emptyRow) % 2 === 1);
+                    } else {
+                        return (invCount % 2 === 0);
+                    }
+                }
+
+                function isSolved() {
+                    for (let i = 0; i < tiles.length - 1; i++) {
+                        if (tiles[i] !== i) return false;
+                    }
+                    return true;
+                }
+
+                function render() {
+                    container.innerHTML = '';
+                    for (let i = 0; i < tiles.length; i++) {
+                        const tileNum = tiles[i];
+                        const tile = document.createElement('div');
+                        tile.className = 'tile';
+                        if (tileNum === size * size - 1) {
+                            tile.classList.add('empty');
+                        } else {
+                            // Calcular la posición de fondo para cada pieza
+                            const x = tileNum % size;
+                            const y = Math.floor(tileNum / size);
+                            tile.style.backgroundPosition = `${(x * 100 / (size - 1))}% ${(y * 100 / (size - 1))}%`;
+                            tile.addEventListener('click', () => trySlide(i));
+                        }
+                        container.appendChild(tile);
+                    }
+                }
+
+                // Deslizar varias fichas en línea
+                function trySlide(idx) {
+                    const rowIdx = Math.floor(idx / size);
+                    const colIdx = idx % size;
+                    const emptyRow = Math.floor(emptyIndex / size);
+                    const emptyCol = emptyIndex % size;
+
+                    if (rowIdx === emptyRow && colIdx !== emptyCol) {
+                        const dir = colIdx < emptyCol ? 1 : -1;
+                        for (let c = emptyCol - dir; c !== colIdx - dir; c -= dir) {
+                            const from = rowIdx * size + c;
+                            const to = rowIdx * size + (c + dir);
+                            [tiles[to], tiles[from]] = [tiles[from], tiles[to]];
+                        }
+                        emptyIndex = idx;
+                        render();
+                        if (isSolved()) setTimeout(showWin, 200);
+                        return;
+                    }
+                    if (colIdx === emptyCol && rowIdx !== emptyRow) {
+                        const dir = rowIdx < emptyRow ? 1 : -1;
+                        for (let r = emptyRow - dir; r !== rowIdx - dir; r -= dir) {
+                            const from = r * size + colIdx;
+                            const to = (r + dir) * size + colIdx;
+                            [tiles[to], tiles[from]] = [tiles[from], tiles[to]];
+                        }
+                        emptyIndex = idx;
+                        render();
+                        if (isSolved()) setTimeout(showWin, 200);
+                        return;
+                    }
+                }
+
+                document.getElementById('restart-btn').onclick = startGame;
+
+                function startGame() {
+                    createTiles();
+                    shuffleTiles();
+                    render();
+                }
+
+                function showWin() {
+                    // Pantalla de pista igual a los otros juegos, imagen Silla2.jpeg
+                    const puzzleBg = document.getElementById('puzzle-bg');
+                    let html = `
+                        <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
+                            <h2 style="margin-top:0;">${(window.textos && window.textos[currentLang] ? window.textos[currentLang].pongWin : 'Siguiente pista')}</h2>
+                            <div id="pong-next-img-98142" style="margin:0;">
+                                <img src="Silla2.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
+                            </div>
+                            <button id="pong-continue-98142" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">
+                                ${(window.textos && window.textos[currentLang] ? window.textos[currentLang].continuar : 'Continuar')}
+                            </button>
+                        </div>
+                    `;
+                    puzzleBg.insertAdjacentHTML('beforeend', html);
+                    document.getElementById('pong-continue-98142').onclick = function() {
+                        location.reload();
+                    };
+                }
+
+                // Iniciar el juego al cargar
+                startGame();
+            })();
         });
     </script>
 </body>
