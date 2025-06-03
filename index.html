@@ -260,49 +260,6 @@
         .shake {
             animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both;
         }
-        #puzzle-container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            grid-template-rows: repeat(3, 1fr);
-            margin: 0 auto 1.2rem auto;
-            border: 2.5px solid #fff;
-            background: #222;
-            border-radius: 22px; /* Más redondeado, igual que la referencia */
-            box-shadow: 0 2px 12px #178a2c33;
-            position: relative;
-            aspect-ratio: 1/1;
-            width: 60vw;
-            height: 60vw;
-            max-width: 220px;
-            max-height: 220px;
-            min-width: 120px;
-            min-height: 120px;
-        }
-        .tile {
-            width: 100%;
-            height: 100%;
-            background-image: url('rompecabezas.png');
-            background-size: 300% 300%;
-            cursor: pointer;
-            transition: box-shadow 0.2s, filter 0.2s;
-            box-shadow: none;
-            font-size: 0;
-            border-radius: 14px; /* Bordes internos más redondeados */
-            border: none;
-            outline: none;
-            box-sizing: border-box;
-        }
-        .tile:active {
-            filter: brightness(1.15);
-            box-shadow: 0 0 0 2px #ffe44d;
-        }
-        .empty {
-            background: #222;
-            cursor: default;
-            box-shadow: none;
-            border: none;
-            border-radius: 14px;
-        }
     </style>
 </head>
 <body>
@@ -1598,7 +1555,7 @@
                 if (currentLang === 'en') {
                     arbolChanTexto13122.innerHTML = "If you are as gymbro as you think, <span style='color:#178a2c;font-weight:bold;'>hold</span> this weight for 90 seconds";
                 } else {
-                                       arbolChanTexto13122.innerHTML = "Si eres tan gymbro como lo crees ser, <span style='color:#178a2c;font-weight:bold;'>resiste</span> esta pesa durante 90 segundos";
+                    arbolChanTexto13122.innerHTML = "Si eres tan gymbro como lo crees ser, <span style='color:#178a2c;font-weight:bold;'>resiste</span> esta pesa durante 90 segundos";
                 }
                 gymbroDialogStep = 1;
             } else {
@@ -1610,213 +1567,207 @@
         btnContinuar98142.addEventListener('click', function() {
             // Juego de rompecabezas deslizante con estética del resto de juegos
             document.body.innerHTML = `
-                <style>
-                    body, html {
-                        margin: 0; padding: 0; width: 100vw; height: 100vh;
-                        background: url('fonde mesa.jpg') no-repeat center center;
-                        background-size: cover;
-                        overflow: hidden;
-                    }
-                    #puzzle-bg {
-                        width: 100vw;
-                        height: 100vh;
-                        max-width: 430px;
-                        max-height: 932px;
-                        min-width: 320px;
-                        min-height: 568px;
-                        background: linear-gradient(180deg, #fff 0%, #e8f5e9 60%, #178a2c 100%);
-                        border-radius: 20px;
-                        box-shadow: 0 0 20px 2px rgba(0,0,0,0.2);
-                        position: relative;
-                        margin: 0 auto;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: flex-start;
-                    }
-                    @media (max-width: 430px) {
-                        #puzzle-bg {
-                            width: 100vw;
-                            height: 100vh;
-                            max-width: 100vw;
-                            max-height: 100vh;
-                            border-radius: 0;
-                            box-shadow: none;
-                        }
-                    }
-                    #puzzle-title {
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        font-size: 1.2rem;
-                        color: #178a2c;
-                        font-weight: 700;
-                        text-align: center;
-                        margin-top: 2.2rem;
-                        margin-bottom: 0.7rem;
-                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
-                        letter-spacing: 1px;
-                    }
-                    #puzzle-reference, #puzzle-container {
-                        width: 60vw;
-                        height: 60vw;
-                        max-width: 220px;
-                        max-height: 220px;
-                        min-width: 120px;
-                        min-height: 120px;
-                        border-radius: 12px;
-                        box-shadow: 0 2px 12px #178a2c33;
-                        object-fit: cover;
-                        display: block;
-                    }
-                    #puzzle-reference {
-                        margin-bottom: 1.1rem;
-                    }
-                    #puzzle-container {
-                        display: grid;
-                        grid-template-columns: repeat(3, 1fr);
-                        grid-template-rows: repeat(3, 1fr);
-                        margin: 0 auto 1.2rem auto;
-                        border: 2.5px solid #fff;
-                        background: #222;
-                        border-radius: 18px; /* Más redondeado, similar a la referencia */
-                        box-shadow: 0 2px 12px #178a2c33;
-                        position: relative;
-                        aspect-ratio: 1/1;
-                        width: 60vw;
-                        height: 60vw;
-                        max-width: 220px;
-                        max-height: 220px;
-                        min-width: 120px;
-                        min-height: 120px;
-                        /* gap: 0; // sin separación para recorte perfecto */
-                    }
-                    .tile {
-                        width: 100%;
-                        height: 100%;
-                        background-image: url('rompecabezas.png');
-                        background-size: 300% 300%; /* recorte exacto para 3x3 */
-                        cursor: pointer;
-                        transition: box-shadow 0.2s, filter 0.2s;
-                        box-shadow: none;
-                        font-size: 0;
-                        border-radius: 0;
-                        border: none;
-                        outline: none;
-                        box-sizing: border-box;
-                    }
-                    .tile:active {
-                        filter: brightness(1.15);
-                        box-shadow: 0 0 0 2px #ffe44d;
-                    }
-                    .empty {
-                        background: #222;
-                        cursor: default;
-                        box-shadow: none;
-                        border: none;
-                    }
-                    #accept-btn {
-                        display: block;
-                        margin: 1.2rem auto 0 auto;
-                        padding: 0.7rem 2.2rem;
-                        font-size: 1.1rem;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        font-weight: bold;
-                        background: #bdbdbd;
-                        color: #fff;
-                        border: 2px solid #fff;
-                        border-radius: 8px;
-                        box-shadow: 0 2px 8px #178a2c33;
-                        cursor: not-allowed;
-                        transition: background 0.2s, border 0.2s;
-                    }
-                    #accept-btn.enabled {
-                        background: #178a2c;
-                        cursor: pointer;
-                        border: 2px solid #ffe44d;
-                    }
-                    #accept-btn:active.enabled {
-                        background: #ffe44d;
-                        color: #178a2c;
-                        border: 2px solid #ffe44d;
-                    }
-                    @media (max-width: 430px) {
-                        #puzzle-container, #puzzle-reference {
-                            min-width: 80px;
-                            min-height: 80px;
-                            max-width: 90vw;
-                            max-height: 90vw;
-                        }
-                        #accept-btn {
-                            font-size: 1rem;
-                            padding: 0.5rem 1.2rem;
-                        }
-                    }
-                    #pong-end {
-                        position: absolute;
-                        top: 0; left: 0; width: 100vw; height: 100vh;
-                        background: url('Fondo texto.jpg') no-repeat center center;
-                        background-size: cover;
-                        color: #178a2c;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        z-index: 10;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                    }
-                    #pong-end h2 {
-                        font-size: 2.2rem;
-                        margin-bottom: 2rem;
-                        color: #178a2c;
-                        text-align: center;
-                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
-                        margin-top: 0;
-                    }
-                    #pong-next-img-98142 {
-                        width: 60vw;
-                        max-width: 300px;
-                        min-width: 120px;
-                        height: 180px;
-                        background: #fff;
-                        margin: 0;
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 12px;
-                        overflow: hidden;
-                        box-shadow: 0 2px 12px #178a2c33;
-                    }
-                    #pong-end button {
-                        font-size: 1.3rem;
-                        background: #178a2c;
-                        color: #fff;
-                        border: 2px solid #fff;
-                        border-radius: 8px;
-                        padding: 0.7rem 2.5rem;
-                        font-weight: bold;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-                        cursor: pointer;
-                        margin-top: 1.5rem;
-                        margin-bottom: 2rem;
-                    }
-                    #pong-end button:active {
-                        background: #176d13;
-                        border: 2px solid #ffe44d;
-                    }
-                </style>
-                <div id="puzzle-bg">
-                    <div id="puzzle-title">Presiona la pieza que quieres que se mueva</div>
-                    <img id="puzzle-reference" src="rompecabezas.png" alt="Referencia" />
-                    <div id="puzzle-container"></div>
-                    <button id="accept-btn" disabled>Aceptar</button>
-                </div>
-            `;
+        <style>
+            body, html {
+                margin: 0; padding: 0; width: 100vw; height: 100vh;
+                background: url('fonde mesa.jpg') no-repeat center center;
+                background-size: cover;
+                overflow: hidden;
+            }
+            #puzzle-bg {
+                width: 100vw;
+                height: 100vh;
+                max-width: 430px;
+                max-height: 932px;
+                min-width: 320px;
+                min-height: 568px;
+                background: linear-gradient(180deg, #fff 0%, #e8f5e9 60%, #178a2c 100%);
+                border-radius: 20px;
+                box-shadow: 0 0 20px 2px rgba(0,0,0,0.2);
+                position: relative;
+                margin: 0 auto;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: flex-start;
+            }
+            @media (max-width: 430px) {
+                #puzzle-bg {
+                    width: 100vw;
+                    height: 100vh;
+                    max-width: 100vw;
+                    max-height: 100vh;
+                    border-radius: 0;
+                    box-shadow: none;
+                }
+            }
+            #puzzle-title {
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-size: 1.2rem;
+                color: #178a2c;
+                font-weight: 700;
+                text-align: center;
+                margin-top: 2.2rem;
+                margin-bottom: 0.7rem;
+                text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                letter-spacing: 1px;
+            }
+            #puzzle-reference, #puzzle-container {
+                width: 300px;
+                height: 300px;
+                border-radius: 12px;
+                box-shadow: 0 2px 12px #178a2c33;
+                object-fit: cover;
+                display: block;
+            }
+            #puzzle-reference {
+                margin-bottom: 1.1rem;
+            }
+            #puzzle-container {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                grid-template-rows: repeat(3, 1fr);
+                gap: 2px;
+                margin: 0 auto 1.2rem auto;
+                border: 2.5px solid #fff;
+                background: #222;
+                border-radius: 16px;
+                box-shadow: 0 2px 12px #178a2c33;
+                position: relative;
+                aspect-ratio: 1/1;
+                width: 300px;
+                height: 300px;
+            }
+            .tile {
+                width: 100%;
+                height: 100%;
+                background-image: url('rompecabezas.png');
+                background-size: 300px 300px;
+                cursor: pointer;
+                transition: box-shadow 0.2s, filter 0.2s;
+                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                font-size: 0;
+                border-radius: 8px;
+                border: none;
+                outline: none;
+            }
+            .tile:active {
+                filter: brightness(1.15);
+                box-shadow: 0 0 0 2px #ffe44d;
+            }
+            .empty {
+                background: #222;
+                cursor: default;
+                box-shadow: none;
+            }
+            #accept-btn {
+                display: block;
+                margin: 1.2rem auto 0 auto;
+                padding: 0.7rem 2.2rem;
+                font-size: 1.1rem;
+                font-family: 'Montserrat', Arial, sans-serif;
+                font-weight: bold;
+                background: #bdbdbd;
+                color: #fff;
+                border: 2px solid #fff;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px #178a2c33;
+                cursor: not-allowed;
+                transition: background 0.2s, border 0.2s;
+            }
+            #accept-btn.enabled {
+                background: #178a2c;
+                cursor: pointer;
+                border: 2px solid #ffe44d;
+            }
+            #accept-btn:active.enabled {
+                background: #ffe44d;
+                color: #178a2c;
+                border: 2px solid #ffe44d;
+            }
+            @media (max-width: 430px) {
+                #puzzle-container, #puzzle-reference {
+                    min-width: 80px;
+                    min-height: 80px;
+                    max-width: 90vw;
+                    max-height: 90vw;
+                    width: 90vw;
+                    height: 90vw;
+                }
+                #accept-btn {
+                    font-size: 1rem;
+                    padding: 0.5rem 1.2rem;
+                }
+            }
+            #pong-end {
+                position: absolute;
+                top: 0; left: 0; width: 100vw; height: 100vh;
+                background: url('Fondo texto.jpg') no-repeat center center;
+                background-size: cover;
+                color: #178a2c;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                font-family: 'Montserrat', Arial, sans-serif;
+            }
+            #pong-end h2 {
+                font-size: 2.2rem;
+                margin-bottom: 2rem;
+                color: #178a2c;
+                text-align: center;
+                text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                margin-top: 0;
+            }
+            #pong-next-img-98142 {
+                width: 60vw;
+                max-width: 300px;
+                min-width: 120px;
+                height: 180px;
+                background: #fff;
+                margin: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 12px;
+                overflow: hidden;
+                box-shadow: 0 2px 12px #178a2c33;
+            }
+            #pong-end button {
+                font-size: 1.3rem;
+                background: #178a2c;
+                color: #fff;
+                border: 2px solid #fff;
+                border-radius: 8px;
+                padding: 0.7rem 2.5rem;
+                font-weight: bold;
+                font-family: 'Montserrat', Arial, sans-serif;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                cursor: pointer;
+                margin-top: 1.5rem;
+                margin-bottom: 2rem;
+            }
+            #pong-end button:active {
+                background: #176d13;
+                border: 2px solid #ffe44d;
+            }
+        </style>
+        <div id="puzzle-bg">
+            <div id="puzzle-title">Presiona la pieza que quieres que se mueva</div>
+            <img id="puzzle-reference" src="rompecabezas.png" alt="Referencia" />
+            <div id="puzzle-container"></div>
+            <button id="accept-btn" disabled>Aceptar</button>
+            <button id="skip-btn" style="display:block;margin:1.2rem auto 0 auto;padding:0.7rem 2.2rem;font-size:1.1rem;font-family:'Montserrat',Arial,sans-serif;font-weight:bold;background:#bdbdbd;color:#fff;border:2px solid #fff;border-radius:8px;box-shadow:0 2px 8px #178a2c33;cursor:pointer;transition:background 0.2s,border 0.2s;">Saltar</button>
+        </div>
+    `;
 
             // --- Lógica del rompecabezas deslizante ---
             (function() {
                 const size = 3;
                 const container = document.getElementById('puzzle-container');
                 const acceptBtn = document.getElementById('accept-btn');
+                const skipBtn = document.getElementById('skip-btn');
                 let tiles = [];
                 let emptyIndex = size * size - 1;
 
@@ -1830,13 +1781,10 @@
                 function shuffleTiles() {
                     // Fisher-Yates shuffle, asegurando que sea resoluble
                     do {
-                        for (let i = tiles.length - 2; i > 0; i--) { // NO mezclar la última pieza (vacía)
+                        for (let i = tiles.length - 1; i > 0; i--) {
                             const j = Math.floor(Math.random() * (i + 1));
                             [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
                         }
-                        // Fuerza la vacía a la última posición
-                        tiles = tiles.filter(x => x !== size*size-1);
-                        tiles.push(size*size-1);
                     } while (!isSolvable(tiles) || isSolved());
                     emptyIndex = tiles.indexOf(size * size - 1);
                 }
@@ -1872,10 +1820,10 @@
                         if (tileNum === size * size - 1) {
                             tile.classList.add('empty');
                         } else {
-                            // Recorte exacto: 0%, 50%, 100% para 3x3
+                            // Calcular la posición de fondo para cada pieza (3x3) usando 300px x 300px
                             const x = tileNum % size;
                             const y = Math.floor(tileNum / size);
-                            tile.style.backgroundPosition = `${x * 50}% ${y * 50}%`;
+                            tile.style.backgroundPosition = `${-(x * 100)}px ${-(y * 100)}px`;
                             tile.addEventListener('click', () => trySlide(i));
                         }
                         container.appendChild(tile);
@@ -1928,20 +1876,32 @@
                     // Pantalla de pista igual a los otros juegos, imagen Silla2.jpeg
                     const puzzleBg = document.getElementById('puzzle-bg');
                     let html = `
-                        <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
-                            <h2 style="margin-top:0;">${(window.textos && window.textos[currentLang] ? window.textos[currentLang].pongWin : 'Siguiente pista')}</h2>
-                            <div id="pong-next-img-98142" style="margin:0;">
+                        <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;">
+                            <h2 style="margin-top:0;">${(typeof textos !== "undefined" && textos[currentLang] ? textos[currentLang].pongWin : 'Siguiente pista')}</h2>
+                            <div id="pong-next-img-98142" style="margin:0;width:60vw;max-width:300px;min-width:120px;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px #178a2c33;">
                                 <img src="Silla2.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
                             </div>
                             <button id="pong-continue-98142" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">
-                                ${(window.textos && window.textos[currentLang] ? window.textos[currentLang].continuar : 'Continuar')}
+                                ${(typeof textos !== "undefined" && textos[currentLang] ? textos[currentLang].continuar : 'Continuar')}
                             </button>
                         </div>
                     `;
+                    // Elimina cualquier pantalla de pista previa antes de insertar
+                    const prevEnd = document.getElementById('pong-end');
+                    if (prevEnd) prevEnd.remove();
                     puzzleBg.insertAdjacentHTML('beforeend', html);
                     document.getElementById('pong-continue-98142').onclick = function() {
                         location.reload();
                     };
+                };
+
+                // --- Botón Saltar: resuelve el puzzle automáticamente ---
+                skipBtn.onclick = function() {
+                    for (let i = 0; i < tiles.length; i++) {
+                        tiles[i] = i;
+                    }
+                    emptyIndex = size * size - 1;
+                    render();
                 };
 
                 function startGame() {
