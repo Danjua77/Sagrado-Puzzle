@@ -260,6 +260,24 @@
         .shake {
             animation: shake 0.45s cubic-bezier(.36,.07,.19,.97) both;
         }
+        #puzzle-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            margin: 0 auto 1.2rem auto;
+            border: 2.5px solid #fff;
+            background: #222;
+            border-radius: 22px; /* Más redondeado, igual que la referencia */
+            box-shadow: 0 2px 12px #178a2c33;
+            position: relative;
+            aspect-ratio: 1/1;
+            width: 60vw;
+            height: 60vw;
+            max-width: 220px;
+            max-height: 220px;
+            min-width: 120px;
+            min-height: 120px;
+        }
         .tile {
             width: 100%;
             height: 100%;
@@ -267,11 +285,23 @@
             background-size: 300% 300%;
             cursor: pointer;
             transition: box-shadow 0.2s, filter 0.2s;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            box-shadow: none;
             font-size: 0;
-            border-radius: 8px;
+            border-radius: 14px; /* Bordes internos más redondeados */
             border: none;
             outline: none;
+            box-sizing: border-box;
+        }
+        .tile:active {
+            filter: brightness(1.15);
+            box-shadow: 0 0 0 2px #ffe44d;
+        }
+        .empty {
+            background: #222;
+            cursor: default;
+            box-shadow: none;
+            border: none;
+            border-radius: 14px;
         }
     </style>
 </head>
@@ -324,7 +354,7 @@
     <div class="arbol-chan-container" id="arbol-chan-container-98142">
         <div class="arbol-chan-content" style="margin-top: -60px;">
             <img src="Igupai.png" class="arbol-chan-img" id="arbol-chan-img-98142" alt="Igupai" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-98142" style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Iguana-senpai</div>
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-98142" style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Iguana-sempai</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto-98142" style="margin-top: 2.2rem; margin-bottom: 2.2rem;">
                 <span style="color:#178a2c;font-weight:bold;">Analiza</span>
             </div>
@@ -1568,7 +1598,7 @@
                 if (currentLang === 'en') {
                     arbolChanTexto13122.innerHTML = "If you are as gymbro as you think, <span style='color:#178a2c;font-weight:bold;'>hold</span> this weight for 90 seconds";
                 } else {
-                    arbolChanTexto13122.innerHTML = "Si eres tan gymbro como lo crees ser, <span style='color:#178a2c;font-weight:bold;'>resiste</span> esta pesa durante 90 segundos";
+                                       arbolChanTexto13122.innerHTML = "Si eres tan gymbro como lo crees ser, <span style='color:#178a2c;font-weight:bold;'>resiste</span> esta pesa durante 90 segundos";
                 }
                 gymbroDialogStep = 1;
             } else {
@@ -1644,27 +1674,34 @@
                         display: grid;
                         grid-template-columns: repeat(3, 1fr);
                         grid-template-rows: repeat(3, 1fr);
-                        gap: 2px;
                         margin: 0 auto 1.2rem auto;
                         border: 2.5px solid #fff;
                         background: #222;
-                        border-radius: 16px;
+                        border-radius: 18px; /* Más redondeado, similar a la referencia */
                         box-shadow: 0 2px 12px #178a2c33;
                         position: relative;
                         aspect-ratio: 1/1;
+                        width: 60vw;
+                        height: 60vw;
+                        max-width: 220px;
+                        max-height: 220px;
+                        min-width: 120px;
+                        min-height: 120px;
+                        /* gap: 0; // sin separación para recorte perfecto */
                     }
                     .tile {
                         width: 100%;
                         height: 100%;
                         background-image: url('rompecabezas.png');
-                        background-size: 300% 300%;
+                        background-size: 300% 300%; /* recorte exacto para 3x3 */
                         cursor: pointer;
                         transition: box-shadow 0.2s, filter 0.2s;
-                        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+                        box-shadow: none;
                         font-size: 0;
-                        border-radius: 8px;
+                        border-radius: 0;
                         border: none;
                         outline: none;
+                        box-sizing: border-box;
                     }
                     .tile:active {
                         filter: brightness(1.15);
@@ -1674,6 +1711,7 @@
                         background: #222;
                         cursor: default;
                         box-shadow: none;
+                        border: none;
                     }
                     #accept-btn {
                         display: block;
@@ -1792,15 +1830,13 @@
                 function shuffleTiles() {
                     // Fisher-Yates shuffle, asegurando que sea resoluble
                     do {
-                        for (let i = tiles.length - 1; i > 0; i--) {
+                        for (let i = tiles.length - 2; i > 0; i--) { // NO mezclar la última pieza (vacía)
                             const j = Math.floor(Math.random() * (i + 1));
                             [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
                         }
-                        // Fuerza la ficha vacía (size*size-1) a la última posición
-                        const emptyIdx = tiles.indexOf(size * size - 1);
-                        if (emptyIdx !== size * size - 1) {
-                            [tiles[emptyIdx], tiles[size * size - 1]] = [tiles[size * size - 1], tiles[emptyIdx]];
-                        }
+                        // Fuerza la vacía a la última posición
+                        tiles = tiles.filter(x => x !== size*size-1);
+                        tiles.push(size*size-1);
                     } while (!isSolvable(tiles) || isSolved());
                     emptyIndex = tiles.indexOf(size * size - 1);
                 }
@@ -1836,11 +1872,10 @@
                         if (tileNum === size * size - 1) {
                             tile.classList.add('empty');
                         } else {
-                            // Calcular la posición de fondo para cada pieza (3x3)
+                            // Recorte exacto: 0%, 50%, 100% para 3x3
                             const x = tileNum % size;
                             const y = Math.floor(tileNum / size);
-                            tile.style.backgroundPosition = 
-                                `${-x * 100 / (size - 1)}% ${-y * 100 / (size - 1)}%`;
+                            tile.style.backgroundPosition = `${x * 50}% ${y * 50}%`;
                             tile.addEventListener('click', () => trySlide(i));
                         }
                         container.appendChild(tile);
