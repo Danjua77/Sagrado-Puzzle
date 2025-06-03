@@ -307,6 +307,18 @@
             <button class="btn-continuar" id="btn-continuar-13122">Continuar</button>
         </div>
     </div>
+    <!-- NUEVA SECUENCIA ARBOL-CHAN PARA EL CÓDIGO 98142 -->
+    <div class="arbol-chan-container" id="arbol-chan-container-98142">
+        <div class="arbol-chan-content" style="margin-top: -40px;">
+            <img src="Igupai.png" class="arbol-chan-img" id="arbol-chan-img-98142" alt="Igupai" />
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-98142" style="margin-top: 0.7rem; margin-bottom: 0.3rem;">Abuelo-sama</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto-98142" style="margin-top: 0.2rem; margin-bottom: 0.7rem;">
+                <!-- Texto editable posteriormente -->
+                JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad
+            </div>
+            <button class="btn-continuar" id="btn-continuar-98142" style="margin-top: 0.2rem;">Continuar</button>
+        </div>
+    </div>
     <audio id="audio-codigo-aceptado" src="codigo aceptado.mp3" preload="auto"></audio>
     <script>
         // Interacción para inputs: foco automático y estilos
@@ -384,6 +396,10 @@
             arbolChanTitulo13122.textContent = lang === 'en' ? 'GymBro-Shi' : 'GymBro-Shi';
             arbolChanTexto13122.innerHTML = "¿Quién te crees para pensar que eres tan Gymbro como yo?";
             btnContinuar13122.textContent = textos[lang].continuar;
+            // Actualiza la secuencia 98142
+            arbolChanTitulo98142.textContent = "Abuelo-sama";
+            arbolChanTexto98142.innerHTML = "JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad";
+            btnContinuar98142.textContent = textos[lang].continuar;
             currentLang = lang;
         }
 
@@ -427,6 +443,17 @@
         arbolChanContainer13122.style.opacity = 0;
         arbolChanContainer13122.style.pointerEvents = 'none';
         arbolChanImg13122.classList.remove('visible');
+
+        // Referencias para la secuencia 98142
+        const arbolChanContainer98142 = document.getElementById('arbol-chan-container-98142');
+        const arbolChanImg98142 = document.getElementById('arbol-chan-img-98142');
+        const btnContinuar98142 = document.getElementById('btn-continuar-98142');
+        const arbolChanTitulo98142 = document.getElementById('arbol-chan-titulo-98142');
+        const arbolChanTexto98142 = document.getElementById('arbol-chan-texto-98142');
+        // Oculta la secuencia de Arbol-chan 98142 al inicio
+        arbolChanContainer98142.style.opacity = 0;
+        arbolChanContainer98142.style.pointerEvents = 'none';
+        arbolChanImg98142.classList.remove('visible');
 
         // Referencia al audio
         const audioCodigoAceptado = document.getElementById('audio-codigo-aceptado');
@@ -510,9 +537,28 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === '72971') {
-                // Código deshabilitado: no hacer nada
-                // Puedes mostrar un mensaje si lo deseas, pero aquí simplemente no ocurre nada
+            } else if (code === '98142') {
+                // Secuencia igual a la de "pizza" pero separada
+                audioCodigoAceptado.currentTime = 0;
+                audioCodigoAceptado.play();
+                container.classList.add('fade-out');
+                setTimeout(() => {
+                    container.style.backgroundImage = "url('Fondo texto.jpg')";
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                    Array.from(container.children).forEach(child => {
+                        if (!child.classList.contains('arbol-chan-container')) {
+                            child.classList.add('hidden');
+                        }
+                    });
+                    setTimeout(() => {
+                        arbolChanContainer98142.style.opacity = 1;
+                        arbolChanContainer98142.style.pointerEvents = 'auto';
+                        setTimeout(() => {
+                            arbolChanImg98142.classList.add('visible');
+                        }, 800);
+                    }, 1200);
+                }, 1200);
             } else {
                 // Código incorrecto: animación de temblor
                 container.classList.remove('shake'); // reset si ya está
@@ -1482,8 +1528,8 @@
                     } else {
                         html = `
                             <div id="pong-end">
-                                <img src="abuelo.sama (2).png" class="arbol-img" alt="Abuelo-sama" />
-                                <h2>Abuelo-sama fue más rápido que tú</h2>
+                                <img src="Arbol-chan.png" class="arbol-img" alt="Árbol-chan" />
+                                <h2>Árbol-chan fue más rápido que tú</h2>
                                 <button id="pong-retry-2">${textos[lang].continuar}</button>
                             </div>
                         `;
@@ -1516,6 +1562,11 @@
             } else {
                 // Aquí puedes agregar la lógica para el reto de la pesa si lo deseas
             }
+        });
+
+        // Nueva lógica para el botón "Continuar" de la secuencia 98142
+        btnContinuar98142.addEventListener('click', function() {
+            // Aquí puedes agregar la lógica para el reto de la secuencia 98142
         });
     </script>
 </body>
