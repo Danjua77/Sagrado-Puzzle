@@ -377,7 +377,7 @@
             if (lang === 'en') {
                 arbolChanTexto2.innerHTML = "Run and not only win, but also <span style='color:#178a2c;font-weight:bold;'>prove</span> that no one can catch you";
             } else {
-                arbolChanTexto2.innerHTML = "Corre y no solo gana, también <span style='color:#178a2c;font-weight:bold;'>demuestra</span> que nadie te puede alcanzar";
+                arbolChanTexto2.innerHTML = "JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad";
             }
             btnContinuar2.textContent = textos[lang].continuar;
             // Actualiza la secuencia 13122
@@ -485,7 +485,7 @@
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === 'pizza') {
+            } else if (code.toLowerCase() === 'pizza') {
                 // Reproducir audio de código aceptado
                 audioCodigoAceptado.currentTime = 0;
                 audioCodigoAceptado.play();
@@ -503,6 +503,8 @@
                     setTimeout(() => {
                         arbolChanContainer2.style.opacity = 1;
                         arbolChanContainer2.style.pointerEvents = 'auto';
+                        // Cambia el texto aquí también por si el usuario no cambió el idioma antes
+                        arbolChanTexto2.innerHTML = "JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad";
                         setTimeout(() => {
                             arbolChanImg2.classList.add('visible');
                         }, 800);
@@ -530,9 +532,9 @@
             if (arbolChanDialogStep === 0) {
                 // Primer clic: cambia el texto y espera otro clic
                 if (currentLang === 'en') {
-                    arbolChanTexto.innerHTML = "Play ping-pong to get the next clue, <span style='color:#178a2c;font-weight:bold;'>hold on</span> until your opponent misses and win";
+                    arbolChanTexto.innerHTML = "If you want the next clue, you'll have to <span style='color:#178a2c;font-weight:bold;'>prove</span> you're better than me at Ping-Pong";
                 } else {
-                    arbolChanTexto.innerHTML = "Juega ping-pong para obtener la siguiente pista, <span style='color:#178a2c;font-weight:bold;'>resiste</span> hasta que tu oponente falle y gana";
+                    arbolChanTexto.innerHTML = "Si quieres la siguiente pista, tendrás que <span style='color:#178a2c;font-weight:bold;'>demostrarme</span> que eres mejor que yo en Ping-Pong";
                 }
                 arbolChanDialogStep = 1;
             } else {
@@ -1026,8 +1028,8 @@
                         } else {
                             html = `
                                 <div id="pong-end">
-                                    <img src="gymbro.png" class="arbol-img" alt="Gymbro" />
-                                    <h2>GymBro-Shi </h2>
+                                    <img src="Arbol-chan.png" class="arbol-img" alt="Árbol-chan" />
+                                    <h2>Fuiste derrotado por Árbol-chan</h2>
                                     <button id="pong-retry">${textos[lang].continuar}</button>
                                 </div>
                             `;
