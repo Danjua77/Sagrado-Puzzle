@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8"
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Puzzle Sagrado</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
@@ -281,43 +281,13 @@
     </div>
     <div class="arbol-chan-container" id="arbol-chan-container">
         <div class="arbol-chan-content">
-            <img src="DonArbol.png" class="arbol-chan-img" id="arbol-chan-img" alt="Árbol-chan" />
+            <img src="DonArbol.png" class="arbol-chan-img" id="arbol-chan-img" alt="Don Árbol" />
             <div class="arbol-chan-titulo" id="arbol-chan-titulo">Don Árbol</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto">Estimado Usuario, debo confesar que me resulta lamentable negarle la pista sin más…
 Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los logros deben ser alcanzados con honor y elegancia.</div>
             <button class="btn-continuar" id="btn-continuar">Continuar</button>
         </div>
     </div>
-    <!-- NUEVA SECUENCIA ARBOL-CHAN PARA EL CÓDIGO 72971 -->
-    <div class="arbol-chan-container" id="arbol-chan-container-2">
-        <div class="arbol-chan-content">
-            <img src="abuelo.sama (2).png" class="arbol-chan-img" id="arbol-chan-img-2" alt="Abuelox" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">Abuelox</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto-2">JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.</div>
-            <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
-        </div>
-    </div>
-    <!-- NUEVA SECUENCIA ARBOL-CHAN PARA EL CÓDIGO 13122 (COPIA DE 18122) -->
-    <div class="arbol-chan-container" id="arbol-chan-container-13122">
-        <div class="arbol-chan-content">
-            <img src="gymbro.png" class="arbol-chan-img" id="arbol-chan-img-13122" alt="Gymbro" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-13122">Gym Bro</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto-13122">Bro... ¿de verdad crees que puedes tener la pista así de fácil? Ni tu sombra tiene masa muscular.</div>
-            <button class="btn-continuar" id="btn-continuar-13122">Continuar</button>
-        </div>
-    </div>
-    <!-- NUEVA SECUENCIA ARBOL-CHAN PARA EL CÓDIGO 98142 -->
-    <div class="arbol-chan-container" id="arbol-chan-container-98142">
-        <div class="arbol-chan-content" style="margin-top: -60px;">
-            <img src="Igupai.png" class="arbol-chan-img" id="arbol-chan-img-98142" alt="Igupai" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-98142" style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Iguana-kun</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto-98142" style="margin-top: 2.2rem; margin-bottom: 2.2rem;">
-                <span style="color:#178a2c;font-weight:bold;">¿Mango? ¡MANGO!</span>
-            </div>
-            <button class="btn-continuar" id="btn-continuar-98142" style="margin-top: 0.2rem;">Continuar</button>
-        </div>
-    </div>
-    <audio id="audio-codigo-aceptado" src="codigo aceptado.mp3" preload="auto"></audio>
     <script>
         // Interacción para inputs: foco automático y estilos
         const inputs = document.querySelectorAll('.codigo-input');
@@ -356,7 +326,7 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
                 arbolTitulo: 'Don Árbol',
-                arbolTexto: 'En cada código tendrás un reto para <span style="color:#178a2c;font-weight:bold;">superar</span> y cuando lo hagas obtendrás la siguiente pista, busca todas las pistas para poder encontrar el caché',
+                arbolTexto: 'Estimado Usuario, debo confesar que me resulta lamentable negarle la pista sin más…<br>Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los logros deben ser alcanzados con honor y elegancia.',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
@@ -364,10 +334,10 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
             },
             en: {
                 titulo: 'Sagrado<br>Puzzle',
-                instrucciones: 'Find the clues and enter the<br>secret codes',
+                instrucciones: 'Search for the clues and enter the<br>secret codes',
                 aceptar: 'Accept',
-                arbolTitulo: 'Árbol-chan',
-                arbolTexto: 'For each code you will have a challenge to <span style="color:#178a2c;font-weight:bold;">overcome</span> and when you do, you will get the next clue. Find all the clues to locate the cache.',
+                arbolTitulo: 'Don Árbol',
+                arbolTexto: 'Dear User, I must confess that I regret denying you the clue just like that…<br>But you will understand that, in your noble quest for the cache, achievements must be reached with honor and elegance.',
                 continuar: 'Continue',
                 mesa: 'Welcome to the sacred table!',
                 pongWin: 'Next clue',
@@ -382,28 +352,11 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
             arbolChanTitulo.textContent = textos[lang].arbolTitulo;
             arbolChanTexto.innerHTML = textos[lang].arbolTexto;
             btnContinuar.textContent = textos[lang].continuar;
-            // Actualiza la segunda secuencia de Árbol-chan
-            arbolChanTitulo2.textContent = "Abuelox";
-            if (lang === 'en') {
-                arbolChanTexto2.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
-            } else {
-                arbolChanTexto2.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
-            }
-            btnContinuar2.textContent = textos[lang].continuar;
-            // Actualiza la secuencia 13122
-            arbolChanTitulo13122.textContent = lang === 'en' ? 'Gym Bro' : 'Gym Bro';
-            arbolChanTexto13122.innerHTML = "Bro... ¿de verdad crees que puedes tener la pista así de fácil? Ni tu sombra tiene masa muscular.";
-            btnContinuar13122.textContent = textos[lang].continuar;
-            // Actualiza la secuencia 98142
-            arbolChanTitulo98142.textContent = "Abuelox";
-            arbolChanTexto98142.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
-            btnContinuar98142.textContent = textos[lang].continuar;
             currentLang = lang;
         }
 
         idiomaSelect.addEventListener('change', function() {
             updateTexts(idiomaSelect.value);
-            // Si ya estamos en la pantalla de mesa, actualizar el texto ahí también
             const mesaTexto = document.getElementById('mesa-texto');
             if (mesaTexto) {
                 mesaTexto.textContent = textos[idiomaSelect.value].mesa;
@@ -414,68 +367,23 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
         const arbolChanContainer = document.getElementById('arbol-chan-container');
         const arbolChanImg = document.getElementById('arbol-chan-img');
         const btnContinuar = document.getElementById('btn-continuar');
-        // Oculta la secuencia de Arbol-chan al inicio
         arbolChanContainer.style.opacity = 0;
         arbolChanContainer.style.pointerEvents = 'none';
         arbolChanImg.classList.remove('visible');
 
-        // Referencias para la segunda secuencia
-        const arbolChanContainer2 = document.getElementById('arbol-chan-container-2');
-        const arbolChanImg2 = document.getElementById('arbol-chan-img-2');
-        const btnContinuar2 = document.getElementById('btn-continuar-2');
-        const arbolChanTitulo2 = document.getElementById('arbol-chan-titulo-2');
-        const arbolChanTexto2 = document.getElementById('arbol-chan-texto-2');
-
-        // Oculta la secuencia de Arbol-chan 2 al inicio
-        arbolChanContainer2.style.opacity = 0;
-        arbolChanContainer2.style.pointerEvents = 'none';
-        arbolChanImg2.classList.remove('visible');
-
-        // Referencias para la secuencia 13122
-        const arbolChanContainer13122 = document.getElementById('arbol-chan-container-13122');
-        const arbolChanImg13122 = document.getElementById('arbol-chan-img-13122');
-        const btnContinuar13122 = document.getElementById('btn-continuar-13122');
-        const arbolChanTitulo13122 = document.getElementById('arbol-chan-titulo-13122');
-        const arbolChanTexto13122 = document.getElementById('arbol-chan-texto-13122');
-        // Oculta la secuencia de Arbol-chan 13122 al inicio
-        arbolChanContainer13122.style.opacity = 0;
-        arbolChanContainer13122.style.pointerEvents = 'none';
-        arbolChanImg13122.classList.remove('visible');
-
-        // Referencias para la secuencia 98142
-        const arbolChanContainer98142 = document.getElementById('arbol-chan-container-98142');
-        const arbolChanImg98142 = document.getElementById('arbol-chan-img-98142');
-        const btnContinuar98142 = document.getElementById('btn-continuar-98142');
-        const arbolChanTitulo98142 = document.getElementById('arbol-chan-titulo-98142');
-        const arbolChanTexto98142 = document.getElementById('arbol-chan-texto-98142');
-        // Oculta la secuencia de Arbol-chan 98142 al inicio
-        arbolChanContainer98142.style.opacity = 0;
-        arbolChanContainer98142.style.pointerEvents = 'none';
-        arbolChanImg98142.classList.remove('visible');
-
-        // Referencia al audio
-        const audioCodigoAceptado = document.getElementById('audio-codigo-aceptado');
-
         document.getElementById('btn-aceptar').addEventListener('click', function() {
             const code = Array.from(document.querySelectorAll('.codigo-input')).map(i => i.value).join('');
             if (code === '18122') {
-                // Reproducir audio de código aceptado
-                audioCodigoAceptado.currentTime = 0;
-                audioCodigoAceptado.play();
-                // Desvanecer todos los elementos
                 container.classList.add('fade-out');
                 setTimeout(() => {
-                    // Cambiar fondo
                     container.style.backgroundImage = "url('Fondo texto.jpg')";
                     container.classList.remove('fade-out');
                     container.classList.add('fade-in');
-                    // Ocultar elementos hijos
                     Array.from(container.children).forEach(child => {
                         if (!child.classList.contains('arbol-chan-container')) {
                             child.classList.add('hidden');
                         }
                     });
-                    // Mostrar secuencia Arbol-chan
                     setTimeout(() => {
                         arbolChanContainer.style.opacity = 1;
                         arbolChanContainer.style.pointerEvents = 'auto';
@@ -484,111 +392,40 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === '13122') {
-                // Reproducir audio de código aceptado
-                audioCodigoAceptado.currentTime = 0;
-                audioCodigoAceptado.play();
-                // Desvanecer todos los elementos
-                container.classList.add('fade-out');
-                setTimeout(() => {
-                    // Cambiar fondo
-                    container.style.backgroundImage = "url('Fondo texto.jpg')";
-                    container.classList.remove('fade-out');
-                    container.classList.add('fade-in');
-                    // Ocultar elementos hijos
-                    Array.from(container.children).forEach(child => {
-                        if (!child.classList.contains('arbol-chan-container')) {
-                            child.classList.add('hidden');
-                        }
-                    });
-                    // Mostrar secuencia Arbol-chan 13122
-                    setTimeout(() => {
-                        arbolChanContainer13122.style.opacity = 1;
-                        arbolChanContainer13122.style.pointerEvents = 'auto';
-                        setTimeout(() => {
-                            arbolChanImg13122.classList.add('visible');
-                        }, 800);
-                    }, 1200);
-                }, 1200);
-            } else if (code.toLowerCase() === 'pizza') {
-                // Reproducir audio de código aceptado
-                audioCodigoAceptado.currentTime = 0;
-                audioCodigoAceptado.play();
-                // SECUENCIA PARA ARBOL-CHAN 2
-                container.classList.add('fade-out');
-                setTimeout(() => {
-                    container.style.backgroundImage = "url('Fondo texto.jpg')";
-                    container.classList.remove('fade-out');
-                    container.classList.add('fade-in');
-                    Array.from(container.children).forEach(child => {
-                        if (!child.classList.contains('arbol-chan-container')) {
-                            child.classList.add('hidden');
-                        }
-                    });
-                    setTimeout(() => {
-                        arbolChanContainer2.style.opacity = 1;
-                        arbolChanContainer2.style.pointerEvents = 'auto';
-                        // Cambia el texto aquí también por si el usuario no cambió el idioma antes
-                        arbolChanTexto2.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
-                        setTimeout(() => {
-                            arbolChanImg2.classList.add('visible');
-                        }, 800);
-                    }, 1200);
-                }, 1200);
-            } else if (code === '98142') {
-                // Secuencia igual a la de "pizza" pero separada
-                audioCodigoAceptado.currentTime = 0;
-                audioCodigoAceptado.play();
-                container.classList.add('fade-out');
-                setTimeout(() => {
-                    container.style.backgroundImage = "url('Fondo texto.jpg')";
-                    container.classList.remove('fade-out');
-                    container.classList.add('fade-in');
-                    Array.from(container.children).forEach(child => {
-                        if (!child.classList.contains('arbol-chan-container')) {
-                            child.classList.add('hidden');
-                        }
-                    });
-                    setTimeout(() => {
-                        arbolChanContainer98142.style.opacity = 1;
-                        arbolChanContainer98142.style.pointerEvents = 'auto';
-                        setTimeout(() => {
-                            arbolChanImg98142.classList.add('visible');
-                        }, 800);
-                    }, 1200);
-                }, 1200);
             } else {
-                // Código incorrecto: animación de temblor
-                container.classList.remove('shake'); // reset si ya está
-                // Forzar reflow para reiniciar animación si se repite
+                container.classList.remove('shake');
                 void container.offsetWidth;
                 container.classList.add('shake');
-                // Quitar la clase después de la animación
                 setTimeout(() => {
                     container.classList.remove('shake');
                 }, 450);
             }
         });
 
-        // Nueva lógica para el botón "Continuar" de la secuencia 1
         let arbolChanDialogStep = 0;
         btnContinuar.addEventListener('click', function() {
             if (arbolChanDialogStep === 0) {
-                // Primer clic: cambia el texto y espera otro clic
                 if (currentLang === 'en') {
-                    arbolChanTexto.innerHTML = "If you want the next clue, you'll have to <span style='color:#178a2c;font-weight:bold;'>prove</span> you're better than me at Ping-Pong";
+                    arbolChanTexto.innerHTML = "I will grant you a fair chance.<br>Withstand fifteen seconds of my attacks<br>and score five points during the brief moments when I am not defending...<br>Only then, this duel between human and plant will be settled with dignity.";
                 } else {
-                    arbolChanTexto.innerHTML = "Le concederé una ocasión justa. Resista quince segundos de mis embates y anote 5 puntos durante los breves momentos en que no defiendo...Solo entonces, daremos este duelo por resuelto entre ser humano y planta con dignidad.";
+                    arbolChanTexto.innerHTML = "Le concederé una ocasión justa.<br>Resista quince segundos de mis embates<br>y anote cinco puntos durante los breves momentos en que no defiendo...<br>Solo entonces, daremos este duelo por resuelto entre ser humano-planta con dignidad.";
                 }
                 arbolChanDialogStep = 1;
             } else {
-                // Segundo clic: inicia el juego de Pong
+                // --- AGREGAR AUDIO DE FONDO PARA EL JUEGO DE PONG ---
+                // Si ya existe, elimínalo antes de crear uno nuevo
+                let oldAudio = document.getElementById('pong-audio');
+                if (oldAudio) oldAudio.remove();
+                const audio = document.createElement('audio');
+                audio.id = 'pong-audio';
+                audio.src = 'pingpongtime.mp3';
+                audio.loop = true;
+                audio.autoplay = true;
+                audio.style.display = 'none';
+                document.body.appendChild(audio);
+
                 document.body.innerHTML = `
                     <style>
-                        body, html {
-                            margin: 0; padding: 0; width: 100vw; height: 100vh; background: #178a2c;
-                            overflow: hidden;
-                        }
                         #pong-container {
                             width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
                             background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
@@ -676,6 +513,8 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                         <canvas id="pong-canvas"></canvas>
                     </div>
                 `;
+                // --- REINSERTAR EL AUDIO EN EL NUEVO BODY ---
+                document.body.appendChild(audio);
 
                 // Pong game logic (zona de juego más pequeña, IA casi invencible, velocidad de pelota constante)
                 (function() {
@@ -1058,30 +897,55 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                         const pongContainer = document.getElementById('pong-container');
                         let html = '';
                         const lang = currentLang || 'es';
+
                         if (playerWon) {
-                            // espacio para pista 1
+                            // Exterior blanco, interior responsivo igual que los otros diálogos
                             html = `
-                                <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
-                                    <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
-                                    <div id="pong-next-img" style="margin:0; padding:0;">
-                                        <img src="gym.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
+                                <div id="pong-end" style="background: #fff; color: #178a2c; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; font-family: 'Montserrat', Arial, sans-serif; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;">
+                                    <div class="arbol-chan-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; max-width: 430px; max-height: 932px; min-width: 320px; min-height: 568px; margin: 0 auto; background: url('Fondo texto.jpg') no-repeat center center; background-size: cover; border-radius: 20px; box-shadow: 0 0 20px 2px rgba(0,0,0,0.2); position: relative;">
+                                        <img src="DonArbol.png" class="arbol-chan-img visible" alt="Don Árbol" style="width: 60vw; max-width: 220px; min-width: 120px; margin-top: 0; opacity: 1; transform: translateY(0); transition: opacity 1.2s, transform 1.2s cubic-bezier(.77,0,.18,1);" />
+                                        <div class="arbol-chan-titulo" style="font-family: 'Montserrat', Arial, sans-serif; color: #178a2c; font-size: 2.5rem; font-weight: bold; margin-top: 1.2rem; margin-bottom: 0.7rem; text-align: center; text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;">Don Árbol</div>
+                                        <div class="arbol-chan-texto" style="color: #fff; font-family: 'Roboto', Arial, sans-serif; font-size: 1.2rem; margin-top: 0.5rem; margin-bottom: 1.2rem; text-align: center; text-shadow: 0 2px 8px #000;">
+                                            ${
+                                                lang === 'en'
+                                                ? `Well done, User. You have shown courage and precision.<br><br>
+                                                    The clue I will give you is a picture taken somewhere in this park.<br>
+                                                    Go, observe carefully... and you will find the next code.`
+                                                : `Bien hecho, Usuario. Ha demostrado valor y precisión.<br><br>
+                                                    La pista que le brindaré es una imagen tomada en algún rincón de este parque.<br>
+                                                    Vaya, observe con atención… y encontrará el siguiente código....y recuerda, no te rindas!.`
+                                            }
+                                        </div>
+                                        <button id="pong-ver-pista" class="btn-continuar" style="margin-top: 0.5rem; font-size: 1.2rem; background: #178a2c; color: #fff; border: 2px solid #fff; border-radius: 8px; padding: 0.7rem 2.5rem; font-weight: bold; font-family: 'Montserrat', Arial, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer; transition: background 0.2s, border 0.2s;">${lang === 'en' ? 'See clue' : 'Ver pista'}</button>
                                     </div>
-                                    <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
                                 </div>
                             `;
                         } else {
                             html = `
                                 <div id="pong-end">
-                                    <img src="Arbol-chan.png" class="arbol-img" alt="Árbol-chan" />
-                                    <h2>Fuiste derrotado por Árbol-chan</h2>
+                                    <img src="DonArbol.png" class="arbol-img" alt="Don Árbol" />
+                                    <h2>${lang === 'en' ? 'You were never worthy...' : 'Nunca fuiste digno...'}</h2>
                                     <button id="pong-retry">${textos[lang].continuar}</button>
                                 </div>
                             `;
                         }
                         pongContainer.insertAdjacentHTML('beforeend', html);
+
                         if (playerWon) {
-                            document.getElementById('pong-continue').onclick = function() {
-                                location.reload();
+                            document.getElementById('pong-ver-pista').onclick = function() {
+                                const pongEnd = document.getElementById('pong-end');
+                                pongEnd.innerHTML = `
+                                    <div class="arbol-chan-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; max-width: 430px; max-height: 932px; min-width: 320px; min-height: 568px; margin: 0 auto; background: url('Fondo texto.jpg') no-repeat center center; background-size: cover; border-radius: 20px; box-shadow: 0 0 20px 2px rgba(0,0,0,0.2); position: relative;">
+                                        <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
+                                        <div id="pong-next-img" style="margin:0; padding:0; width: 60vw; max-width: 300px; min-width: 120px; height: 180px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px #178a2c33;">
+                                            <img src="gym.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
+                                        </div>
+                                        <button id="pong-continue" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
+                                    </div>
+                                `;
+                                document.getElementById('pong-continue').onclick = function() {
+                                    location.reload();
+                                };
                             };
                         }
                         if (!playerWon) {
@@ -1111,833 +975,6 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
             }
         });
 
-        // Nueva lógica para el botón "Continuar" de la secuencia 2
-        btnContinuar2.addEventListener('click', function() {
-            document.body.innerHTML = `
-                <style>
-                    body, html {
-                        margin: 0; padding: 0; width: 100vw; height: 100vh; background: #178a2c;
-                        overflow: hidden;
-                    }
-                    #maze-container {
-                        width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
-                        background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
-                        background-size: cover;
-                        position: fixed; top: 0; left: 0;
-                        flex-direction: column;
-                    }
-                    #maze-canvas {
-                        background: #fff;
-                        border-radius: 18px;
-                        box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
-                        display: block;
-                        margin: 0 auto;
-                        width: 99vw;
-                        height: 75vw;
-                        max-width: 520px;
-                        max-height: 400px;
-                        min-width: 260px;
-                        min-height: 180px;
-                        aspect-ratio: 16/9;
-                        touch-action: none;
-                    }
-                    #maze-controls {
-                        position: fixed;
-                        left: 0;
-                        right: 0;
-                        bottom: 10px;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        z-index: 2;
-                    }
-                    #maze-controls div {
-                        display: flex;
-                        gap: 10px;
-                    }
-                    #maze-controls button {
-                        width: 60px;
-                        height: 60px;
-                        font-size: 2em;
-                        border-radius: 50%;
-                        background: #178a2c;
-                        color: #fff;
-                        border: 2px solid #fff;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        font-weight: bold;
-                        box-shadow: 0 2px 8px #178a2c33;
-                        cursor: pointer;
-                        transition: background 0.2s, border 0.2s;
-                    }
-                    #maze-controls button:active {
-                        background: #ffe44d;
-                        color: #178a2c;
-                        border: 2px solid #ffe44d;
-                    }
-                    #maze-timer {
-                        margin-top: 1.2rem;
-                        font-size: 1.1rem;
-                        color: #fff;
-                        font-family: 'Roboto', Arial, sans-serif;
-                        text-shadow: 0 2px 8px #178a2c;
-                        text-align: center;
-                    }
-                    #pong-end {
-                        position: absolute;
-                        top: 0; left: 0; width: 100vw; height: 100vh;
-                        background: url('Fondo texto.jpg') no-repeat center center;
-                        background-size: cover;
-                        color: #178a2c;
-                        display: flex;
-                        margin-top: 1.2rem;
-                        font-size: 1.1rem;
-                        color: #fff;
-                        font-family: 'Roboto', Arial, sans-serif;
-                        text-shadow: 0 2px 8px #178a2c;
-                        text-align: center;
-                    }
-                    #pong-end {
-                        position: absolute;
-                        top: 0; left: 0; width: 100vw; height: 100vh;
-                        background: url('Fondo texto.jpg') no-repeat center center;
-                        background-size: cover;
-                        color: #178a2c;
-                        display: flex;
-                        flex-direction: column;
-                        align-items: center;
-                        justify-content: center;
-                        z-index: 10;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                    }
-                    #pong-end .arbol-img {
-                        width: 38vw;
-                        max-width: 180px;
-                        min-width: 90px;
-                        margin-top: 2.5rem;
-                        margin-bottom: 1.2rem;
-                        filter: drop-shadow(0 4px 16px #fff);
-                    }
-                    #pong-end h2 {
-                        font-size: 2.2rem;
-                        margin-bottom: 2rem;
-                        color: #178a2c;
-                        text-align: center;
-                        text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
-                        margin-top: 0; /* quitar margen superior */
-                    }
-                    #pong-next-img {
-                        width: 60vw;
-                        max-width: 300px;
-                        min-width: 120px;
-                        height: 180px;
-                        background: #fff;
-                        margin: 0; /* quitar margen vertical */
-                        display: flex;
-                        align-items: center;
-                        justify-content: center;
-                        border-radius: 12px;
-                        overflow: hidden;
-                        box-shadow: 0 2px 12px #178a2c33;
-                    }
-                    #pong-end button {
-                        font-size: 1.3rem;
-                        background: #178a2c;
-                        color: #fff;
-                        border: 2px solid #fff;
-                        border-radius: 8px;
-                        padding: 0.7rem 2.5rem;
-                        font-weight: bold;
-                        font-family: 'Montserrat', Arial, sans-serif;
-                        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-                        cursor: pointer;
-                        margin-top: 1.5rem;
-                        margin-bottom: 2rem;
-                    }
-                    #pong-end button:active {
-                        background: #176d13;
-                        border: 2px solid #ffe44d;
-                    }
-                </style>
-                <div id="maze-container">
-                    <canvas id="maze-canvas"></canvas>
-                    <div id="maze-timer"></div>
-                    <div id="maze-controls">
-                        <div>
-                            <button id="maze-up">▲</button>
-                        </div>
-                        <div style="margin-top:5px;">
-                            <button id="maze-left">◀</button>
-                            <button id="maze-down">▼</button>
-                            <button id="maze-right">▶</button>
-                        </div>
-                    </div>
-                </div>
-            `;
-
-            // --- Juego Carrera Laberinto 2D adaptado ---
-            (function() {
-                const canvas = document.getElementById('maze-canvas');
-                const ctx = canvas.getContext('2d');
-                let W = canvas.width, H = canvas.height;
-
-                // Calcula el máximo número de columnas y filas para que el laberinto ocupe toda la celda
-                function getOptimalMazeSize() {
-                    // Queremos celdas cuadradas y que el laberinto ocupe todo el canvas
-                    // Limita el tamaño máximo para que siga siendo jugable
-                    const maxCols = 60, maxRows = 40, minCell = 14;
-                    let cols = Math.floor(W / minCell);
-                    let rows = Math.floor(H / minCell);
-                    cols = Math.min(cols, maxCols);
-                    rows = Math.min(rows, maxRows);
-                    // Asegura que sean impares para mejor generación de laberinto
-                    if (cols % 2 === 0) cols--;
-                    if (rows % 2 === 0) rows--;
-                    return {cols, rows};
-                }
-
-                let MAZE_COLS, MAZE_ROWS, CELL, OFFSET_X, OFFSET_Y, maze, player, ai;
-
-                function recalcCellAndOffsets() {
-                    const size = getOptimalMazeSize();
-                    MAZE_COLS = size.cols;
-                    MAZE_ROWS = size.rows;
-                    CELL = Math.min(W / MAZE_COLS, H / MAZE_ROWS);
-                    OFFSET_X = (W - (CELL * MAZE_COLS)) / 2;
-                    OFFSET_Y = (H - (CELL * MAZE_ROWS)) / 2;
-                }
-
-                function generateMaze(cols, rows) {
-                    const maze = Array.from({length: rows}, () => Array(cols).fill(0));
-                    function carve(x, y) {
-                        maze[y][x] = 1;
-                        const dirs = [[1,0],[-1,0],[0,1],[0,-1]].sort(()=>Math.random()-0.5);
-                        for (const [dx,dy] of dirs) {
-                            const nx = x + dx*2, ny = y + dy*2;
-                            if (nx >= 0 && nx < cols && ny >= 0 && ny < rows && maze[ny][nx] === 0) {
-                                maze[y+dy][x+dx] = 1;
-                                carve(nx, ny);
-                            }
-                        }
-                    }
-                    carve(0, Math.floor(rows/2));
-                    maze[Math.floor(rows/2)][0] = 1;
-                    maze[Math.floor(rows/2)][cols-1] = 1;
-                    return maze;
-                }
-
-                function getPlayerSize() {
-                    return CELL * 0.7;
-                }
-                function getPlayerOffset() {
-                    return (CELL - getPlayerSize()) / 2;
-                }
-
-                function resetMazeAndPlayers() {
-                    recalcCellAndOffsets();
-                    maze = generateMaze(MAZE_COLS, MAZE_ROWS);
-                    player = {
-                        x: 0,
-                        y: Math.floor(MAZE_ROWS/2),
-                        color: '#ffe44d',
-                        path: [],
-                        step: 0,
-                    };
-                    ai = {
-                        x: 0,
-                        y: Math.floor(MAZE_ROWS/2),
-                        color: '#178a2c',
-                        path: [],
-                        step: 0,
-                    };
-                    player.path = findPath(player.x, player.y, MAZE_COLS-1, player.y, maze);
-                    player.step = 0;
-                    ai.path = findPath(ai.x, ai.y, MAZE_COLS-1, ai.y, maze, 0.2);
-                    ai.step = 0;
-                }
-
-                function resizeCanvas() {
-                    const rect = canvas.getBoundingClientRect();
-                    canvas.width = rect.width;
-                    canvas.height = rect.height;
-                    W = canvas.width; H = canvas.height;
-                    resetMazeAndPlayers();
-                }
-                resizeCanvas();
-                window.addEventListener('resize', function() {
-                    resizeCanvas();
-                    draw();
-                });
-
-                // IA: encontrar camino óptimo (A*)
-                function heuristic(ax, ay, bx, by) {
-                    return Math.abs(ax-bx) + Math.abs(ay-by);
-                }
-                function findPath(sx, sy, ex, ey, maze, randomness=0) {
-                    const cols = maze[0].length, rows = maze.length;
-                    const open = [[sx, sy, 0, heuristic(sx,sy,ex,ey), null]];
-                    const visited = Array.from({length: rows}, () => Array(cols).fill(false));
-                    while (open.length) {
-                        let idx = 0;
-                        if (randomness > 0 && Math.random() < randomness && open.length > 1) {
-                            idx = Math.floor(Math.random() * open.length);
-                        }
-                        open.sort((a,b)=>a[2]+a[3]-b[2]-b[3]);
-                        const [x, y, g, h, prev] = open.splice(idx, 1)[0];
-                        if (x === ex && y === ey) {
-                            const path = [[x,y]];
-                            let p = prev;
-                            while (p) { path.push([p[0],p[1]]); p = p[4]; }
-                            return path.reverse();
-                        }
-                        if (visited[y][x]) continue;
-                        visited[y][x] = true;
-                        for (const [dx,dy] of [[1,0],[0,1],[0,-1],[-1,0]]) {
-                            const nx = x+dx, ny = y+dy;
-                            if (nx>=0 && nx<cols && ny>=0 && ny<rows && maze[ny][nx]===1 && !visited[ny][nx]) {
-                                open.push([nx,ny,g+1,heuristic(nx,ny,ex,ey), [x,y,g,h,prev]]);
-                            }
-                        }
-                    }
-                    return null;
-                }
-
-                resetMazeAndPlayers();
-
-                function draw() {
-                    ctx.clearRect(0,0,W,H);
-                    ctx.fillStyle = "#fff";
-                    ctx.fillRect(0, 0, W, H);
-                    // Laberinto
-                    for (let y=0; y<MAZE_ROWS; y++) {
-                        for (let x=0; x<MAZE_COLS; x++) {
-                            if (maze[y][x] === 0) {
-                                ctx.fillStyle = '#178a2c';
-                                ctx.fillRect(OFFSET_X + x*CELL, OFFSET_Y + y*CELL, CELL, CELL);
-                            }
-                        }
-                    }
-                    // Meta: cuadro azul brillante titilando
-                    const goalX = MAZE_COLS-1, goalY = Math.floor(MAZE_ROWS/2);
-                    const t = Date.now();
-                    const glow = 0.5 + 0.5 * Math.sin(t/220); // titileo
-                    ctx.save();
-                    ctx.shadowColor = "#2196f3";
-                    ctx.shadowBlur = 18 + 18*glow;
-                    ctx.globalAlpha = 0.7 + 0.3*glow;
-                    ctx.fillStyle = "#2196f3";
-                    ctx.fillRect(
-                        OFFSET_X + goalX*CELL + 2,
-                        OFFSET_Y + goalY*CELL + 2,
-                        CELL-4, CELL-4
-                    );
-                    ctx.restore();
-
-                    // IA (verde con borde blanco)
-                    ctx.save();
-                    ctx.shadowColor = "#fff";
-                    ctx.shadowBlur = 6;
-                    ctx.fillStyle = ai.color;
-                    ctx.fillRect(
-                        OFFSET_X + ai.x*CELL + getPlayerOffset(),
-                        OFFSET_Y + ai.y*CELL + getPlayerOffset(),
-                        getPlayerSize(), getPlayerSize()
-                    );
-                    ctx.restore();
-                    ctx.fillStyle = player.color;
-                    ctx.fillRect(
-                        OFFSET_X + player.x*CELL + getPlayerOffset(),
-                        OFFSET_Y + player.y*CELL + getPlayerOffset(),
-                        getPlayerSize(), getPlayerSize()
-                    );
-                }
-
-                function playerAdvance() {
-                    if (player.step < player.path.length-1) {
-                        player.step++;
-                        player.x = player.path[player.step][0];
-                        player.y = player.path[player.step][1];
-                    }
-                }
-                function aiAdvance() {
-                    if (ai.step < ai.path.length-1) {
-                        ai.step++;
-                        ai.x = ai.path[ai.step][0];
-                        ai.y = ai.path[ai.step][1];
-                    }
-                }
-
-                let finished = false;
-                function checkWin() {
-                    if (player.x === MAZE_COLS-1 && player.y === player.path[0][1]) {
-                        finished = true;
-                        setTimeout(()=>showEndScreen(true), 300);
-                    } else if (ai.x === MAZE_COLS-1 && ai.y === ai.path[0][1]) {
-                        finished = true;
-                        setTimeout(()=>showEndScreen(false), 300);
-                    }
-                }
-
-                function loop() {
-                    draw();
-                    const ny = player.y + dy;
-                    if (
-                        nx >= 0 && nx < MAZE_COLS &&
-                        ny >= 0 && ny < MAZE_ROWS &&
-                        maze[ny][nx] === 1
-                    ) {
-                        player.x = nx;
-                        player.y = ny;
-                        player.path.push([nx, ny]);
-                        checkWin();
-                    }
-                }
-
-                document.getElementById('maze-up').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(0, -1); });
-                document.getElementById('maze-down').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(0, 1); });
-                document.getElementById('maze-left').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(-1, 0); });
-                document.getElementById('maze-right').addEventListener('touchstart', e => { e.preventDefault(); movePlayer(1, 0); });
-                document.getElementById('maze-up').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(0, -1); });
-                document.getElementById('maze-down').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(0, 1); });
-                document.getElementById('maze-left').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(-1, 0); });
-                document.getElementById('maze-right').addEventListener('mousedown', e => { e.preventDefault(); movePlayer(1, 0); });
-
-                document.addEventListener('keydown', function(e) {
-                    if (e.key === 'ArrowUp' || e.key === 'w' || e.key === 'W') movePlayer(0, -1);
-                    if (e.key === 'ArrowDown' || e.key === 's' || e.key === 'S') movePlayer(0, 1);
-                    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'A') movePlayer(-1, 0);
-                    if (e.key === 'ArrowRight' || e.key === 'd' || e.key === 'D') movePlayer(1, 0);
-                });
-
-                function showEndScreen(playerWon) {
-                    const mazeContainer = document.getElementById('maze-container');
-                    let html = '';
-                    const lang = currentLang || 'es';
-                    if (playerWon) {
-                        html = `
-                            <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;">
-                                <h2 style="margin-top:0;">${textos[lang].pongWin}</h2>
-                                <div id="pong-next-img-2" style="margin:0;">
-                                    <!-- espacio para pista 2 -->
-                                    <!-- <img src="pista2.png" alt="Pista 2" style="width:100%;height:100%;object-fit:contain;"> -->
-                                </div>
-                                <button id="pong-continue-2" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${textos[lang].continuar}</button>
-                            </div>
-                        `;
-                    } else {
-                        html = `
-                            <div id="pong-end">
-                                <img src="Arbol-chan.png" class="arbol-img" alt="Árbol-chan" />
-                                <h2>Árbol-chan fue más rápido que tú</h2>
-                                <button id="pong-retry-2">${textos[lang].continuar}</button>
-                            </div>
-                        `;
-                    }
-                    mazeContainer.insertAdjacentHTML('beforeend', html);
-                    if (playerWon) {
-                        document.getElementById('pong-continue-2').onclick = function() {
-                            location.reload();
-                        };
-                    } else {
-                        document.getElementById('pong-retry-2').onclick = function() {
-                            location.reload();
-                        };
-                    }
-                }
-            })();
-        });
-
-        // Nueva lógica para el botón "Continuar" de la secuencia 13122
-        let gymbroDialogStep = 0;
-        btnContinuar13122.addEventListener('click', function() {
-            if (gymbroDialogStep === 0) {
-                // Cambia el texto al mensaje de la pesa
-                if (currentLang === 'en') {
-                    arbolChanTexto13122.innerHTML = "If you are as gymbro as you think, <span style='color:#178a2c;font-weight:bold;'>hold</span> this weight for 90 seconds";
-                } else {
-                    arbolChanTexto13122.innerHTML = "Demuestra que eres un real Bro™ y aguanta estas pesas sin derramar una sola gota de sudor el tiempo que sea necesario.";
-                }
-                gymbroDialogStep = 1;
-            } else {
-                // Aquí puedes agregar la lógica para el reto de la pesa si lo deseas
-            }
-        });
-
-        // Nueva lógica para el botón "Continuar" de la secuencia 98142
-        btnContinuar98142.addEventListener('click', function() {
-            // Juego de rompecabezas deslizante con estética del resto de juegos
-            document.body.innerHTML = `
-        <style>
-            body, html {
-                margin: 0; padding: 0; width: 100vw; height: 100vh;
-                background: url('fonde mesa.jpg') no-repeat center center;
-                background-size: cover;
-                overflow: hidden;
-            }
-            #puzzle-bg {
-                width: 100vw;
-                height: 100vh;
-                max-width: 430px;
-                max-height: 932px;
-                min-width: 320px;
-                min-height: 568px;
-                background: linear-gradient(180deg, #fff 0%, #e8f5e9 60%, #178a2c 100%);
-                border-radius: 20px;
-                box-shadow: 0 0 20px 2px rgba(0,0,0,0.2);
-                position: relative;
-                margin: 0 auto;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                               justify-content: flex-start;
-            }
-            @media (max-width: 430px) {
-                #puzzle-bg {
-                    width: 100vw;
-                    height: 100vh;
-                    max-width: 100vw;
-                    max-height: 100vh;
-                    border-radius: 0;
-                    box-shadow: none;
-                }
-            }
-            #puzzle-title {
-                font-family: 'Montserrat', Arial, sans-serif;
-                font-size: 1.2rem;
-                color: #178a2c;
-                font-weight: 700;
-                text-align: center;
-                margin-top: 2.2rem;
-                margin-bottom: 0.7rem;
-                text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
-                letter-spacing: 1px;
-            }
-            #puzzle-reference, #puzzle-container {
-                width: 90vw;
-                height: 90vw;
-                max-width: 340px;
-                max-height: 340px;
-                min-width: 180px;
-                min-height: 180px;
-                border-radius: 12px;
-                box-shadow: 0 2px 12px #178a2c33;
-                object-fit: cover;
-                display: block;
-            }
-            #puzzle-reference {
-                margin-bottom: 1.1rem;
-            }
-            #puzzle-container {
-                display: grid;
-                grid-template-columns: repeat(3, 1fr);
-                grid-template-rows: repeat(3, 1fr);
-                gap: 2px;
-                margin: 0 auto 1.2rem auto;
-                border: 2.5px solid #fff;
-                background: #222;
-                border-radius: 16px;
-                box-shadow: 0 2px 12px #178a2c33;
-                position: relative;
-                aspect-ratio: 1/1;
-            }
-            .tile {
-                width: 100%;
-                height: 100%;
-                background-image: url('rompecabezas.png');
-                background-size: 100% 100%;
-                cursor: pointer;
-                transition: box-shadow 0.2s, filter 0.2s;
-                box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-                font-size: 0;
-                border-radius: 8px;
-                border: none;
-                outline: none;
-                touch-action: manipulation;
-            }
-            .tile:active {
-                filter: brightness(1.15);
-                box-shadow: 0 0 0 2px #ffe44d;
-            }
-            .empty {
-                background: #222;
-                cursor: default;
-                box-shadow: none;
-            }
-            #accept-btn {
-                display: block;
-                margin: 1.2rem auto 0 auto;
-                padding: 0.7rem 2.2rem;
-                font-size: 1.1rem;
-                font-family: 'Montserrat', Arial, sans-serif;
-                font-weight: bold;
-                background: #bdbdbd;
-                color: #fff;
-                border: 2px solid #fff;
-                border-radius: 8px;
-                box-shadow: 0 2px 8px #178a2c33;
-                cursor: not-allowed;
-                transition: background 0.2s, border 0.2s;
-            }
-            #accept-btn.enabled {
-                background: #178a2c;
-                cursor: pointer;
-                border: 2px solid #ffe44d;
-            }
-            #accept-btn:active.enabled {
-                background: #ffe44d;
-                color: #178a2c;
-                border: 2px solid #ffe44d;
-            }
-            @media (max-width: 430px) {
-                #puzzle-container, #puzzle-reference {
-                    min-width: 80px;
-                    min-height: 80px;
-                    max-width: 96vw;
-                    max-height: 96vw;
-                    width: 96vw;
-                    height: 96vw;
-                }
-                #accept-btn {
-                    font-size: 1rem;
-                    padding: 0.5rem 1.2rem;
-                }
-            }
-            @media (max-width: 350px) {
-                #puzzle-container, #puzzle-reference {
-                    min-width: 60px;
-                    min-height: 60px;
-                    width: 98vw;
-                    height: 98vw;
-                }
-            }
-            #pong-end {
-                position: absolute;
-                top: 0; left: 0; width: 100vw; height: 100vh;
-                background: url('Fondo texto.jpg') no-repeat center center;
-                background-size: cover;
-                color: #178a2c;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                z-index: 10;
-                font-family: 'Montserrat', Arial, sans-serif;
-            }
-            #pong-end h2 {
-                font-size: 2.2rem;
-                margin-bottom: 2rem;
-                color: #178a2c;
-                text-align: center;
-                text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
-                margin-top: 0;
-            }
-            #pong-next-img-98142 {
-                width: 60vw;
-                max-width: 300px;
-                min-width: 120px;
-                height: 180px;
-                background: #fff;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                border-radius: 12px;
-                overflow: hidden;
-                box-shadow: 0 2px 12px #178a2c33;
-            }
-            #pong-end button {
-                font-size: 1.3rem;
-                background: #178a2c;
-                color: #fff;
-                border: 2px solid #fff;
-                border-radius: 8px;
-                padding: 0.7rem 2.5rem;
-                font-weight: bold;
-                font-family: 'Montserrat', Arial, sans-serif;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-                cursor: pointer;
-                margin-top: 1.5rem;
-                margin-bottom: 2rem;
-            }
-            #pong-end button:active {
-                background: #176d13;
-                border: 2px solid #ffe44d;
-            }
-        </style>
-        <div id="puzzle-bg">
-            <div id="puzzle-title">Presiona la pieza que quieres que se mueva</div>
-            <img id="puzzle-reference" src="rompecabezas.png" alt="Referencia" />
-            <div id="puzzle-container"></div>
-            <button id="accept-btn" disabled>Aceptar</button>
-            <button id="skip-btn" style="display:block;margin:1.2rem auto 0 auto;padding:0.7rem 2.2rem;font-size:1.1rem;font-family:'Montserrat',Arial,sans-serif;font-weight:bold;background:#bdbdbd;color:#fff;border:2px solid #fff;border-radius:8px;box-shadow:0 2px 8px #178a2c33;cursor:pointer;transition:background 0.2s,border 0.2s;">Saltar</button>
-        </div>
-    `;
-
-            // --- Lógica del rompecabezas deslizante ---
-            (function() {
-                const size = 3;
-                const container = document.getElementById('puzzle-container');
-                const acceptBtn = document.getElementById('accept-btn');
-                const skipBtn = document.getElementById('skip-btn');
-                let tiles = [];
-                let emptyIndex = size * size - 1;
-
-                function createTiles() {
-                    tiles = [];
-                    for (let i = 0; i < size * size; i++) {
-                        tiles.push(i);
-                    }
-                }
-
-                function shuffleTiles() {
-                    // Fisher-Yates shuffle, asegurando que sea resoluble
-                    do {
-                        for (let i = tiles.length - 1; i > 0; i--) {
-                            const j = Math.floor(Math.random() * (i + 1));
-                            [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
-                        }
-                    } while (!isSolvable(tiles) || isSolved());
-                    emptyIndex = tiles.indexOf(size * size - 1);
-                }
-
-                function isSolvable(arr) {
-                    let invCount = 0;
-                    for (let i = 0; i < arr.length - 1; i++) {
-                        for (let j = i + 1; j < arr.length; j++) {
-                            if (arr[i] !== size*size-1 && arr[j] !== size*size-1 && arr[i] > arr[j]) invCount++;
-                        }
-                    }
-                    const emptyRow = Math.floor(arr.indexOf(size*size-1) / size);
-                    if (size % 2 === 0) {
-                        return ((invCount + emptyRow) % 2 === 1);
-                    } else {
-                        return (invCount % 2 === 0);
-                    }
-                }
-
-                function isSolved() {
-                    for (let i = 0; i < tiles.length - 1; i++) {
-                        if (tiles[i] !== i) return false;
-                    }
-                    return true;
-                }
-
-                function render() {
-                    // Ajustar tamaño del puzzle y referencia según pantalla
-                    const vw = Math.min(window.innerWidth, 430);
-                    const puzzleSize = Math.max(Math.min(Math.floor(vw * 0.96), 340), 120);
-                    container.style.width = container.style.height = puzzleSize + "px";
-                    const ref = document.getElementById('puzzle-reference');
-                    if (ref) {
-                        ref.style.width = ref.style.height = puzzleSize + "px";
-                    }
-                    container.innerHTML = '';
-                    for (let i = 0; i < tiles.length; i++) {
-                        const tileNum = tiles[i];
-                        const tile = document.createElement('div');
-                        tile.className = 'tile';
-                        if (tileNum === size * size - 1) {
-                            tile.classList.add('empty');
-                        } else {
-                            // Calcular la posición de fondo para cada pieza (3x3) usando el tamaño actual
-                            const x = tileNum % size;
-                            const y = Math.floor(tileNum / size);
-                            tile.style.backgroundPosition = `-${x * (puzzleSize/size)}px -${y * (puzzleSize/size)}px`;
-                            tile.style.backgroundSize = `${puzzleSize}px ${puzzleSize}px`;
-                            tile.addEventListener('click', () => trySlide(i));
-                            // Mejorar accesibilidad táctil
-                            tile.style.touchAction = "manipulation";
-                        }
-                        container.appendChild(tile);
-                    }
-                    // Habilitar o deshabilitar el botón aceptar
-                    if (isSolved()) {
-                        acceptBtn.disabled = false;
-                        acceptBtn.classList.add('enabled');
-                        acceptBtn.textContent = 'Aceptar';
-                    } else {
-                        acceptBtn.disabled = true;
-                        acceptBtn.classList.remove('enabled');
-                        acceptBtn.textContent = 'Aceptar';
-                    }
-                }
-
-                // Deslizar varias fichas en línea
-                function trySlide(idx) {
-                    const rowIdx = Math.floor(idx / size);
-                    const colIdx = idx % size;
-                    const emptyRow = Math.floor(emptyIndex / size);
-                    const emptyCol = emptyIndex % size;
-
-                    if (rowIdx === emptyRow && colIdx !== emptyCol) {
-                        const dir = colIdx < emptyCol ? 1 : -1;
-                        for (let c = emptyCol - dir; c !== colIdx - dir; c -= dir) {
-                            const from = rowIdx * size + c;
-                            const to = rowIdx * size + (c + dir);
-                            [tiles[to], tiles[from]] = [tiles[from], tiles[to]];
-                        }
-                        emptyIndex = idx;
-                        render();
-                        return;
-                    }
-                    if (colIdx === emptyCol && rowIdx !== emptyRow) {
-                        const dir = rowIdx < emptyRow ? 1 : -1;
-                        for (let r = emptyRow - dir; r !== rowIdx - dir; r -= dir) {
-                            const from = r * size + colIdx;
-                            const to = (r + dir) * size + colIdx;
-                            [tiles[to], tiles[from]] = [tiles[from], tiles[to]];
-                        }
-                        emptyIndex = idx;
-                        render();
-                        return;
-                    }
-                }
-
-                acceptBtn.onclick = function() {
-                    if (acceptBtn.disabled) return;
-                    // Pantalla de pista igual a los otros juegos, imagen Silla2.jpeg
-                    const puzzleBg = document.getElementById('puzzle-bg');
-                    let html = `
-                        <div id="pong-end" style="background:linear-gradient(180deg,#e8f5e9 0%,#178a2c 100%);color:#178a2c;position:fixed;top:0;left:0;width:100vw;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;">
-                            <h2 style="margin-top:0;">${(typeof textos !== "undefined" && textos[currentLang] ? textos[currentLang].pongWin : 'Siguiente pista')}</h2>
-                            <div id="pong-next-img-98142" style="margin:0;width:60vw;max-width:300px;min-width:120px;height:180px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px #178a2c33;">
-                                <img src="Silla2.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
-                            </div>
-                            <button id="pong-continue-98142" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">
-                                ${(typeof textos !== "undefined" && textos[currentLang] ? textos[currentLang].continuar : 'Continuar')}
-                            </button>
-                        </div>
-                    `;
-                    // Elimina cualquier pantalla de pista previa antes de insertar
-                    const prevEnd = document.getElementById('pong-end');
-                    if (prevEnd) prevEnd.remove();
-                    puzzleBg.insertAdjacentHTML('beforeend', html);
-                    document.getElementById('pong-continue-98142').onclick = function() {
-                        location.reload();
-                    };
-                };
-
-                // --- Botón Saltar: resuelve el puzzle automáticamente ---
-                skipBtn.onclick = function() {
-                    for (let i = 0; i < tiles.length; i++) {
-                        tiles[i] = i;
-                    }
-                    emptyIndex = size * size - 1;
-                    render();
-                };
-
-                function startGame() {
-                    createTiles();
-                    shuffleTiles();
-                    render();
-                }
-
-                // Redibujar puzzle al cambiar tamaño de pantalla
-                window.addEventListener('resize', render);
-
-                // Iniciar el juego al cargar
-                startGame();
-            })();
-        });
     </script>
 </body>
 </html>
