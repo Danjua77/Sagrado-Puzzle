@@ -1189,6 +1189,20 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                         background-size: cover;
                         color: #178a2c;
                         display: flex;
+                        margin-top: 1.2rem;
+                        font-size: 1.1rem;
+                        color: #fff;
+                        font-family: 'Roboto', Arial, sans-serif;
+                        text-shadow: 0 2px 8px #178a2c;
+                        text-align: center;
+                    }
+                    #pong-end {
+                        position: absolute;
+                        top: 0; left: 0; width: 100vw; height: 100vh;
+                        background: url('Fondo texto.jpg') no-repeat center center;
+                        background-size: cover;
+                        color: #178a2c;
+                        display: flex;
                         flex-direction: column;
                         align-items: center;
                         justify-content: center;
@@ -1465,20 +1479,6 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
 
                 function loop() {
                     draw();
-                    if (!finished) requestAnimationFrame(loop);
-                }
-                loop();
-
-                // IA más rápida: avanza cada 350 ms
-                setInterval(function() {
-                    if (finished) return;
-                    aiAdvance();
-                    checkWin();
-                }, 190); // velocidad ajustada a 300 ms (más rápido)
-
-                function movePlayer(dx, dy) {
-                    if (finished) return;
-                    const nx = player.x + dx;
                     const ny = player.y + dy;
                     if (
                         nx >= 0 && nx < MAZE_COLS &&
