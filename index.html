@@ -281,7 +281,7 @@
     </div>
     <div class="arbol-chan-container" id="arbol-chan-container">
         <div class="arbol-chan-content">
-            <img src="Arbol-chan.png" class="arbol-chan-img" id="arbol-chan-img" alt="Árbol-chan" />
+            <img src="DonArbol.png" class="arbol-chan-img" id="arbol-chan-img" alt="Árbol-chan" />
             <div class="arbol-chan-titulo" id="arbol-chan-titulo">Don Árbol</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto">Estimado Usuario, debo confesar que me resulta lamentable negarle la pista sin más…
 Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los logros deben ser alcanzados con honor y elegancia.</div>
@@ -291,11 +291,9 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
     <!-- NUEVA SECUENCIA ARBOL-CHAN PARA EL CÓDIGO 72971 -->
     <div class="arbol-chan-container" id="arbol-chan-container-2">
         <div class="arbol-chan-content">
-            <img src="abuelo.sama (2).png" class="arbol-chan-img" id="arbol-chan-img-2" alt="Abuelo Sama" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">Abuelo-sama</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto-2">
-                Corre y no solo gana, también <span style='color:#178a2c;font-weight:bold;'>demuestra</span> que nadie te puede alcanzar
-            </div>
+            <img src="abuelo.sama (2).png" class="arbol-chan-img" id="arbol-chan-img-2" alt="Abuelox" />
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-2">Abuelox</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto-2">JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.</div>
             <button class="btn-continuar" id="btn-continuar-2">Continuar</button>
         </div>
     </div>
@@ -303,8 +301,8 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
     <div class="arbol-chan-container" id="arbol-chan-container-13122">
         <div class="arbol-chan-content">
             <img src="gymbro.png" class="arbol-chan-img" id="arbol-chan-img-13122" alt="Gymbro" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-13122">GymBro-Shi</div>
-            <div class="arbol-chan-texto" id="arbol-chan-texto-13122">¿Quién te crees para pensar que eres tan Gymbro como yo?</div>
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-13122">Gym Bro</div>
+            <div class="arbol-chan-texto" id="arbol-chan-texto-13122">Bro... ¿de verdad crees que puedes tener la pista así de fácil? Ni tu sombra tiene masa muscular.</div>
             <button class="btn-continuar" id="btn-continuar-13122">Continuar</button>
         </div>
     </div>
@@ -312,9 +310,9 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
     <div class="arbol-chan-container" id="arbol-chan-container-98142">
         <div class="arbol-chan-content" style="margin-top: -60px;">
             <img src="Igupai.png" class="arbol-chan-img" id="arbol-chan-img-98142" alt="Igupai" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo-98142" style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Iguana-sempai</div>
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo-98142" style="margin-top: 0.2rem; margin-bottom: 0.2rem;">Iguana-kun</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto-98142" style="margin-top: 2.2rem; margin-bottom: 2.2rem;">
-                <span style="color:#178a2c;font-weight:bold;">Analiza</span>
+                <span style="color:#178a2c;font-weight:bold;">¿Mango? ¡MANGO!</span>
             </div>
             <button class="btn-continuar" id="btn-continuar-98142" style="margin-top: 0.2rem;">Continuar</button>
         </div>
@@ -357,7 +355,7 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                 titulo: 'Sagrado<br>Puzzle',
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
-                arbolTitulo: 'Árbol-chan',
+                arbolTitulo: 'Don Árbol',
                 arbolTexto: 'En cada código tendrás un reto para <span style="color:#178a2c;font-weight:bold;">superar</span> y cuando lo hagas obtendrás la siguiente pista, busca todas las pistas para poder encontrar el caché',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
@@ -385,20 +383,20 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
             arbolChanTexto.innerHTML = textos[lang].arbolTexto;
             btnContinuar.textContent = textos[lang].continuar;
             // Actualiza la segunda secuencia de Árbol-chan
-            arbolChanTitulo2.textContent = "Abuelo-sama";
+            arbolChanTitulo2.textContent = "Abuelox";
             if (lang === 'en') {
-                arbolChanTexto2.innerHTML = "Run and not only win, but also <span style='color:#178a2c;font-weight:bold;'>prove</span> that no one can catch you";
+                arbolChanTexto2.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
             } else {
-                arbolChanTexto2.innerHTML = "JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad";
+                arbolChanTexto2.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
             }
             btnContinuar2.textContent = textos[lang].continuar;
             // Actualiza la secuencia 13122
-            arbolChanTitulo13122.textContent = lang === 'en' ? 'GymBro-Shi' : 'GymBro-Shi';
-            arbolChanTexto13122.innerHTML = "¿Quién te crees para pensar que eres tan Gymbro como yo?";
+            arbolChanTitulo13122.textContent = lang === 'en' ? 'Gym Bro' : 'Gym Bro';
+            arbolChanTexto13122.innerHTML = "Bro... ¿de verdad crees que puedes tener la pista así de fácil? Ni tu sombra tiene masa muscular.";
             btnContinuar13122.textContent = textos[lang].continuar;
             // Actualiza la secuencia 98142
-            arbolChanTitulo98142.textContent = "Abuelo-sama";
-            arbolChanTexto98142.innerHTML = "JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad";
+            arbolChanTitulo98142.textContent = "Abuelox";
+            arbolChanTexto98142.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
             btnContinuar98142.textContent = textos[lang].continuar;
             currentLang = lang;
         }
@@ -531,7 +529,7 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                         arbolChanContainer2.style.opacity = 1;
                         arbolChanContainer2.style.pointerEvents = 'auto';
                         // Cambia el texto aquí también por si el usuario no cambió el idioma antes
-                        arbolChanTexto2.innerHTML = "JA JA JA . Si quieres la próxima pista, te tendrás que <span style='color:#178a2c;font-weight:bold;'>atrever</span> a ganarme en mi propio juego, aunque no te veo las agallas ni tampoco la velocidad";
+                        arbolChanTexto2.innerHTML = "JA JA JA JA JA Si quieres la siguiente pista tendrás que demostrar que eres más rápido que yo...pero cuidado, me tomé un tinto cargado, olvidé dónde vivo...y no me interesa regresar.";
                         setTimeout(() => {
                             arbolChanImg2.classList.add('visible');
                         }, 800);
@@ -580,7 +578,7 @@ Pero comprenderá usted que, en su noble búsqueda por la búsqueda caché, los 
                 if (currentLang === 'en') {
                     arbolChanTexto.innerHTML = "If you want the next clue, you'll have to <span style='color:#178a2c;font-weight:bold;'>prove</span> you're better than me at Ping-Pong";
                 } else {
-                    arbolChanTexto.innerHTML = "Si quieres la siguiente pista, tendrás que <span style='color:#178a2c;font-weight:bold;'>demostrarme</span> que eres mejor que yo en Ping-Pong";
+                    arbolChanTexto.innerHTML = "Le concederé una ocasión justa. Resista quince segundos de mis embates y anote 5 puntos durante los breves momentos en que no defiendo...Solo entonces, daremos este duelo por resuelto entre ser humano y planta con dignidad.";
                 }
                 arbolChanDialogStep = 1;
             } else {
