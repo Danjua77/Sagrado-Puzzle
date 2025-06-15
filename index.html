@@ -288,15 +288,6 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
             <button class="btn-continuar" id="btn-continuar">Continuar</button>
         </div>
     </div>
-    <!-- GYMBRO CONTAINER (inicialmente oculto) -->
-    <div class="arbol-chan-container" id="gymbro-container" style="opacity:0; pointer-events:none;">
-        <div class="arbol-chan-content">
-            <img src="gymbro.png" class="arbol-chan-img" id="gymbro-img" alt="Gym Bro" />
-            <div class="arbol-chan-titulo" id="gymbro-titulo">Gym Bro</div>
-            <div class="arbol-chan-texto" id="gymbro-texto">Bro... ¿de verdad crees que puedes tener la pista así de fácil?<br>Ni tu sombra tiene masa muscular.</div>
-            <button class="btn-continuar" id="btn-gymbro-continuar">Continuar</button>
-        </div>
-    </div>
     <script>
         // Interacción para inputs: foco automático y estilos
         const inputs = document.querySelectorAll('.codigo-input');
@@ -380,17 +371,6 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
         arbolChanContainer.style.pointerEvents = 'none';
         arbolChanImg.classList.remove('visible');
 
-        // --- GYMBRO LOGIC ---
-        const gymbroContainer = document.getElementById('gymbro-container');
-        const gymbroImg = document.getElementById('gymbro-img');
-        const gymbroTitulo = document.getElementById('gymbro-titulo');
-        const gymbroTexto = document.getElementById('gymbro-texto');
-        const btnGymbroContinuar = document.getElementById('btn-gymbro-continuar');
-        gymbroContainer.style.opacity = 0;
-        gymbroContainer.style.pointerEvents = 'none';
-        gymbroImg.classList.remove('visible');
-        let gymbroDialogStep = 0;
-
         document.getElementById('btn-aceptar').addEventListener('click', function() {
             const code = Array.from(document.querySelectorAll('.codigo-input')).map(i => i.value).join('');
             if (code === '18122') {
@@ -412,25 +392,6 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         }, 800);
                     }, 1200);
                 }, 1200);
-            } else if (code === '13777') {
-                container.classList.add('fade-out');
-                setTimeout(() => {
-                    container.style.backgroundImage = "url('Fondo texto.jpg')";
-                    container.classList.remove('fade-out');
-                    container.classList.add('fade-in');
-                    Array.from(container.children).forEach(child => {
-                        if (!child.classList.contains('arbol-chan-container')) {
-                            child.classList.add('hidden');
-                        }
-                    });
-                    setTimeout(() => {
-                        gymbroContainer.style.opacity = 1;
-                        gymbroContainer.style.pointerEvents = 'auto';
-                        setTimeout(() => {
-                            gymbroImg.classList.add('visible');
-                        }, 800);
-                    }, 1200);
-                }, 1200);
             } else {
                 container.classList.remove('shake');
                 void container.offsetWidth;
@@ -441,6 +402,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
             }
         });
 
+        let arbolChanDialogStep = 0;
         btnContinuar.addEventListener('click', function() {
             if (arbolChanDialogStep === 0) {
                 if (currentLang === 'en') {
@@ -1031,15 +993,6 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
             }
         });
 
-        btnGymbroContinuar.addEventListener('click', function() {
-            if (gymbroDialogStep === 0) {
-                gymbroTexto.innerHTML = "Demuestra que eres un real Bro™:<br>aguanta estas pesas sin derramar una sola gota de sudor el tiempo que sea necesario.";
-                gymbroDialogStep = 1;
-            } else {
-                // Aquí puedes agregar la lógica para el siguiente reto o recargar, según tu flujo
-                location.reload();
-            }
-        });
     </script>
 </body>
 </html>
