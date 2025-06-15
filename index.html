@@ -701,13 +701,14 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         ctx.textBaseline = "top";
                         // Color azul claro durante la quietud, blanco normal
                         let color = aiFrozen ? "#b7d3e6" : "#fff";
+                        // Sombra: azul oscuro si congelada, verde normal si no
+                        ctx.shadowColor = aiFrozen ? "#1a237e" : "#178a2c";
+                        ctx.shadowBlur = 8;
                         let timerValue = aiFrozen ? aiFreezeTimer : aiTimer;
                         let timerText = timerValue.toFixed(1);
                         const timerX = ai.x + ai.w/2;
                         const timerY = ai.y + ai.h + rel(0.012, 'h');
                         ctx.fillStyle = color;
-                        ctx.shadowColor = "#178a2c";
-                        ctx.shadowBlur = 8;
                         ctx.fillText(timerText, timerX, timerY);
                         ctx.restore();
                     }
@@ -715,7 +716,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     function drawBall() {
                         ctx.save();
                         ctx.fillStyle = "#fff";
-                        ctx.shadowColor = "#ffe44d";
+                        ctx.shadowColor = "#ffe44d"; // estela original amarilla
                         ctx.shadowBlur = 8;
                         ctx.beginPath();
                         ctx.arc(ball.x + ball.size/2, ball.y + ball.size/2, ball.size/2, 0, 2*Math.PI);
