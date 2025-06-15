@@ -538,6 +538,9 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     // --- Agrega la imagen de la raqueta IA ---
                     const tronkImg = new Image();
                     tronkImg.src = 'tronk.png';
+                    // --- Imagen alternativa para la IA paralizada ---
+                    const tronkquiImg = new Image();
+                    tronkquiImg.src = 'tronkqui.png';
 
                     // --- Proporción 9:16, tablero horizontal ---
                     function getGameSize() {
@@ -660,28 +663,25 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         ctx.save();
                         if (!isPlayer) {
                             // --- Dibuja la imagen "tronk.png" como raqueta de la IA ---
-                            // Si está congelada, aplica temblor y glitch de color centrado
-                            let dx = 0, dy = 0;
+                            // Si está congelada, cambia a "tronkqui.png"
                             if (aiFrozen) {
-                                const t = Date.now() % 320;
-                                // Rango de desplazamiento reducido: -3 a +3 px
-                                if (t < 40)      { dx = -3; dy =  2; }
-                                else if (t < 80) { dx =  2; dy = -2; }
-                                else if (t < 120){ dx = -2; dy =  3; }
-                                else if (t < 160){ dx =  2; dy = -3; }
-                                else if (t < 200){ dx = -2; dy =  2; }
-                                else if (t < 240){ dx =  3; dy = -2; }
-                                else if (t < 280){ dx = -1; dy =  2; }
-                                else             { dx =  1; dy = -2; }
-                                ctx.translate(dx, dy);
-                            }
-                            // Dibuja la imagen centrada en la raqueta
-                            if (tronkImg.complete) {
-                                ctx.drawImage(tronkImg, p.x, p.y, p.w, p.h);
+                                // Dibuja la imagen alternativa para la IA paralizada
+                                if (tronkquiImg.complete) {
+                                    ctx.drawImage(tronkquiImg, p.x, p.y, p.w, p.h);
+                                } else {
+                                    tronkquiImg.onload = () => {
+                                        ctx.drawImage(tronkquiImg, p.x, p.y, p.w, p.h);
+                                    };
+                                }
                             } else {
-                                tronkImg.onload = () => {
+                                // Imagen normal
+                                if (tronkImg.complete) {
                                     ctx.drawImage(tronkImg, p.x, p.y, p.w, p.h);
-                                };
+                                } else {
+                                    tronkImg.onload = () => {
+                                        ctx.drawImage(tronkImg, p.x, p.y, p.w, p.h);
+                                    };
+                                }
                             }
                         } else {
                             ctx.fillStyle = "#ffe44d";
@@ -699,17 +699,8 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         ctx.font = `bold ${rel(0.06, 'w')}px 'Montserrat', Arial, sans-serif`;
                         ctx.textAlign = "center";
                         ctx.textBaseline = "top";
-                        // --- Glitch de color para el cronómetro si está congelado ---
-                        let color;
-                        if (aiFrozen) {
-                            const glitchColors = [
-                                "#ff0055", "#00ffe7", "#fff600", "#ff00ff", "#00ff00", "#ffffff", "#00aaff", "#ff8800"
-                            ];
-                            let colorIdx = Math.floor((Date.now() / 45) % glitchColors.length);
-                            color = glitchColors[colorIdx];
-                        } else {
-                            color = "#fff";
-                        }
+                        // --- Color fijo, sin glitch ---
+                        let color = "#fff";
                         let timerValue = aiFrozen ? aiFreezeTimer : aiTimer;
                         let timerText = timerValue.toFixed(1);
                         const timerX = ai.x + ai.w/2;
