@@ -699,8 +699,8 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         ctx.font = `bold ${rel(0.06, 'w')}px 'Montserrat', Arial, sans-serif`;
                         ctx.textAlign = "center";
                         ctx.textBaseline = "top";
-                        // --- Color fijo, sin glitch ---
-                        let color = "#fff";
+                        // Color azul claro durante la quietud, blanco normal
+                        let color = aiFrozen ? "#b7d3e6" : "#fff";
                         let timerValue = aiFrozen ? aiFreezeTimer : aiTimer;
                         let timerText = timerValue.toFixed(1);
                         const timerX = ai.x + ai.w/2;
