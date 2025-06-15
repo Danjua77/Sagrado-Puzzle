@@ -281,8 +281,8 @@
     </div>
     <div class="arbol-chan-container" id="arbol-chan-container">
         <div class="arbol-chan-content">
-            <img src="DonArbol.png" class="arbol-chan-img" id="arbol-chan-img" alt="Don Árbol" />
-            <div class="arbol-chan-titulo" id="arbol-chan-titulo">Don Árbol</div>
+            <img src="DonArbol.png" class="arbol-chan-img" id="arbol-chan-img" alt="Don Árbolito" />
+            <div class="arbol-chan-titulo" id="arbol-chan-titulo">Don Árbolito</div>
             <div class="arbol-chan-texto" id="arbol-chan-texto">Estimado Usuario, debo confesar que me resulta lamentable negarle la pista sin más…
 Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, los logros deben ser alcanzados con honor y elegancia.</div>
             <button class="btn-continuar" id="btn-continuar">Continuar</button>
@@ -325,7 +325,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 titulo: 'Sagrado<br>Puzzle',
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
-                arbolTitulo: 'Don Árbol',
+                arbolTitulo: 'Don Árbolito',
                 arbolTexto: 'Estimado Usuario, debo confesar que me resulta lamentable negarle la pista sin más…<br>Pero comprenderá usted que, en su noble búsqueda por la búsqueda del caché, los logros deben ser alcanzados con honor y elegancia.',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
@@ -336,7 +336,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 titulo: 'Sagrado<br>Puzzle',
                 instrucciones: 'Search for the clues and enter the<br>secret codes',
                 aceptar: 'Accept',
-                arbolTitulo: 'Don Árbol',
+                arbolTitulo: 'Don Árbolito',
                 arbolTexto: 'Dear User, I must confess that I regret denying you the clue just like that…<br>But you will understand that, in your noble quest for the cache, achievements must be reached with honor and elegance.',
                 continuar: 'Continue',
                 mesa: 'Welcome to the sacred table!',
@@ -431,6 +431,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                             background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
                             background-size: cover;
                             position: fixed; top: 0; left: 0;
+                            flex-direction: column;
                         }
                         #pong-canvas {
                             background: transparent;
@@ -445,6 +446,19 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                             border-radius: 18px;
                             box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
                             touch-action: none;
+                        }
+                        #pong-ost-label {
+                            margin-top: 18px;
+                            color: #fff;
+                            font-family: 'Montserrat', Arial, sans-serif;
+                            font-size: 1.1rem;
+                            font-weight: bold;
+                            text-shadow: 0 2px 8px #000, 0 0 8px #178a2c;
+                            z-index: 20;
+                            pointer-events: none;
+                            user-select: none;
+                            letter-spacing: 0.5px;
+                            text-align: center;
                         }
                         #pong-end {
                             position: absolute;
@@ -511,6 +525,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     </style>
                     <div id="pong-container">
                         <canvas id="pong-canvas"></canvas>
+                        <div id="pong-ost-label">OST: Vampire Killer - Castlevania</div>
                     </div>
                 `;
                 // --- REINSERTAR EL AUDIO EN EL NUEVO BODY ---
@@ -895,6 +910,9 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
 
                     function showEndScreen(playerWon) {
                         const pongContainer = document.getElementById('pong-container');
+                        // Elimina el texto OST si existe
+                        const ostLabel = document.getElementById('pong-ost-label');
+                        if (ostLabel) ostLabel.remove();
                         let html = '';
                         const lang = currentLang || 'es';
 
@@ -903,8 +921,8 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                             html = `
                                 <div id="pong-end" style="background: #fff; color: #178a2c; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; font-family: 'Montserrat', Arial, sans-serif; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;">
                                     <div class="arbol-chan-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; max-width: 430px; max-height: 932px; min-width: 320px; min-height: 568px; margin: 0 auto; background: url('Fondo texto.jpg') no-repeat center center; background-size: cover; border-radius: 20px; box-shadow: 0 0 20px 2px rgba(0,0,0,0.2); position: relative;">
-                                        <img src="DonArbol.png" class="arbol-chan-img visible" alt="Don Árbol" style="width: 60vw; max-width: 220px; min-width: 120px; margin-top: 0; opacity: 1; transform: translateY(0); transition: opacity 1.2s, transform 1.2s cubic-bezier(.77,0,.18,1);" />
-                                        <div class="arbol-chan-titulo" style="font-family: 'Montserrat', Arial, sans-serif; color: #178a2c; font-size: 2.5rem; font-weight: bold; margin-top: 1.2rem; margin-bottom: 0.7rem; text-align: center; text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;">Don Árbol</div>
+                                        <img src="DonArbol.png" class="arbol-chan-img visible" alt="Don Árbolito" style="width: 60vw; max-width: 220px; min-width: 120px; margin-top: 0; opacity: 1; transform: translateY(0); transition: opacity 1.2s, transform 1.2s cubic-bezier(.77,0,.18,1);" />
+                                        <div class="arbol-chan-titulo" style="font-family: 'Montserrat', Arial, sans-serif; color: #178a2c; font-size: 2.5rem; font-weight: bold; margin-top: 1.2rem; margin-bottom: 0.7rem; text-align: center; text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;">Don Árbolito</div>
                                         <div class="arbol-chan-texto" style="color: #fff; font-family: 'Roboto', Arial, sans-serif; font-size: 1.2rem; margin-top: 0.5rem; margin-bottom: 1.2rem; text-align: center; text-shadow: 0 2px 8px #000;">
                                             ${
                                                 lang === 'en'
@@ -923,7 +941,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         } else {
                             html = `
                                 <div id="pong-end">
-                                    <img src="DonArbol.png" class="arbol-img" alt="Don Árbol" />
+                                    <img src="DonArbol.png" class="arbol-img" alt="Don Árbolito" />
                                     <h2>${lang === 'en' ? 'How unfortunate...' : 'Qué desafortunado...'}</h2>
                                     <button id="pong-retry">${textos[lang].continuar}</button>
                                 </div>
