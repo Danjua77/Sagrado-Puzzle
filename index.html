@@ -704,7 +704,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     }
                     topLineY = baseOffset + offsetAnim;
                     bottomLineY = canvas.height - baseOffset + offsetAnim;
-                    ctx.strokeStyle = '#178a2c';
+                    ctx.strokeStyle = '#e53935'; // Cambiado a rojo
                     ctx.lineWidth = 6;
                     ctx.beginPath();
                     ctx.moveTo(0, topLineY);
@@ -739,7 +739,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     if (!gameStarted) return;
                     ctx.textAlign = 'center';
                     const timerText = inFinalMilliseconds ? (finalMilliseconds / 1000).toFixed(1) + 's' : gameTimer + 's';
-                    ctx.fillStyle = '#fff';
+                    ctx.fillStyle = '#178a2c'; // Cambiado a verde
                     ctx.font = 'bold 28px Montserrat, Arial, sans-serif';
                     ctx.shadowColor = "#178a2c";
                     ctx.shadowBlur = 8;
@@ -749,7 +749,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     activeBonuses.forEach((b, index) => {
                       const alpha = 1 - (performance.now() - b.start) / 1500;
                       ctx.globalAlpha = alpha;
-                      ctx.fillStyle = '#ffe44d';
+                      ctx.fillStyle = '#e53935'; // Cambiado a rojo
                       ctx.font = 'bold 20px Montserrat, Arial, sans-serif';
                       const offsetX = 30 + index * 30 + 3;
                       ctx.fillText('+5', canvas.width / 2 + offsetX, 42);
