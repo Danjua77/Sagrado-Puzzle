@@ -470,49 +470,65 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 let oldAudio = document.getElementById('pong-audio');
                 if (oldAudio) oldAudio.remove();
 
-                // Reemplaza el body por el minijuego Flappy Touch
+                // Reemplaza el body por el minijuego Flappy Touch con estética adaptada
                 document.body.innerHTML = `
                     <style>
                         body {
                           margin: 0;
-                          background: #70c5ce;
+                          background: url('fonde mesa.jpg') no-repeat center center, linear-gradient(180deg, #e8f5e9 0%, #178a2c 100%);
+                          background-size: cover;
                           display: flex;
                           justify-content: center;
                           align-items: center;
                           height: 100vh;
                           overflow: hidden;
                         }
-                        canvas {
-                          background: #fff;
-                          border: 2px solid #000;
+                        #flappy-container {
+                          width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center;
+                          flex-direction: column;
+                          position: fixed; top: 0; left: 0;
                         }
-                        #game-over {
+                        #flappy-canvas {
+                          background: transparent;
+                          display: block;
+                          margin: auto;
+                          width: 92vw;
+                          height: 70vh;
+                          max-width: 370px;
+                          max-height: 620px;
+                          aspect-ratio: 9/16;
+                          border-radius: 18px;
+                          box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
+                          touch-action: none;
+                        }
+                        #flappy-end {
                           position: absolute;
-                          background: rgba(0,0,0,0.7);
-                          color: white;
-                          padding: 20px 30px;
-                          border-radius: 12px;
-                          font-size: 24px;
-                          text-align: center;
-                          display: none;
+                          top: 0; left: 0; width: 100vw; height: 100vh;
+                          background: url('Fondo texto.jpg') no-repeat center center;
+                          background-size: cover;
+                          color: #178a2c;
+                          display: flex;
+                          flex-direction: column;
+                          align-items: center;
+                          justify-content: center;
                           z-index: 10;
-                        }
-                        #retry-btn, #flappy-next-btn {
-                          margin-top: 10px;
-                          padding: 10px 20px;
-                          background: #178a2c;
-                          color: white;
-                          border: none;
-                          border-radius: 8px;
-                          cursor: pointer;
-                          font-size: 18px;
                           font-family: 'Montserrat', Arial, sans-serif;
                         }
-                        #flappy-next-btn {
-                          background: #ffe44d;
+                        #flappy-end .arbol-img {
+                          width: 38vw;
+                          max-width: 180px;
+                          min-width: 90px;
+                          margin-top: 2.5rem;
+                          margin-bottom: 1.2rem;
+                          filter: drop-shadow(0 4px 16px #fff);
+                        }
+                        #flappy-end h2 {
+                          font-size: 2.2rem;
+                          margin-bottom: 2rem;
                           color: #178a2c;
-                          font-weight: bold;
-                          margin-top: 22px;
+                          text-align: center;
+                          text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;
+                          margin-top: 0;
                         }
                         #flappy-pista-img {
                           margin-top: 18px;
@@ -529,12 +545,46 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                           overflow: hidden;
                           box-shadow: 0 2px 12px #178a2c33;
                         }
+                        #flappy-end button, #retry-btn, #flappy-next-btn {
+                          font-size: 1.3rem;
+                          background: #178a2c;
+                          color: #fff;
+                          border: 2px solid #fff;
+                          border-radius: 8px;
+                          padding: 0.7rem 2.5rem;
+                          font-weight: bold;
+                          font-family: 'Montserrat', Arial, sans-serif;
+                          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+                          cursor: pointer;
+                          margin-top: 1.5rem;
+                          margin-bottom: 2rem;
+                          transition: background 0.2s, border 0.2s;
+                        }
+                        #flappy-end button:active, #retry-btn:active, #flappy-next-btn:active {
+                          background: #176d13;
+                          border: 2px solid #ffe44d;
+                        }
+                        #flappy-timer {
+                          margin-top: 18px;
+                          color: #fff;
+                          font-family: 'Montserrat', Arial, sans-serif;
+                          font-size: 1.1rem;
+                          font-weight: bold;
+                          text-shadow: 0 2px 8px #000, 0 0 8px #178a2c;
+                          z-index: 20;
+                          pointer-events: none;
+                          user-select: none;
+                          letter-spacing: 0.5px;
+                          text-align: center;
+                        }
                     </style>
-                    <div id="game-over">
-                      <div id="game-over-message"></div>
-                      <button id="retry-btn"></button>
+                    <div id="flappy-container">
+                      <canvas id="flappy-canvas" width="320" height="480"></canvas>
+                      <div id="flappy-timer"></div>
                     </div>
-                    <canvas id="game" width="320" height="480"></canvas>
+                    <div id="flappy-end" style="display:none;">
+                      <div id="flappy-end-content"></div>
+                    </div>
                 `;
 
                 // Traducción de textos
@@ -556,13 +606,13 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   }
                 };
 
-                // Lógica Flappy Touch adaptada
+                // Lógica Flappy Touch adaptada (canvas y colores igual que Pong)
                 (function() {
-                  const canvas = document.getElementById('game');
+                  const canvas = document.getElementById('flappy-canvas');
                   const ctx = canvas.getContext('2d');
-                  const gameOverEl = document.getElementById('game-over');
-                  const gameOverMessage = document.getElementById('game-over-message');
-                  const retryBtn = document.getElementById('retry-btn');
+                  const flappyEnd = document.getElementById('flappy-end');
+                  const flappyEndContent = document.getElementById('flappy-end-content');
+                  const flappyTimer = document.getElementById('flappy-timer');
 
                   let birdY, velocity, gameStarted, countdown, lastPhaseTime, animationStartTime, repetitions;
                   let currentTargetIndex, currentOffset, time, gameTimer, gameTimerInterval;
@@ -592,7 +642,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     activeBonuses = [];
                     gameOver = false;
                     phaseAnimationActive = true;
-                    gameOverEl.style.display = 'none';
+                    flappyEnd.style.display = 'none';
                     clearInterval(gameTimerInterval);
                     startCountdown();
                     update();
@@ -616,19 +666,19 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   }
 
                   function drawBird() {
-                    ctx.strokeStyle = 'gold';
+                    ctx.strokeStyle = '#ffe44d';
                     ctx.lineWidth = 4;
-                    ctx.fillStyle = 'gold';
-                    const radius = 6;
+                    ctx.fillStyle = '#ffe44d';
+                    const radius = 12;
                     ctx.beginPath();
-                    ctx.arc(birdX - 12, birdY, radius, 0, Math.PI * 2);
+                    ctx.arc(birdX - 18, birdY, radius, 0, Math.PI * 2);
                     ctx.fill();
                     ctx.beginPath();
-                    ctx.arc(birdX + 12, birdY, radius, 0, Math.PI * 2);
+                    ctx.arc(birdX + 18, birdY, radius, 0, Math.PI * 2);
                     ctx.fill();
                     ctx.beginPath();
-                    ctx.moveTo(birdX - 12, birdY);
-                    ctx.lineTo(birdX + 12, birdY);
+                    ctx.moveTo(birdX - 18, birdY);
+                    ctx.lineTo(birdX + 18, birdY);
                     ctx.stroke();
                   }
 
@@ -654,8 +704,8 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     }
                     topLineY = baseOffset + offsetAnim;
                     bottomLineY = canvas.height - baseOffset + offsetAnim;
-                    ctx.strokeStyle = 'darkred';
-                    ctx.lineWidth = 4;
+                    ctx.strokeStyle = '#178a2c';
+                    ctx.lineWidth = 6;
                     ctx.beginPath();
                     ctx.moveTo(0, topLineY);
                     ctx.lineTo(canvas.width, topLineY);
@@ -667,35 +717,40 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   }
 
                   function checkCollision() {
-                    const halfHeight = 6;
+                    const halfHeight = 12;
                     if (birdY - halfHeight < topLineY || birdY + halfHeight > bottomLineY) {
                       gameOver = true;
-                      gameOverMessage.textContent = texts[lang].lose;
-                      retryBtn.textContent = texts[lang].retry;
-                      gameOverEl.style.display = 'block';
+                      showLoseScreen();
                     }
                   }
 
                   function drawCountdown() {
-                    ctx.fillStyle = 'black';
-                    ctx.font = 'bold 64px sans-serif';
+                    ctx.fillStyle = '#178a2c';
+                    ctx.font = 'bold 64px Montserrat, Arial, sans-serif';
                     ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.shadowColor = "#fff";
+                    ctx.shadowBlur = 8;
                     ctx.fillText(countdown, canvas.width / 2, canvas.height / 2);
+                    ctx.shadowBlur = 0;
                   }
 
                   function drawGameTimer() {
                     if (!gameStarted) return;
                     ctx.textAlign = 'center';
                     const timerText = inFinalMilliseconds ? (finalMilliseconds / 1000).toFixed(1) + 's' : gameTimer + 's';
-                    ctx.fillStyle = 'black';
-                    ctx.font = 'bold 28px sans-serif';
+                    ctx.fillStyle = '#fff';
+                    ctx.font = 'bold 28px Montserrat, Arial, sans-serif';
+                    ctx.shadowColor = "#178a2c";
+                    ctx.shadowBlur = 8;
                     ctx.fillText(timerText, canvas.width / 2, 42);
+                    ctx.shadowBlur = 0;
                     activeBonuses = activeBonuses.filter(b => performance.now() - b.start < 1500);
                     activeBonuses.forEach((b, index) => {
                       const alpha = 1 - (performance.now() - b.start) / 1500;
                       ctx.globalAlpha = alpha;
-                      ctx.fillStyle = 'red';
-                      ctx.font = 'bold 20px sans-serif';
+                      ctx.fillStyle = '#ffe44d';
+                      ctx.font = 'bold 20px Montserrat, Arial, sans-serif';
                       const offsetX = 30 + index * 30 + 3;
                       ctx.fillText('+5', canvas.width / 2 + offsetX, 42);
                       ctx.globalAlpha = 1;
@@ -743,7 +798,6 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         if (finalMilliseconds <= 0) {
                           clearInterval(gameTimerInterval);
                           gameOver = true;
-                          gameOverMessage.textContent = texts[lang].win;
                           showWinScreen();
                         }
                         return;
@@ -758,30 +812,38 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                       if (gameTimer <= 0) {
                         clearInterval(gameTimerInterval);
                         gameOver = true;
-                        gameOverMessage.textContent = texts[lang].win;
                         showWinScreen();
                       }
                     }, 1000);
                   }
 
                   function showWinScreen() {
-                    // Muestra la pista y botón continuar
-                    gameOverEl.innerHTML = `
+                    flappyEnd.style.display = 'flex';
+                    flappyEndContent.innerHTML = `
                       <div style="font-size:1.3rem;margin-bottom:0.7rem;">${texts[lang].next}</div>
                       <div id="flappy-pista-img">
                         <img src="13777.jpg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
                       </div>
                       <button id="flappy-next-btn">${texts[lang].continue}</button>
                     `;
-                    gameOverEl.style.display = 'block';
                     document.getElementById('flappy-next-btn').onclick = function() {
+                      location.reload();
+                    };
+                  }
+
+                  function showLoseScreen() {
+                    flappyEnd.style.display = 'flex';
+                    flappyEndContent.innerHTML = `
+                      <h2>${texts[lang].lose}</h2>
+                      <button id="retry-btn">${texts[lang].retry}</button>
+                    `;
+                    document.getElementById('retry-btn').onclick = function() {
                       location.reload();
                     };
                   }
 
                   document.body.addEventListener('touchstart', flap);
                   document.body.addEventListener('mousedown', flap);
-                  retryBtn.addEventListener('click', resetGame);
 
                   function startCountdown() {
                     const countdownInterval = setInterval(() => {
