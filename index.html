@@ -288,6 +288,15 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
             <button class="btn-continuar" id="btn-continuar">Continuar</button>
         </div>
     </div>
+    <!-- GYMBRO CONTAINER -->
+    <div class="arbol-chan-container" id="gymbro-container" style="z-index:11;">
+        <div class="arbol-chan-content">
+            <img src="gymbro.png" class="arbol-chan-img" id="gymbro-img" alt="Gym Bro" />
+            <div class="arbol-chan-titulo" id="gymbro-titulo">Gym Bro</div>
+            <div class="arbol-chan-texto" id="gymbro-texto"></div>
+            <button class="btn-continuar" id="gymbro-continuar"></button>
+        </div>
+    </div>
     <script>
         // Interacción para inputs: foco automático y estilos
         const inputs = document.querySelectorAll('.codigo-input');
@@ -317,9 +326,12 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
         const btnAceptar = document.getElementById('btn-aceptar');
         const arbolChanTitulo = document.getElementById('arbol-chan-titulo');
         const arbolChanTexto = document.getElementById('arbol-chan-texto');
+        const gymbroTitulo = document.getElementById('gymbro-titulo');
+        const gymbroTexto = document.getElementById('gymbro-texto');
+        const gymbroContinuar = document.getElementById('gymbro-continuar');
         let currentLang = idiomaSelect.value;
 
-        // Textos en ambos idiomas, incluyendo Arbol-chan y la pantalla de mesa
+        // Textos en ambos idiomas, incluyendo Gym Bro
         const textos = {
             es: {
                 titulo: 'Sagrado<br>Puzzle',
@@ -330,7 +342,11 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
-                pongLose: '¡Perdiste!<br>Inténtalo de nuevo'
+                pongLose: '¡Perdiste!<br>Inténtalo de nuevo',
+                gymbroTitulo: 'Gym Bro',
+                gymbro1: 'Bro… ¿De verdad crees que puedes tener la pista así de fácil? He visto sombras con más masa muscular que tú.',
+                gymbro2: 'Demuestra que eres un real Bro™: aguanta estas pesas sin derramar una sola gota de sudor el tiempo que sea necesario.',
+                gymbroContinuar: 'Continuar',
             },
             en: {
                 titulo: 'Sagrado<br>Puzzle',
@@ -341,7 +357,11 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 continuar: 'Continue',
                 mesa: 'Welcome to the sacred table!',
                 pongWin: 'Next clue',
-                pongLose: 'You lost!<br>Try again'
+                pongLose: 'You lost!<br>Try again',
+                gymbroTitulo: 'Gym Bro',
+                gymbro1: 'Bro... Do you really think you can get the clue that easy? I\'ve seen shadows with more muscle mass than you.',
+                gymbro2: 'Show you\'re a real Bro™: hold these weights without breaking a sweat for as long as it takes.',
+                gymbroContinuar: 'Continue',
             }
         };
 
@@ -352,6 +372,14 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
             arbolChanTitulo.textContent = textos[lang].arbolTitulo;
             arbolChanTexto.innerHTML = textos[lang].arbolTexto;
             btnContinuar.textContent = textos[lang].continuar;
+            gymbroTitulo.textContent = textos[lang].gymbroTitulo;
+            gymbroContinuar.textContent = textos[lang].gymbroContinuar;
+            // Si está visible, actualiza el texto actual
+            if (gymbroDialogStep === 0) {
+                gymbroTexto.textContent = textos[lang].gymbro1;
+            } else if (gymbroDialogStep === 1) {
+                gymbroTexto.textContent = textos[lang].gymbro2;
+            }
             currentLang = lang;
         }
 
@@ -367,9 +395,11 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
         const arbolChanContainer = document.getElementById('arbol-chan-container');
         const arbolChanImg = document.getElementById('arbol-chan-img');
         const btnContinuar = document.getElementById('btn-continuar');
-        arbolChanContainer.style.opacity = 0;
-        arbolChanContainer.style.pointerEvents = 'none';
-        arbolChanImg.classList.remove('visible');
+        const gymbroContainer = document.getElementById('gymbro-container');
+        const gymbroImg = document.getElementById('gymbro-img');
+        gymbroContainer.style.opacity = 0;
+        gymbroContainer.style.pointerEvents = 'none';
+        gymbroImg.classList.remove('visible');
 
         document.getElementById('btn-aceptar').addEventListener('click', function() {
             const code = Array.from(document.querySelectorAll('.codigo-input')).map(i => i.value).join('');
@@ -392,6 +422,32 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                         }, 800);
                     }, 1200);
                 }, 1200);
+            } else if (code === '13777') {
+                // --- GYMBRO SEQUENCE ---
+                // Oculta todo menos el contenedor de Gym Bro
+                container.classList.add('fade-out');
+                setTimeout(() => {
+                    container.style.backgroundImage = "url('Fondo texto.jpg')";
+                    container.classList.remove('fade-out');
+                    container.classList.add('fade-in');
+                    Array.from(container.children).forEach(child => {
+                        if (!child.classList.contains('arbol-chan-container')) {
+                            child.classList.add('hidden');
+                        }
+                    });
+                    setTimeout(() => {
+                        // Configura textos e imagen
+                        gymbroTitulo.textContent = textos[currentLang].gymbroTitulo;
+                        gymbroTexto.textContent = textos[currentLang].gymbro1;
+                        gymbroContinuar.textContent = textos[currentLang].gymbroContinuar;
+                        gymbroContainer.style.opacity = 1;
+                        gymbroContainer.style.pointerEvents = 'auto';
+                        setTimeout(() => {
+                            gymbroImg.classList.add('visible');
+                        }, 800);
+                    }, 1200);
+                }, 1200);
+                gymbroDialogStep = 0;
             } else {
                 container.classList.remove('shake');
                 void container.offsetWidth;
@@ -399,6 +455,18 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 setTimeout(() => {
                     container.classList.remove('shake');
                 }, 450);
+            }
+        });
+
+        // Secuencia de diálogos Gym Bro
+        let gymbroDialogStep = 0;
+        gymbroContinuar.addEventListener('click', function() {
+            if (gymbroDialogStep === 0) {
+                gymbroTexto.textContent = textos[currentLang].gymbro2;
+                gymbroDialogStep = 1;
+            } else {
+                // Aquí puedes agregar la lógica para el reto de Gym Bro (por ahora solo recarga)
+                location.reload();
             }
         });
 
