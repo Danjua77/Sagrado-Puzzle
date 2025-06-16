@@ -501,6 +501,19 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                           box-shadow: 0 0 32px 4px #178a2c88, 0 0 0 4px #178a2c;
                           touch-action: none;
                         }
+                        #flappy-ost-label {
+                          margin-top: 18px;
+                          color: #fff;
+                          font-family: 'Montserrat', Arial, sans-serif;
+                          font-size: 1.1rem;
+                          font-weight: bold;
+                          text-shadow: 0 2px 8px #000, 0 0 8px #178a2c;
+                          z-index: 20;
+                          pointer-events: none;
+                          user-select: none;
+                          letter-spacing: 0.5px;
+                          text-align: center;
+                        }
                         #flappy-end {
                           position: absolute;
                           top: 0; left: 0; width: 100vw; height: 100vh;
@@ -578,9 +591,11 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                           text-align: center;
                         }
                     </style>
+                    <audio id="gymbro-audio" src="gymtime.mp3" autoplay loop style="display:none"></audio>
                     <div id="flappy-container">
                       <canvas id="flappy-canvas" width="320" height="480"></canvas>
                       <div id="flappy-timer"></div>
+                      <div id="flappy-ost-label">OST: Dr. Wily's Stage Theme 1 metal version - Mega Man 2</div>
                     </div>
                     <div id="flappy-end" style="display:none;">
                       <div id="flappy-end-content"></div>
