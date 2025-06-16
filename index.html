@@ -625,6 +625,10 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   let topLineY = 0;
                   let bottomLineY = 0;
 
+                  // Cargar la imagen de las pesas
+                  const pesasImg = new window.Image();
+                  pesasImg.src = 'pesas1.png';
+
                   function resetGame() {
                     birdY = canvas.height / 2;
                     velocity = 0;
@@ -666,20 +670,18 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   }
 
                   function drawBird() {
-                    ctx.strokeStyle = '#ffe44d';
-                    ctx.lineWidth = 4;
-                    ctx.fillStyle = '#ffe44d';
+                    // Dibuja la imagen de las pesas en vez de los círculos amarillos
                     const radius = 12;
-                    ctx.beginPath();
-                    ctx.arc(birdX - 18, birdY, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.arc(birdX + 18, birdY, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.moveTo(birdX - 18, birdY);
-                    ctx.lineTo(birdX + 18, birdY);
-                    ctx.stroke();
+                    const imgW = 60; // ancho de la imagen en px
+                    const imgH = 36; // alto de la imagen en px
+                    // Centrar la imagen en birdX, birdY
+                    if (pesasImg.complete) {
+                      ctx.drawImage(pesasImg, birdX - imgW/2, birdY - imgH/2, imgW, imgH);
+                    } else {
+                      pesasImg.onload = () => {
+                        ctx.drawImage(pesasImg, birdX - imgW/2, birdY - imgH/2, imgW, imgH);
+                      };
+                    }
                   }
 
                   function drawBoundaries() {
@@ -822,7 +824,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     flappyEndContent.innerHTML = `
                       <div style="font-size:1.3rem;margin-bottom:0.7rem;">${texts[lang].next}</div>
                       <div id="flappy-pista-img">
-                        <img src="13777.jpg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
+                        <img src="silla1.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
                       </div>
                       <button id="flappy-next-btn">${texts[lang].continue}</button>
                     `;
@@ -834,8 +836,11 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   function showLoseScreen() {
                     flappyEnd.style.display = 'flex';
                     flappyEndContent.innerHTML = `
-                      <h2>${texts[lang].lose}</h2>
-                      <button id="retry-btn">${texts[lang].retry}</button>
+                      <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;">
+                        <img src="gymbro.png" alt="Gym Bro" style="width:120px;max-width:60vw;margin-bottom:1.2rem;"/>
+                        <h2 style="color:#178a2c;font-family:'Montserrat',Arial,sans-serif;font-size:2.2rem;text-align:center;text-shadow:0 2px 12px #fff,0 0 12px #178a2c,2px 2px 0 #fff;margin:0;">Bro....</h2>
+                        <button id="retry-btn" style="font-size:1.3rem;background:#178a2c;color:#fff;border:2px solid #fff;border-radius:8px;padding:0.7rem 2.5rem;font-weight:bold;font-family:'Montserrat',Arial,sans-serif;box-shadow:0 2px 8px rgba(0,0,0,0.12);cursor:pointer;margin-top:1.5rem;margin-bottom:2rem;">${texts[lang].retry}</button>
+                      </div>
                     `;
                     document.getElementById('retry-btn').onclick = function() {
                       location.reload();
@@ -1400,7 +1405,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                                 <div id="pong-end">
                                     <img src="DonArbol.png" class="arbol-img" alt="Don Árbolito" />
                                     <h2>${lang === 'en' ? 'How unfortunate...' : 'Qué desafortunado...'}</h2>
-                                    <button id="pong-retry">${textos[lang].continuar}</button>
+                                    <button id="pong-retry">${texts[lang].continuar}</button>
                                 </div>
                             `;
                         }
