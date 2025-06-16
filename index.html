@@ -338,7 +338,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
                 arbolTitulo: 'Don Árbolito',
-                arbolTexto: 'Estimado usuario, debo confesar que me resulta lamentable negarle la pista sin más…<br>Pero comprenderá usted que, en su noble búsqueda por la búsqueda del caché, los logros deben ser alcanzados con honor y elegancia.',
+                arbolTexto: 'Estimado usuario, debo confesar que me resulta lamentable negarle la pista sin más…<br>Pero comprenderá usted que, en su noble búsqueda por la búsqueda del caché, los logros deben alcanzarse con honor y elegancia.',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
@@ -671,9 +671,9 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
 
                   function drawBird() {
                     // Dibuja la imagen de las pesas en vez de los círculos amarillos
-                    const radius = 12;
-                    const imgW = 60; // ancho de la imagen en px
-                    const imgH = 36; // alto de la imagen en px
+                    // Hacemos la imagen más grande
+                    const imgW = 90; // ancho de la imagen en px (aumentado)
+                    const imgH = 54; // alto de la imagen en px (aumentado)
                     // Centrar la imagen en birdX, birdY
                     if (pesasImg.complete) {
                       ctx.drawImage(pesasImg, birdX - imgW/2, birdY - imgH/2, imgW, imgH);
