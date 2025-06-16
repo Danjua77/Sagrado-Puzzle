@@ -338,7 +338,7 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 instrucciones: 'Busca las pistas e ingresa los<br>códigos secretos',
                 aceptar: 'Aceptar',
                 arbolTitulo: 'Don Árbolito',
-                arbolTexto: 'Estimado usuario, debo confesar que me resulta lamentable negarle la pista sin más…<br>Pero comprenderá usted que, en su noble búsqueda por la búsqueda del caché, los logros deben ser alcanzados con honor y elegancia.',
+                arbolTexto: 'Estimado usuario, debo confesar que me resulta lamentable negarle la pista sin más…<br>Pero comprenderá usted que, en su noble búsqueda por la búsqueda del caché, los logros deben alcanzados con honor y elegancia.',
                 continuar: 'Continuar',
                 mesa: '¡Bienvenido a la mesa sagrada!',
                 pongWin: 'Siguiente pista',
@@ -665,21 +665,33 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                     return currentOffset;
                   }
 
+                  // Cargar la imagen de las pesas
+                  const pesasImg = new Image();
+                  pesasImg.src = 'pesas1.png';
+
                   function drawBird() {
-                    ctx.strokeStyle = '#ffe44d';
-                    ctx.lineWidth = 4;
-                    ctx.fillStyle = '#ffe44d';
-                    const radius = 12;
-                    ctx.beginPath();
-                    ctx.arc(birdX - 18, birdY, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.arc(birdX + 18, birdY, radius, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.beginPath();
-                    ctx.moveTo(birdX - 18, birdY);
-                    ctx.lineTo(birdX + 18, birdY);
-                    ctx.stroke();
+                    // Dibuja la imagen de las pesas en vez de los círculos amarillos
+                    const imgWidth = 128;   // antes: 64
+                    const imgHeight = 64;   // antes: 32
+                    if (pesasImg.complete) {
+                      ctx.drawImage(
+                        pesasImg,
+                        birdX - imgWidth / 2,
+                        birdY - imgHeight / 2,
+                        imgWidth,
+                        imgHeight
+                      );
+                    } else {
+                      pesasImg.onload = () => {
+                        ctx.drawImage(
+                          pesasImg,
+                          birdX - imgWidth / 2,
+                          birdY - imgHeight / 2,
+                          imgWidth,
+                          imgHeight
+                        );
+                      };
+                    }
                   }
 
                   function drawBoundaries() {
