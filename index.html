@@ -465,8 +465,337 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                 gymbroTexto.textContent = textos[currentLang].gymbro2;
                 gymbroDialogStep = 1;
             } else {
-                // Aquí puedes agregar la lógica para el reto de Gym Bro (por ahora solo recarga)
-                location.reload();
+                // --- INICIO DEL MINIJUEGO DE GYMBRO (FLAPPY TOUCH) ---
+                // Elimina el audio de fondo si existe
+                let oldAudio = document.getElementById('pong-audio');
+                if (oldAudio) oldAudio.remove();
+
+                // Reemplaza el body por el minijuego Flappy Touch
+                document.body.innerHTML = `
+                    <style>
+                        body {
+                          margin: 0;
+                          background: #70c5ce;
+                          display: flex;
+                          justify-content: center;
+                          align-items: center;
+                          height: 100vh;
+                          overflow: hidden;
+                        }
+                        canvas {
+                          background: #fff;
+                          border: 2px solid #000;
+                        }
+                        #game-over {
+                          position: absolute;
+                          background: rgba(0,0,0,0.7);
+                          color: white;
+                          padding: 20px 30px;
+                          border-radius: 12px;
+                          font-size: 24px;
+                          text-align: center;
+                          display: none;
+                          z-index: 10;
+                        }
+                        #retry-btn, #flappy-next-btn {
+                          margin-top: 10px;
+                          padding: 10px 20px;
+                          background: #178a2c;
+                          color: white;
+                          border: none;
+                          border-radius: 8px;
+                          cursor: pointer;
+                          font-size: 18px;
+                          font-family: 'Montserrat', Arial, sans-serif;
+                        }
+                        #flappy-next-btn {
+                          background: #ffe44d;
+                          color: #178a2c;
+                          font-weight: bold;
+                          margin-top: 22px;
+                        }
+                        #flappy-pista-img {
+                          margin-top: 18px;
+                          margin-bottom: 8px;
+                          width: 60vw;
+                          max-width: 300px;
+                          min-width: 120px;
+                          height: 180px;
+                          background: #fff;
+                          display: flex;
+                          align-items: center;
+                          justify-content: center;
+                          border-radius: 12px;
+                          overflow: hidden;
+                          box-shadow: 0 2px 12px #178a2c33;
+                        }
+                    </style>
+                    <div id="game-over">
+                      <div id="game-over-message"></div>
+                      <button id="retry-btn"></button>
+                    </div>
+                    <canvas id="game" width="320" height="480"></canvas>
+                `;
+
+                // Traducción de textos
+                const lang = currentLang === 'en' ? 'en' : 'es';
+                const texts = {
+                  es: {
+                    lose: "¡Perdiste!",
+                    win: "¡Ganaste!",
+                    retry: "Intentar de nuevo",
+                    next: "Ver pista",
+                    continue: "Continuar"
+                  },
+                  en: {
+                    lose: "You lost!",
+                    win: "You won!",
+                    retry: "Try again",
+                    next: "See clue",
+                    continue: "Continue"
+                  }
+                };
+
+                // Lógica Flappy Touch adaptada
+                (function() {
+                  const canvas = document.getElementById('game');
+                  const ctx = canvas.getContext('2d');
+                  const gameOverEl = document.getElementById('game-over');
+                  const gameOverMessage = document.getElementById('game-over-message');
+                  const retryBtn = document.getElementById('retry-btn');
+
+                  let birdY, velocity, gameStarted, countdown, lastPhaseTime, animationStartTime, repetitions;
+                  let currentTargetIndex, currentOffset, time, gameTimer, gameTimerInterval;
+                  let inFinalMilliseconds, finalMilliseconds, activeBonuses, gameOver;
+                  const gravity = 0.25;
+                  const birdX = canvas.width / 2;
+                  const phaseOffsets = [60, 90, 120, 150];
+                  const maxRepetitions = 5;
+                  let phaseAnimationActive = true;
+                  let topLineY = 0;
+                  let bottomLineY = 0;
+
+                  function resetGame() {
+                    birdY = canvas.height / 2;
+                    velocity = 0;
+                    gameStarted = false;
+                    countdown = 3;
+                    lastPhaseTime = 0;
+                    animationStartTime = null;
+                    repetitions = 0;
+                    currentTargetIndex = 0;
+                    currentOffset = phaseOffsets[0];
+                    time = 0;
+                    gameTimer = 30;
+                    inFinalMilliseconds = false;
+                    finalMilliseconds = 900;
+                    activeBonuses = [];
+                    gameOver = false;
+                    phaseAnimationActive = true;
+                    gameOverEl.style.display = 'none';
+                    clearInterval(gameTimerInterval);
+                    startCountdown();
+                    update();
+                  }
+
+                  function updateTargetOffset() {
+                    const phaseDuration = 300;
+                    const nextTargetIndex = Math.min(Math.floor(time / phaseDuration), phaseOffsets.length - 1);
+                    if (nextTargetIndex !== currentTargetIndex) {
+                      currentTargetIndex = nextTargetIndex;
+                      lastPhaseTime = performance.now();
+                    }
+                  }
+
+                  function smoothOffset() {
+                    const target = phaseOffsets[currentTargetIndex];
+                    const progress = Math.min(time / 200, 1);
+                    const factor = 0.01 + progress * (0.05 - 0.01);
+                    currentOffset += (target - currentOffset) * factor;
+                    return currentOffset;
+                  }
+
+                  function drawBird() {
+                    ctx.strokeStyle = 'gold';
+                    ctx.lineWidth = 4;
+                    ctx.fillStyle = 'gold';
+                    const radius = 6;
+                    ctx.beginPath();
+                    ctx.arc(birdX - 12, birdY, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.arc(birdX + 12, birdY, radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.beginPath();
+                    ctx.moveTo(birdX - 12, birdY);
+                    ctx.lineTo(birdX + 12, birdY);
+                    ctx.stroke();
+                  }
+
+                  function drawBoundaries() {
+                    const now = performance.now();
+                    const baseOffset = smoothOffset();
+                    let offsetAnim = 0;
+                    if (currentTargetIndex === phaseOffsets.length - 1) {
+                      if (phaseAnimationActive) {
+                        const elapsed = (now - lastPhaseTime) / 1000;
+                        offsetAnim = Math.sin(elapsed * 2 * Math.PI / 10) * 100;
+                        if (elapsed >= 10) {
+                          animationStartTime = now;
+                          phaseAnimationActive = false;
+                        }
+                      } else if (repetitions < maxRepetitions) {
+                        const elapsed = (now - animationStartTime) / 1000;
+                        const cycleDuration = 10;
+                        const t = (elapsed % cycleDuration) / cycleDuration;
+                        if (elapsed >= (repetitions + 1) * cycleDuration) repetitions++;
+                        offsetAnim = Math.sin(t * 2 * Math.PI) * 100;
+                      }
+                    }
+                    topLineY = baseOffset + offsetAnim;
+                    bottomLineY = canvas.height - baseOffset + offsetAnim;
+                    ctx.strokeStyle = 'darkred';
+                    ctx.lineWidth = 4;
+                    ctx.beginPath();
+                    ctx.moveTo(0, topLineY);
+                    ctx.lineTo(canvas.width, topLineY);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(0, bottomLineY);
+                    ctx.lineTo(canvas.width, bottomLineY);
+                    ctx.stroke();
+                  }
+
+                  function checkCollision() {
+                    const halfHeight = 6;
+                    if (birdY - halfHeight < topLineY || birdY + halfHeight > bottomLineY) {
+                      gameOver = true;
+                      gameOverMessage.textContent = texts[lang].lose;
+                      retryBtn.textContent = texts[lang].retry;
+                      gameOverEl.style.display = 'block';
+                    }
+                  }
+
+                  function drawCountdown() {
+                    ctx.fillStyle = 'black';
+                    ctx.font = 'bold 64px sans-serif';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(countdown, canvas.width / 2, canvas.height / 2);
+                  }
+
+                  function drawGameTimer() {
+                    if (!gameStarted) return;
+                    ctx.textAlign = 'center';
+                    const timerText = inFinalMilliseconds ? (finalMilliseconds / 1000).toFixed(1) + 's' : gameTimer + 's';
+                    ctx.fillStyle = 'black';
+                    ctx.font = 'bold 28px sans-serif';
+                    ctx.fillText(timerText, canvas.width / 2, 42);
+                    activeBonuses = activeBonuses.filter(b => performance.now() - b.start < 1500);
+                    activeBonuses.forEach((b, index) => {
+                      const alpha = 1 - (performance.now() - b.start) / 1500;
+                      ctx.globalAlpha = alpha;
+                      ctx.fillStyle = 'red';
+                      ctx.font = 'bold 20px sans-serif';
+                      const offsetX = 30 + index * 30 + 3;
+                      ctx.fillText('+5', canvas.width / 2 + offsetX, 42);
+                      ctx.globalAlpha = 1;
+                    });
+                  }
+
+                  function update() {
+                    if (gameOver) return;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    if (!gameStarted) {
+                      updateTargetOffset();
+                      drawBoundaries();
+                      drawBird();
+                      drawCountdown();
+                      time++;
+                      requestAnimationFrame(update);
+                      return;
+                    }
+                    velocity += gravity;
+                    birdY += velocity;
+                    if (birdY > canvas.height) birdY = canvas.height;
+                    if (birdY < 0) {
+                      birdY = 0;
+                      velocity = 0;
+                    }
+                    updateTargetOffset();
+                    drawBoundaries();
+                    drawBird();
+                    drawGameTimer();
+                    checkCollision();
+                    time++;
+                    requestAnimationFrame(update);
+                  }
+
+                  function flap() {
+                    if (!gameStarted || gameOver) return;
+                    velocity = -5.4;
+                  }
+
+                  function startGameTimer() {
+                    let bonusGiven = 0;
+                    gameTimerInterval = setInterval(() => {
+                      if (inFinalMilliseconds) {
+                        finalMilliseconds -= 100;
+                        if (finalMilliseconds <= 0) {
+                          clearInterval(gameTimerInterval);
+                          gameOver = true;
+                          gameOverMessage.textContent = texts[lang].win;
+                          showWinScreen();
+                        }
+                        return;
+                      }
+                      gameTimer--;
+                      if (gameTimer === 5 && bonusGiven < 3) {
+                        gameTimer += 5;
+                        bonusGiven++;
+                        activeBonuses.push({ start: performance.now() });
+                      }
+                      if (gameTimer === 1 && bonusGiven >= 3) inFinalMilliseconds = true;
+                      if (gameTimer <= 0) {
+                        clearInterval(gameTimerInterval);
+                        gameOver = true;
+                        gameOverMessage.textContent = texts[lang].win;
+                        showWinScreen();
+                      }
+                    }, 1000);
+                  }
+
+                  function showWinScreen() {
+                    // Muestra la pista y botón continuar
+                    gameOverEl.innerHTML = `
+                      <div style="font-size:1.3rem;margin-bottom:0.7rem;">${texts[lang].next}</div>
+                      <div id="flappy-pista-img">
+                        <img src="13777.jpg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
+                      </div>
+                      <button id="flappy-next-btn">${texts[lang].continue}</button>
+                    `;
+                    gameOverEl.style.display = 'block';
+                    document.getElementById('flappy-next-btn').onclick = function() {
+                      location.reload();
+                    };
+                  }
+
+                  document.body.addEventListener('touchstart', flap);
+                  document.body.addEventListener('mousedown', flap);
+                  retryBtn.addEventListener('click', resetGame);
+
+                  function startCountdown() {
+                    const countdownInterval = setInterval(() => {
+                      countdown--;
+                      if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        gameStarted = true;
+                        startGameTimer();
+                      }
+                    }, 1000);
+                  }
+
+                  resetGame();
+                })();
             }
         });
 
