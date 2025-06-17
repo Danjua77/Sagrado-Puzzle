@@ -846,12 +846,20 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   function showLoseScreen() {
                     flappyEnd.style.display = 'flex';
                     flappyEndContent.innerHTML = `
-                      <h2>${texts[lang].lose}</h2>
-                      <button id="retry-btn">${texts[lang].retry}</button>
-                    `;
-                    document.getElementById('retry-btn').onclick = function() {
-                      location.reload();
-                    };
+      <div id="gymbro-end" style="background: #fff; color: #178a2c; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; font-family: 'Montserrat', Arial, sans-serif; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;">
+        <div class="arbol-chan-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; max-width: 430px; max-height: 932px; min-width: 320px; min-height: 568px; margin: 0 auto; background: url('Fondo texto.jpg') no-repeat center center; background-size: cover; border-radius: 20px; box-shadow: 0 0 20px 2px rgba(0,0,0,0.2); position: relative;">
+          <img src="gymbro.png" class="arbol-chan-img visible" alt="Gym Bro" style="width: 60vw; max-width: 220px; min-width: 120px; margin-top: 0; opacity: 1; transform: translateY(0); transition: opacity 1.2s, transform 1.2s cubic-bezier(.77,0,.18,1);" />
+          <div class="arbol-chan-titulo" style="font-family: 'Montserrat', Arial, sans-serif; color: #178a2c; font-size: 2.5rem; font-weight: bold; margin-top: 1.2rem; margin-bottom: 0.7rem; text-align: center; text-shadow: 0 2px 12px #fff, 0 0 12px #178a2c, 2px 2px 0 #fff;">Gym Bro</div>
+          <div class="arbol-chan-texto" style="color: #fff; font-family: 'Roboto', Arial, sans-serif; font-size: 1.2rem; margin-top: 0.5rem; margin-bottom: 1.2rem; text-align: center; text-shadow: 0 2px 8px #000;">
+            Bro....
+          </div>
+          <button id="retry-btn" class="btn-continuar" style="margin-top: 0.5rem; font-size: 1.2rem; background: #178a2c; color: #fff; border: 2px solid #fff; border-radius: 8px; padding: 0.7rem 2.5rem; font-weight: bold; font-family: 'Montserrat', Arial, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer; transition: background 0.2s, border 0.2s;">Continuar</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('retry-btn').onclick = function() {
+      location.reload();
+    };
                   }
 
                   document.body.addEventListener('touchstart', flap);
