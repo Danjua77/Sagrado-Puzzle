@@ -832,15 +832,19 @@ Pero comprenderá usted que, en su noble cruzada por la búsqueda del caché, lo
                   function showWinScreen() {
                     flappyEnd.style.display = 'flex';
                     flappyEndContent.innerHTML = `
-                      <div style="font-size:1.3rem;margin-bottom:0.7rem;">${texts[lang].next}</div>
-                      <div id="flappy-pista-img">
-                        <img src="13777.jpg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px;">
-                      </div>
-                      <button id="flappy-next-btn">${texts[lang].continue}</button>
-                    `;
-                    document.getElementById('flappy-next-btn').onclick = function() {
-                      location.reload();
-                    };
+      <div id="flappy-end" style="background: #fff; color: #178a2c; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 10; font-family: 'Montserrat', Arial, sans-serif; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0;">
+        <div class="arbol-chan-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100vw; height: 100vh; max-width: 430px; max-height: 932px; min-width: 320px; min-height: 568px; margin: 0 auto; background: url('Fondo texto.jpg') no-repeat center center; background-size: cover; border-radius: 20px; box-shadow: 0 0 20px 2px rgba(0,0,0,0.2); position: relative;">
+          <h2 style="margin-top:0;">${texts[lang].next}</h2>
+          <div id="flappy-pista-img" style="margin:0; padding:0; width: 60vw; max-width: 300px; min-width: 120px; height: 180px; background: #fff; display: flex; align-items: center; justify-content: center; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 12px #178a2c33;">
+            <img src="silla1.jpeg" alt="Pista" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:12px 12px 12px 12px;">
+          </div>
+          <button id="flappy-next-btn" class="btn-continuar" style="margin-top: 1.5rem; font-size: 1.3rem; background: #178a2c; color: #fff; border: 2px solid #fff; border-radius: 8px; padding: 0.7rem 2.5rem; font-weight: bold; font-family: 'Montserrat', Arial, sans-serif; box-shadow: 0 2px 8px rgba(0,0,0,0.12); cursor: pointer; margin-bottom: 2rem; transition: background 0.2s, border 0.2s;">${texts[lang].continue}</button>
+        </div>
+      </div>
+    `;
+    document.getElementById('flappy-next-btn').onclick = function() {
+      location.reload();
+    };
                   }
 
                   function showLoseScreen() {
